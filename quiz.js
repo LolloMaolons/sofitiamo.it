@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="quiz-question">
                         <p>🎉 Hai completato tutti i quiz su Sofia!</p>
                         <p>Grazie per aver giocato! Ora conosci Sofia ancora meglio!</p>
-                        <button onclick="window.location.href='home.html'" style="background: linear-gradient(90deg,var(--bordeaux-sx),var(--bordeaux-dx)); margin-top: 1rem;">Torna alla Home 🏠</button>
+                        <button onclick="window.location.href='home.html'">Torna alla Home 🏠</button>
                     </div>
                 </div>
             `;

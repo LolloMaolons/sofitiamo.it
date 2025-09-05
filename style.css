@@ -345,9 +345,16 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
 }
 
 /* Enhanced button styling for completion and navigation */
-.quiz-question button[onclick*="home.html"], 
 .quiz-question button[onclick*="goToQuizPage"] {
     background: linear-gradient(145deg, var(--verde-sx), var(--verde-dx)) !important;
+    border: none;
+    color: white;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.quiz-question button[onclick*="home.html"]{
+    background: linear-gradient(145deg, var(--bordeaux-sx), var(--bordeaux-dx)) !important;
     border: none;
     color: white;
     font-weight: 700;
