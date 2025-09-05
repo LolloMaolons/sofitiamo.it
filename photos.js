@@ -15,30 +15,22 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('media/media-list.json')
         .then(response => response.json())
         .then(data => {
-            data.files.forEach(file => {
+            const mediaFiles = data.files;
+            mediaFiles.forEach(file => {
+                const extension = file.split('.').pop().toLowerCase();
                 let mediaElement;
-                if (file.endsWith('.mp4') || file.endsWith('.mov') || file.endsWith('.webm')) {
-                    mediaElement = document.createElement('video');
-                    mediaElement.loop = true;
-                    mediaElement.muted = true;
-                    videosToPlay.push(mediaElement); 
-                } else {
+                if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
                     mediaElement = document.createElement('img');
+                    mediaElement.src = `media/${file}`;
+                } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
+                    mediaElement = document.createElement('video');
+                    mediaElement.src = `media/${file}`;
+                    mediaElement.controls = true; // Aggiungi controlli qui
                 }
-                mediaElement.src = `media/${file}`;
-                mediaElement.alt = `Media: ${file}`;
-                photoGallery.appendChild(mediaElement);
+                if(mediaElement){
+                    photosGallery.appendChild(mediaElement);
+                }
             });
-
-            if (videosToPlay.length > 0) {
-                const playPromises = videosToPlay.map(video => video.play());
-                Promise.all(playPromises)
-                    .then(() => console.log('Tutti i video sono partiti.'))
-                    .catch(error => {
-                        console.warn('Autoplay bloccato. Aggiungo i controlli.', error);
-                        videosToPlay.forEach(v => v.controls = true);
-                    });
-            }
         })
-        .catch(error => console.error('Errore nel caricamento della galleria:', error));
+        .catch(error => console.error('Errore nel caricare la galleria completa:', error));
 });
