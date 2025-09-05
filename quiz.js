@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const quizContainer = document.getElementById('quiz-section');
     const allQuizzes = [
         // I primi 3 sono gli stessi della home
-        { question: "🤔 Quanto puzza il culo di Sofia", answer: "tanto" },
+        { question: "🤔 Quanto puzza il culo di Sofia?", answer: "tanto" },
         { question: "📚 In che anno ha iniziato l'università?", answer: "1856" },
         { question: "💭 Qual è il suo soprannome più comune?", answer: "Soffocotto" },
         // Aggiungi qui altre domande
