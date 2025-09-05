@@ -128,3 +128,25 @@ main {
 .error {
     color: red;
 }
+
+/* --- Stili per la galleria "Momenti Iconici" --- */
+
+/* Usiamo CSS Grid per allineare bene gli elementi */
+#iconic-moments {
+    display: grid;
+    /* Crea colonne da 250px, andando a capo automaticamente */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px; /* Spazio tra gli elementi */
+    padding: 20px;
+    justify-content: center;
+}
+
+/* Applica lo stile sia alle immagini che ai video dentro la galleria */
+#iconic-moments img,
+#iconic-moments video {
+    width: 100%; /* Occupa tutta la larghezza della colonna della griglia */
+    height: 250px; /* Altezza fissa per creare il quadrato */
+    object-fit: cover; /* Fondamentale: riempie lo spazio senza deformare l'immagine/video */
+    border-radius: 8px; /* Angoli leggermente arrotondati */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Una leggera ombra */
+}
