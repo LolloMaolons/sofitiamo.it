@@ -1,3 +1,4 @@
+/* Stili Generali e Sfondo */
 body {
     margin: 0;
     font-family: sans-serif;
@@ -8,12 +9,14 @@ body {
     color: #333;
 }
 
+/* Header con gradiente verde bosco */
 header {
-    background-color: #004d00; /* Verde bosco */
+    background: linear-gradient(to right, #003a00, #005c00); /* Gradiente verde bosco */
     padding: 10px 20px;
     position: sticky;
     top: 0;
     z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 nav {
@@ -22,15 +25,27 @@ nav {
     align-items: center;
 }
 
+/* Testo oro più lucente */
 .brand {
     font-size: 2em;
     font-weight: bold;
-    text-decoration: none;
-    background: linear-gradient(to right, #ffd700, #ffec80);
+    background: linear-gradient(145deg, #d4af37, #ffd700, #d4af37);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     text-fill-color: transparent;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+
+/* Testo oro più lucente */
+.gold-text {
+    background: linear-gradient(145deg, #d4af37, #ffd700, #d4af37);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .menu-toggle {
@@ -43,13 +58,13 @@ nav {
 .menu-toggle div {
     width: 25px;
     height: 3px;
-    background-color: #ffd700;
-}
+    background: linear-gradient(145deg, #d4af37, #ffd700, #d4af37);
+    border-radius: 2px;}
 
 .menu-links {
     display: none;
     flex-direction: column;
-    background-color: #004d00;
+    background-color: #003a00; /* Verde scuro per coerenza */
     position: absolute;
     top: 60px;
     right: 0;
@@ -68,15 +83,22 @@ nav {
 }
 
 .menu-links a:hover {
-    background-color: #003300;
+    background: linear-gradient(to right, #004a00, #006c00);
 }
 
+/* Rimuoviamo lo sfondo dal main per darlo alle sezioni figlie */
 main {
     padding: 20px;
     text-align: center;
-    background-color: rgba(255, 255, 255, 0.8);
-    margin: 20px;
-    border-radius: 10px;
+}
+
+/* Stili per le sezioni separate nella home */
+.congratulations, #home-quiz-section, #iconic-moments, #graduation-video {
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .login-container {
@@ -87,12 +109,11 @@ main {
     height: 100vh;
     text-align: center;
     background-color: rgba(255, 255, 255, 0.8);
+    padding: 2rem;
+    border-radius: 15px;
 }
 
-.gold-text {
-    color: #ffd700;
-    text-shadow: 1px 1px 2px black;
-}
+
 
 .bordeaux-text {
     color: #800000;
@@ -101,20 +122,28 @@ main {
 .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
+    gap: 1.5rem;
     margin-top: 20px;
 }
 
 .gallery img, .gallery video {
     width: 100%;
-    height: auto;
-    border-radius: 8px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.gallery img:hover, .gallery video:hover {
+    transform: scale(1.05);
 }
 
 #graduation-video video {
     width: 100%;
     max-width: 800px;
     margin-top: 20px;
+    border-radius: 10px;
 }
 
 #quiz-section, #home-quiz-section {
@@ -129,24 +158,11 @@ main {
     color: red;
 }
 
-/* --- Stili per la galleria "Momenti Iconici" --- */
-
-/* Usiamo CSS Grid per allineare bene gli elementi */
+/* Stili specifici per la galleria, ora unificati con .gallery */
 #iconic-moments {
-    display: grid;
-    /* Crea colonne da 250px, andando a capo automaticamente */
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px; /* Spazio tra gli elementi */
-    padding: 20px;
-    justify-content: center;
+    padding: 2rem; /* Spaziatura interna */
 }
 
-/* Applica lo stile sia alle immagini che ai video dentro la galleria */
-#iconic-moments img,
-#iconic-moments video {
-    width: 100%; /* Occupa tutta la larghezza della colonna della griglia */
-    height: 250px; /* Altezza fissa per creare il quadrato */
-    object-fit: cover; /* Fondamentale: riempie lo spazio senza deformare l'immagine/video */
-    border-radius: 8px; /* Angoli leggermente arrotondati */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Una leggera ombra */
+#iconic-moments .gallery {
+    gap: 1.5rem;
 }
