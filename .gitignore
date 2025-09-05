@@ -1,0 +1,17 @@
+# File di sistema operativo
+.DS_Store
+Thumbs.db
+
+# Cartelle di configurazione degli editor
+.vscode/
+.idea/
+
+# File di ambiente
+.env
+
+# --- MEDIA DA IGNORARE ---
+# Ignora l'intera cartella 'media' e il suo contenuto
+media/
+
+# Ignora anche il video nella cartella principale, se esiste
+videolaurea.mp4
