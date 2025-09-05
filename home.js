@@ -137,7 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     mediaElement.muted = true;
                 }
                 if(mediaElement) {
-                    homeGallery.appendChild(mediaElement);
+                    // Crea un link che avvolge l'elemento media
+                    const linkElement = document.createElement('a');
+                    linkElement.href = 'photos.html';
+                    linkElement.appendChild(mediaElement);
+                    homeGallery.appendChild(linkElement);
                 }
             });
         })
