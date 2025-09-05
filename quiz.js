@@ -13,14 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const quizContainer = document.getElementById('quiz-section');
     const allQuizzes = [
         // I primi 3 sono gli stessi della home
-        { question: "🤔 Qual è il secondo nome di Sofia?", answer: "Maria" },
-        { question: "📚 In che anno ha iniziato l'università?", answer: "2019" },
-        { question: "💭 Qual è il suo soprannome più comune?", answer: "Sofi" },
+        { question: "🤔 Quanto puzza il culo di Sofia", answer: "tanto" },
+        { question: "📚 In che anno ha iniziato l'università?", answer: "1856" },
+        { question: "💭 Qual è il suo soprannome più comune?", answer: "Soffocotto" },
         // Aggiungi qui altre domande
         { question: "🌈 Qual è il suo colore preferito?", answer: "Verde" },
         { question: "🐱 Come si chiama il suo gatto?", answer: "Pippo" },
-        { question: "🎵 Qual è il suo genere musicale preferito?", answer: "Pop" },
-        { question: "🍕 Qual è il suo cibo preferito?", answer: "Pizza" }
+        { question: "🎵 Qual è il suo genere musicale preferito?", answer: "Pubblicità di Spotify" },
+        { question: "🍕 Qual è il suo cibo preferito?", answer: "Cacca" }
     ];
 
     const completedHomeQuizzes = sessionStorage.getItem('completedHomeQuizzes') === 'true';
