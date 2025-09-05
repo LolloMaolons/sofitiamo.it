@@ -9,25 +9,27 @@
 </head>
 <body>
     <div class="login-container">
-        <h1>Entra nel sito di Sofia</h1>
-        <h2>Quanto ne sai sulla neo dottoressa?</h2>
-        
-        <!-- Il form invia i dati a login.php usando il metodo POST -->
-        <form id="login-form" action="login.php" method="POST">
-            <label for="frutto">Qual è il suo frutto preferito?</label>
-            <input type="text" id="frutto" name="frutto" required autocomplete="off" autofocus>
-            <button type="submit">Entra</button>
-        </form>
+        <div class="login-box">
+            <h1>Entra nel sito di Sofia</h1>
+            <h2>Quanto ne sai sulla neo dottoressa?</h2>
+            
+            <!-- Il form invia i dati a login.php usando il metodo POST -->
+            <form id="login-form" action="login.php" method="POST">
+                <label for="frutto">Qual è il suo frutto preferito?</label>
+                <input type="text" id="frutto" name="frutto" required autocomplete="off" autofocus>
+                <button type="submit">Entra</button>
+            </form>
 
-        <p id="error-message" class="error">
-            <?php
-            // Questo piccolo script PHP controlla se l'URL contiene "?error=1"
-            // e in tal caso stampa un messaggio di errore.
-            if (isset($_GET['error']) && $_GET['error'] == 1) {
-                echo 'Risposta sbagliata, riprova!';
-            }
-            ?>
-        </p>
+            <p id="error-message" class="error">
+                <?php
+                // Questo piccolo script PHP controlla se l'URL contiene "?error=1"
+                // e in tal caso stampa un messaggio di errore.
+                if (isset($_GET['error']) && $_GET['error'] == 1) {
+                    echo 'Risposta sbagliata, riprova!';
+                }
+                ?>
+            </p>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>

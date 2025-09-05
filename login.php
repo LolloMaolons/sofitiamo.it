@@ -10,7 +10,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['frutto'])) {
     
     $rispostaUtente = $_POST['frutto'];
 
-    // 3. Verifica in modo sicuro se la risposta dell'utente corrisponde all'hash.
+    // 3. Normalizza la risposta dell'utente in minuscolo per renderla case-insensitive
+    $rispostaUtente = strtolower(trim($rispostaUtente));
+
+    // 4. Verifica in modo sicuro se la risposta dell'utente corrisponde all'hash.
     if (password_verify($rispostaUtente, $passwordHash)) {
         // Password CORRETTA: reindirizza alla home page.
         header('Location: home.html');

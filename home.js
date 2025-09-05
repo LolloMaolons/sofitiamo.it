@@ -13,15 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const homeQuizContainer = document.getElementById('home-quiz-section');
     const quizzes = [
         {
-            question: "Qual è il secondo nome di Sofia?",
+            question: "🤔 Qual è il secondo nome di Sofia?",
             answer: "Maria"
         },
         {
-            question: "In che anno ha iniziato l'università?",
+            question: "📚 In che anno ha iniziato l'università?",
             answer: "2019"
         },
         {
-            question: "Qual è il suo soprannome più comune?",
+            question: "💭 Qual è il suo soprannome più comune?",
             answer: "Sofi"
         }
     ];
@@ -34,16 +34,30 @@ document.addEventListener('DOMContentLoaded', () => {
             homeQuizContainer.innerHTML = `
                 <div class="quiz-question">
                     <p>${quiz.question}</p>
-                    <input type="text" id="quiz-answer-${index}">
-                    <button onclick="checkAnswer(${index}, '${quiz.answer}')">Invia</button>
+                    <input type="text" id="quiz-answer-${index}" placeholder="Inserisci la tua risposta...">
+                    <button onclick="checkAnswer(${index}, '${quiz.answer}')">Invia Risposta</button>
                     <p id="feedback-${index}"></p>
                 </div>
             `;
+            
+            // Add Enter key listener to the input field
+            const inputField = document.getElementById(`quiz-answer-${index}`);
+            inputField.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    checkAnswer(index, quiz.answer);
+                }
+            });
+            
+            // Focus on input field for better UX
+            inputField.focus();
         } else {
             homeQuizContainer.innerHTML = `
-                <p>Hai completato i quiz della home!</p>
-                <p>Vuoi continuare nella sezione quiz?</p>
-                <button onclick="goToQuizPage()">Sì, andiamo!</button>
+                <div class="quiz-question">
+                    <p>🎉 Complimenti! Hai completato tutti i quiz della home!</p>
+                    <p>Vuoi continuare con il quiz completo?</p>
+                    <button onclick="goToQuizPage()" style="background: linear-gradient(145deg, var(--verde-sx), var(--verde-dx)); margin-top: 1rem;">Sì, andiamo! 🚀</button>
+                </div>
             `;
         }
     }
@@ -51,16 +65,36 @@ document.addEventListener('DOMContentLoaded', () => {
     window.checkAnswer = function(index, correctAnswer) {
         const userAnswer = document.getElementById(`quiz-answer-${index}`).value.trim();
         const feedback = document.getElementById(`feedback-${index}`);
+        const inputField = document.getElementById(`quiz-answer-${index}`);
+        const button = inputField.nextElementSibling;
+        
         if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
-            feedback.textContent = "Corretto!";
+            feedback.textContent = "🎉 Perfetto! Risposta corretta!";
             feedback.style.color = "green";
+            inputField.style.borderColor = "#28a745";
+            button.disabled = true;
+            button.textContent = "Corretto! ✓";
+            button.style.background = "linear-gradient(145deg, #28a745, #20c997)";
+            
             setTimeout(() => {
                 currentQuizIndex++;
                 showQuiz(currentQuizIndex);
-            }, 1000);
+            }, 1500);
         } else {
-            feedback.textContent = "Sbagliato, riprova!";
+            feedback.textContent = "❌ Ops, riprova! Forse hai sbagliato qualcosa...";
             feedback.style.color = "red";
+            inputField.style.borderColor = "#dc3545";
+            
+            // Shake animation effect
+            inputField.style.animation = "shake 0.5s";
+            setTimeout(() => {
+                inputField.style.animation = "";
+                inputField.style.borderColor = "#e0e6ed";
+            }, 500);
+            
+            // Focus back on input
+            inputField.focus();
+            inputField.select();
         }
     }
     
