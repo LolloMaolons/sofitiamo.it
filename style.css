@@ -1,22 +1,38 @@
-/* Stili Generali e Sfondo */
-body {
-    margin: 0;
-    font-family: sans-serif;
+/* Responsive, mobile-first stylesheet
+   Mantiene la struttura HTML esistente (navbar, menu-toggle, etc.)
+   Migliora i colori (verde bosco a gradiente, oro più realistico),
+   separa sezioni nella home e aggiunge spaziature e regole responsive.
+*/
+
+:root{
+    --verde-sx: #042a12; /* verde bosco scuro sinistra */
+    --verde-dx: #0b5a2b; /* verde bosco scuro destra */
+    --oro-chiaro: #e4b84b; /* oro meno giallo */
+    --oro-scuro: #b8862b; /* ombra oro */
+    --bg-white-semi: rgba(255,255,255,0.92);
+}
+
+/* Reset base */
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
     background-image: url('sfondo.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    color: #333;
+    color:#222;
+    -webkit-font-smoothing:antialiased;
 }
 
-/* Header con gradiente verde bosco */
-header {
-    background: linear-gradient(to right, #003a00, #005c00); /* Gradiente verde bosco */
-    padding: 10px 20px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+/* Header: manteniamo la struttura HTML originale, applichiamo solo stile */
+header{
+    background: linear-gradient(90deg,var(--verde-sx),var(--verde-dx));
+    padding:10px 16px;
+    position:sticky;
+    top:0;
+    z-index:900;
+    box-shadow:0 2px 8px rgba(0,0,0,0.18);
 }
 
 nav {
@@ -26,15 +42,17 @@ nav {
 }
 
 /* Testo oro più lucente */
-.brand {
-    font-size: 2em;
-    font-weight: bold;
-    background: linear-gradient(145deg, #d4af37, #ffd700, #d4af37);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-fill-color: transparent;
-    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+.brand{
+    font-size:1.6rem;
+    font-weight:700;
+    text-decoration:none;
+    /* Oro realistico: sfumatura con leggera texture via gradient */
+    background: linear-gradient(135deg,var(--oro-chiaro) 0%, #d0a14a 40%, var(--oro-scuro) 100%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    color:transparent;
+    text-shadow:0 2px 6px rgba(0,0,0,0.28);
 }
 
 
@@ -48,43 +66,14 @@ nav {
     text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
 }
 
-.menu-toggle {
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
+/* menu-toggle (hamburger) - lasciato come struttura originale */
+.menu-toggle{display:flex;flex-direction:column;gap:5px;cursor:pointer}
+.menu-toggle div{width:26px;height:3px;background:linear-gradient(90deg,var(--oro-chiaro),var(--oro-scuro));border-radius:3px}
 
-.menu-toggle div {
-    width: 25px;
-    height: 3px;
-    background: linear-gradient(145deg, #d4af37, #ffd700, #d4af37);
-    border-radius: 2px;}
-
-.menu-links {
-    display: none;
-    flex-direction: column;
-    background-color: #003a00; /* Verde scuro per coerenza */
-    position: absolute;
-    top: 60px;
-    right: 0;
-    width: 200px;
-}
-
-.menu-links.active {
-    display: flex;
-}
-
-.menu-links a {
-    color: #ffd700;
-    padding: 15px 20px;
-    text-decoration: none;
-    display: block;
-}
-
-.menu-links a:hover {
-    background: linear-gradient(to right, #004a00, #006c00);
-}
+.menu-links{display:none;flex-direction:column;position:absolute;top:64px;right:12px;width:220px;background:linear-gradient(90deg,var(--verde-sx),var(--verde-dx));border-radius:8px;padding:8px;box-shadow:0 4px 12px rgba(0,0,0,0.25)}
+.menu-links a{color:var(--oro-chiaro);padding:10px 12px;text-decoration:none;border-radius:6px;display:block}
+.menu-links a:hover{background:rgba(255,255,255,0.03)}
+.menu-links.active{display:flex}
 
 /* Rimuoviamo lo sfondo dal main per darlo alle sezioni figlie */
 main {
@@ -94,75 +83,70 @@ main {
 
 /* Stili per le sezioni separate nella home */
 .congratulations, #home-quiz-section, #iconic-moments, #graduation-video {
-    background-color: rgba(255, 255, 255, 0.85);
+    background:var(--bg-white-semi);
     padding: 2rem;
     border-radius: 15px;
     margin-bottom: 2rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.login-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    text-align: center;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 2rem;
-    border-radius: 15px;
+/* Specifici box per ogni sezione (possibile variazione di sfumatura) */
+.congratulations{background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(250,250,250,0.9));}
+#home-quiz-section{background:linear-gradient(180deg, rgba(255,255,255,0.94), rgba(245,245,245,0.88));}
+#iconic-moments{background:linear-gradient(180deg, rgba(255,255,255,0.94), rgba(245,245,245,0.9));}
+#graduation-video{background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(250,250,250,0.9));}
+
+/* Titoli */
+h1,h2,h3{margin:.2rem 0 .8rem 0}
+.gold-text{background:linear-gradient(135deg,var(--oro-chiaro) 0%, #e0b24a 50%, var(--oro-scuro) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:transparent;text-shadow:0 2px 6px rgba(0,0,0,0.28);font-weight:800}
+.bordeaux-text{color:#6f0f0f;font-weight:600}
+
+/* Gallery: mobile-first with CSS grid; on >md use denser layout */
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.gallery img,.gallery video{width:100%;height:160px;object-fit:cover;border-radius:10px;box-shadow:0 6px 14px rgba(0,0,0,0.12);transition:transform .28s ease}
+.gallery img:hover{transform:scale(1.03)}
+
+/* Video area responsive */
+#graduation-video video{width:100%;border-radius:10px;display:block}
+
+/* Quiz cards */
+.quiz-card{padding:12px;border-radius:10px;background:linear-gradient(180deg,#fff,#fbfbfb);box-shadow:0 4px 12px rgba(0,0,0,0.06);margin-bottom:12px}
+
+/* Login container fallback */
+.login-container{padding:18px}
+
+/* Error */
+.error{color:#c92a2a;font-weight:600}
+
+/* Larger screens adjustments */
+@media(min-width:768px){
+    .brand{font-size:2rem}
+    .gallery{grid-template-columns:repeat(3,1fr);gap:18px}
+    .gallery img,.gallery video{height:200px}
+    .section-box{padding:22px}
 }
 
-
-
-.bordeaux-text {
-    color: #800000;
+@media(min-width:1024px){
+    .gallery{grid-template-columns:repeat(4,1fr)}
+    .gallery img,.gallery video{height:220px}
+    main{max-width:1100px;margin:0 auto;padding:24px}
 }
 
-.gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-top: 20px;
-}
+/* Small tweaks for accessibility and touch */
+a{cursor:pointer}
+button{cursor:pointer}
 
-.gallery img, .gallery video {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    transition: transform 0.3s ease-in-out;
-}
+/* Keep the old IDs/classes compatibility in place (no HTML structural change) */
+.congratulations,#home-quiz-section,#iconic-moments,#graduation-video{display:block}
 
-.gallery img:hover, .gallery video:hover {
-    transform: scale(1.05);
-}
-
-#graduation-video video {
-    width: 100%;
-    max-width: 800px;
-    margin-top: 20px;
-    border-radius: 10px;
-}
-
-#quiz-section, #home-quiz-section {
-    margin-top: 30px;
-}
-
-.quiz-question {
-    margin-bottom: 20px;
-}
-
-.error {
-    color: red;
-}
-
-/* Stili specifici per la galleria, ora unificati con .gallery */
-#iconic-moments {
-    padding: 2rem; /* Spaziatura interna */
-}
-
-#iconic-moments .gallery {
-    gap: 1.5rem;
+.point-text {
+  color: var(--verde-dx); /* Verde bosco scuro per il testo dei punti */
+  font-weight: 700;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  letter-spacing: 0.2px;
+  background-color: rgba(255, 255, 255, 0.8); /* Sfondo bianco semi-trasparente */
+  padding: 0.5rem 1rem; /* Spaziatura interna */
+  border-radius: 50px; /* Rende gli angoli molto arrotondati per una forma ovale */
+  display: inline-block; /* Permette allo sfondo di adattarsi al testo */
 }
