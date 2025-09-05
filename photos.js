@@ -25,9 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
                     mediaElement = document.createElement('video');
                     mediaElement.src = `media/${file}`;
-                    mediaElement.controls = true; // Aggiungi controlli qui
+                    mediaElement.autoplay = true;
+                    mediaElement.loop = true;
+                    mediaElement.muted = true;
                 }
-                if(mediaElement){
+                if(mediaElement) {
                     photosGallery.appendChild(mediaElement);
                 }
             });

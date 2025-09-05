@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (index < quizzesToShow.length) {
             const quiz = quizzesToShow[index];
             quizContainer.innerHTML = `
-                <h1>Quanto ne sai su Sofia?</h1>
+            <h1 class="gold-text">Quanto ne sai su Sofia?</h1>
                 <div class="quiz-question">
                     <p>${quiz.question}</p>
                     <input type="text" id="full-quiz-answer-${index}">
