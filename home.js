@@ -81,20 +81,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 showQuiz(currentQuizIndex);
             }, 1500);
         } else {
-            feedback.textContent = "❌ Ops, riprova! Forse hai sbagliato qualcosa...";
+            feedback.textContent = `❌ Non proprio! La risposta corretta era: "${correctAnswer}"`;
             feedback.style.color = "red";
             inputField.style.borderColor = "#dc3545";
+            button.disabled = true;
+            button.textContent = "Sbagliato ✗";
+            button.style.background = "linear-gradient(145deg, #dc3545, #c82333)";
             
             // Shake animation effect
             inputField.style.animation = "shake 0.5s";
             setTimeout(() => {
                 inputField.style.animation = "";
-                inputField.style.borderColor = "#e0e6ed";
             }, 500);
             
-            // Focus back on input
-            inputField.focus();
-            inputField.select();
+            // Passa alla domanda successiva dopo aver mostrato la soluzione
+            setTimeout(() => {
+                currentQuizIndex++;
+                showQuiz(currentQuizIndex);
+            }, 2500);
         }
     }
     
