@@ -128,25 +128,87 @@ main {
 .error {
     color: red;
 }
+/* Sostituisci le vecchie regole #iconic-moments con queste */
 
-/* --- Stili per la galleria "Momenti Iconici" --- */
-
-/* Usiamo CSS Grid per allineare bene gli elementi */
-#iconic-moments {
-    display: grid;
-    /* Crea colonne da 250px, andando a capo automaticamente */
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px; /* Spazio tra gli elementi */
+#iconic-moments-wrapper {
     padding: 20px;
-    justify-content: center;
 }
 
-/* Applica lo stile sia alle immagini che ai video dentro la galleria */
+#iconic-moments {
+    /* Su schermi grandi, crea 3 colonne */
+    column-count: 3;
+    /* Su schermi medi (tablet), crea 2 colonne */
+    column-count: 2;
+    /* Spazio tra le colonne */
+    column-gap: 15px;
+}
+
 #iconic-moments img,
 #iconic-moments video {
-    width: 100%; /* Occupa tutta la larghezza della colonna della griglia */
-    height: 250px; /* Altezza fissa per creare il quadrato */
-    object-fit: cover; /* Fondamentale: riempie lo spazio senza deformare l'immagine/video */
-    border-radius: 8px; /* Angoli leggermente arrotondati */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Una leggera ombra */
+    width: 100%; /* Occupa tutta la larghezza della sua colonna */
+    height: auto; /* L'altezza si adatta per mantenere le proporzioni */
+    display: block; /* Evita spazi extra sotto l'immagine */
+    margin-bottom: 15px; /* Spazio sotto ogni elemento */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Media Query per dispositivi mobili */
+@media (max-width: 768px) {
+    #iconic-moments {
+        /* Su schermi piccoli, usa una sola colonna */
+        column-count: 1;
+    }
+}
+
+/* Aggiungi alla fine del tuo file style.css */
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #333; /* o il colore che preferisci */
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+#home-gallery {
+    column-count: 3; /* 3 colonne su schermi grandi */
+    column-gap: 15px; /* Spazio tra le colonne */
+}
+
+/* Stili per gli elementi dentro la galleria */
+#home-gallery a {
+    display: block; /* Necessario per il layout a colonne */
+    margin-bottom: 15px; /* Spazio sotto ogni elemento */
+    break-inside: avoid; /* Evita che un'immagine venga tagliata tra le colonne */
+}
+
+#home-gallery img,
+#home-gallery video {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Adatta il layout per schermi medi (tablet) */
+@media (max-width: 992px) {
+    #home-gallery {
+        column-count: 2; /* 2 colonne */
+    }
+}
+
+/* Adatta il layout per schermi piccoli (mobile) */
+@media (max-width: 768px) {
+    #home-gallery {
+        column-count: 1; /* 1 colonna */
+    }
+}
+.section-title {
+    text-align: center;
+    font-size: 2.5rem; /* 40px */
+    margin-top: 20px;
+    margin-bottom: 30px;
+    color: #333; /* Un colore scuro standard, puoi cambiarlo */
+    font-weight: bold;
 }
