@@ -587,12 +587,12 @@ button{cursor:pointer}
 
 .memory-difficulty-buttons {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     justify-content: center;
     flex-wrap: wrap;
     align-items: center;
     width: 100%;
-    max-width: 500px;
+    max-width: 800px;
     margin: 0 auto;
 }
 
@@ -600,8 +600,8 @@ button{cursor:pointer}
     background: linear-gradient(145deg, var(--oro-chiaro), #ffd700, var(--oro-scuro));
     color: white;
     border: none;
-    padding: 15px 25px;
-    font-size: 1rem;
+    padding: 16px 30px;
+    font-size: 1.1rem;
     font-weight: 700;
     border-radius: 12px;
     cursor: pointer;
@@ -609,9 +609,9 @@ button{cursor:pointer}
     box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    min-width: 180px;
+    min-width: 200px;
     flex: 1;
-    max-width: 220px;
+    max-width: 250px;
     text-align: center;
     white-space: nowrap;
 }
@@ -657,45 +657,63 @@ button{cursor:pointer}
     grid-template-columns: repeat(5, 1fr);
 }
 
-/* Layout adattivo per utilizzare al meglio lo spazio */
-@media(min-width: 1200px) {
-    /* Schermi molto grandi - disponi tutto in orizzontale */
+/* Layout adattivo usando breakpoint Bootstrap */
+@media(min-width: 1400px) {
+    /* Bootstrap XXL - Schermi 4K e oltre */
     .memory-grid.easy {
         grid-template-columns: repeat(6, 1fr);
-        max-width: 900px;
+        max-width: 1200px;
     }
     
     .memory-grid.medium {
         grid-template-columns: repeat(8, 1fr);
-        max-width: 1200px;
+        max-width: 1600px;
     }
     
     .memory-grid.hard {
         grid-template-columns: repeat(10, 1fr);
-        max-width: 1500px;
+        max-width: 2000px;
     }
 }
 
-@media(min-width: 1025px) and (max-width: 1199px) {
-    /* Desktop - layout ottimizzato 2 righe */
+@media(min-width: 1200px) and (max-width: 1399.98px) {
+    /* Bootstrap XL - Schermi molto grandi */
     .memory-grid.easy {
         grid-template-columns: repeat(3, 1fr);
-        max-width: 450px;
+        max-width: 600px;
     }
     
     .memory-grid.medium {
         grid-template-columns: repeat(4, 1fr);
-        max-width: 600px;
+        max-width: 800px;
     }
     
     .memory-grid.hard {
         grid-template-columns: repeat(5, 1fr);
-        max-width: 750px;
+        max-width: 1000px;
     }
 }
 
-@media(min-width: 769px) and (max-width: 1024px) {
-    /* Tablet - layout 2 righe */
+@media(min-width: 992px) and (max-width: 1199.98px) {
+    /* Bootstrap LG - Desktop standard (include 16" Full HD) */
+    .memory-grid.easy {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 500px;
+    }
+    
+    .memory-grid.medium {
+        grid-template-columns: repeat(4, 1fr);
+        max-width: 650px;
+    }
+    
+    .memory-grid.hard {
+        grid-template-columns: repeat(5, 1fr);
+        max-width: 800px;
+    }
+}
+
+@media(min-width: 768px) and (max-width: 991.98px) {
+    /* Bootstrap MD - Tablet */
     .memory-grid.easy {
         grid-template-columns: repeat(3, 1fr);
         max-width: 400px;
@@ -712,8 +730,8 @@ button{cursor:pointer}
     }
 }
 
-/* Layout a 2 colonne su schermi piccoli per contenere le card nello spazio lilla */
-@media(max-width: 768px) {
+/* Bootstrap SM e inferiori - Mobile */
+@media(max-width: 767.98px) {
     .memory-grid.easy {
         grid-template-columns: repeat(2, 1fr);
         max-width: 280px;
@@ -852,8 +870,8 @@ button{cursor:pointer}
     animation: shuffleAnimation 0.8s ease-in-out;
 }
 
-/* Responsive adjustments for memory game */
-@media(max-width: 768px) {
+/* Responsive adjustments for memory game - Bootstrap SM e inferiori */
+@media(max-width: 767.98px) {
     .memory-grid {
         gap: 8px;
     }
@@ -922,7 +940,8 @@ button{cursor:pointer}
     }
 }
 
-@media(max-width: 480px) {
+@media(max-width: 575.98px) {
+    /* Bootstrap XS - Schermi molto piccoli */
     .memory-btn {
         padding: 10px 18px;
         font-size: 0.9rem;
@@ -967,17 +986,18 @@ button{cursor:pointer}
     }
 }
 
-@media(min-width: 769px) and (max-width: 1024px) {
+@media(min-width: 768px) and (max-width: 991.98px) {
+    /* Bootstrap MD - Tablet */
     .memory-difficulty-buttons {
-        max-width: 500px;
-        gap: 0.8rem;
+        max-width: 700px;
+        gap: 1.2rem;
     }
     
     .memory-btn {
-        min-width: 140px;
-        max-width: 160px;
-        font-size: 0.9rem;
-        padding: 12px 16px;
+        min-width: 180px;
+        max-width: 220px;
+        font-size: 1rem;
+        padding: 14px 24px;
     }
     
     .memory-card {
@@ -990,17 +1010,18 @@ button{cursor:pointer}
     }
 }
 
-@media(min-width: 1025px) {
+@media(min-width: 992px) {
+    /* Bootstrap LG e superiori - Desktop e oltre */
     .memory-difficulty-buttons {
-        max-width: 600px;
-        gap: 1rem;
+        max-width: 800px;
+        gap: 1.8rem;
     }
     
     .memory-btn {
-        min-width: 160px;
-        max-width: 180px;
-        padding: 14px 20px;
-        font-size: 0.95rem;
+        min-width: 200px;
+        max-width: 240px;
+        padding: 16px 32px;
+        font-size: 0.95rem; /* Scritta più piccola per desktop */
     }
     
     .memory-card {
@@ -1013,7 +1034,7 @@ button{cursor:pointer}
     }
 }
 
-/* Schermi molto grandi - layout completamente orizzontale */
+/* Bootstrap XL e superiori - Schermi molto grandi */
 @media(min-width: 1200px) {
     .memory-card {
         min-height: 120px;
@@ -1025,20 +1046,20 @@ button{cursor:pointer}
     }
     
     .memory-btn {
-        min-width: 180px;
-        max-width: 200px;
-        padding: 16px 24px;
-        font-size: 1rem;
+        min-width: 220px;
+        max-width: 260px;
+        padding: 18px 36px;
+        font-size: 1rem; /* Scritta leggermente più grande per schermi molto grandi */
     }
     
     .memory-difficulty-buttons {
-        max-width: 700px;
-        gap: 1.2rem;
+        max-width: 900px;
+        gap: 2rem;
     }
 }
 
-/* Media query per schermi molto piccoli (iPhone SE e simili) */
-@media(max-width: 375px) {
+/* Media query per iPhone SE e simili */
+@media(max-width: 374.98px) {
     .congratulations h1 {
         font-size: 1.6rem;
     }
@@ -1093,7 +1114,7 @@ button{cursor:pointer}
 }
 
 /* Media query per schermi estremamente piccoli */
-@media(max-width: 320px) {
+@media(max-width: 319.98px) {
     .memory-grid {
         max-width: 220px;
         gap: 4px;
