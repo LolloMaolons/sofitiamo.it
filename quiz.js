@@ -31,10 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function showFullQuiz(index) {
         if (index < quizzesToShow.length) {
             const quiz = quizzesToShow[index];
+            // Calcola il numero della domanda basandosi su se i quiz della home sono stati completati
+            const questionNumber = completedHomeQuizzes ? index + 4 : index + 1;
+            const totalQuestions = completedHomeQuizzes ? allQuizzes.length : quizzesToShow.length;
+            
             quizContainer.innerHTML = `
                 <h1 class="gold-text">Quanto ne sai su Sofia?</h1>
                 <div class="quiz-progress">
-                    <p>Domanda ${index + 1} di ${quizzesToShow.length}</p>
+                    <p>Domanda ${questionNumber} di ${totalQuestions}</p>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: ${((index + 1) / quizzesToShow.length) * 100}%"></div>
                     </div>
