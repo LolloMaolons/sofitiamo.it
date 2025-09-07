@@ -657,63 +657,45 @@ button{cursor:pointer}
     grid-template-columns: repeat(5, 1fr);
 }
 
-/* Layout adattivo usando breakpoint Bootstrap */
-@media(min-width: 1400px) {
-    /* Bootstrap XXL - Schermi 4K e oltre */
+/* Layout adattivo specifico per il container lilla */
+@media (min-width: 2560px) {
+    /* Schermi 4K - layout completamente orizzontale */
     .memory-grid.easy {
         grid-template-columns: repeat(6, 1fr);
-        max-width: 1200px;
+        max-width: 900px;
     }
     
     .memory-grid.medium {
         grid-template-columns: repeat(8, 1fr);
-        max-width: 1600px;
+        max-width: 1200px;
     }
     
     .memory-grid.hard {
         grid-template-columns: repeat(10, 1fr);
-        max-width: 2000px;
+        max-width: 1500px;
     }
 }
 
-@media(min-width: 1200px) and (max-width: 1399.98px) {
-    /* Bootstrap XL - Schermi molto grandi */
+@media (min-width: 1441px) and (max-width: 2559px) {
+    /* Schermi molto grandi (27" e oltre) - layout a 2 righe ottimizzato */
     .memory-grid.easy {
         grid-template-columns: repeat(3, 1fr);
+        max-width: 450px;
+    }
+    
+    .memory-grid.medium {
+        grid-template-columns: repeat(4, 1fr);
         max-width: 600px;
     }
     
-    .memory-grid.medium {
-        grid-template-columns: repeat(4, 1fr);
-        max-width: 800px;
-    }
-    
     .memory-grid.hard {
         grid-template-columns: repeat(5, 1fr);
-        max-width: 1000px;
+        max-width: 750px;
     }
 }
 
-@media(min-width: 992px) and (max-width: 1199.98px) {
-    /* Bootstrap LG - Desktop standard (include 16" Full HD) */
-    .memory-grid.easy {
-        grid-template-columns: repeat(3, 1fr);
-        max-width: 500px;
-    }
-    
-    .memory-grid.medium {
-        grid-template-columns: repeat(4, 1fr);
-        max-width: 650px;
-    }
-    
-    .memory-grid.hard {
-        grid-template-columns: repeat(5, 1fr);
-        max-width: 800px;
-    }
-}
-
-@media(min-width: 768px) and (max-width: 991.98px) {
-    /* Bootstrap MD - Tablet */
+@media (min-width: 1025px) and (max-width: 1440px) {
+    /* Desktop standard (include 16" Full HD) - layout a 2 righe */
     .memory-grid.easy {
         grid-template-columns: repeat(3, 1fr);
         max-width: 400px;
@@ -721,17 +703,35 @@ button{cursor:pointer}
     
     .memory-grid.medium {
         grid-template-columns: repeat(4, 1fr);
-        max-width: 500px;
+        max-width: 520px;
     }
     
     .memory-grid.hard {
         grid-template-columns: repeat(5, 1fr);
-        max-width: 600px;
+        max-width: 650px;
     }
 }
 
-/* Bootstrap SM e inferiori - Mobile */
-@media(max-width: 767.98px) {
+@media (min-width: 769px) and (max-width: 1024px) {
+    /* Tablet - layout a 2 righe */
+    .memory-grid.easy {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 350px;
+    }
+    
+    .memory-grid.medium {
+        grid-template-columns: repeat(4, 1fr);
+        max-width: 450px;
+    }
+    
+    .memory-grid.hard {
+        grid-template-columns: repeat(5, 1fr);
+        max-width: 550px;
+    }
+}
+
+/* Mobile (768px e sotto) - Layout a 2 colonne */
+@media (max-width: 768px) {
     .memory-grid.easy {
         grid-template-columns: repeat(2, 1fr);
         max-width: 280px;
@@ -870,8 +870,8 @@ button{cursor:pointer}
     animation: shuffleAnimation 0.8s ease-in-out;
 }
 
-/* Responsive adjustments for memory game - Bootstrap SM e inferiori */
-@media(max-width: 767.98px) {
+/* Responsive adjustments for memory game - Mobile */
+@media(max-width: 768px) {
     .memory-grid {
         gap: 8px;
     }
@@ -986,8 +986,8 @@ button{cursor:pointer}
     }
 }
 
-@media(min-width: 768px) and (max-width: 991.98px) {
-    /* Bootstrap MD - Tablet */
+@media(min-width: 769px) and (max-width: 1024px) {
+    /* Tablet - Pulsanti più grandi (180px-220px) */
     .memory-difficulty-buttons {
         max-width: 700px;
         gap: 1.2rem;
@@ -1010,18 +1010,18 @@ button{cursor:pointer}
     }
 }
 
-@media(min-width: 992px) {
-    /* Bootstrap LG e superiori - Desktop e oltre */
+@media(min-width: 1025px) and (max-width: 1440px) {
+    /* Desktop standard (include 16" Full HD) - Pulsanti grandi (200px-240px) */
     .memory-difficulty-buttons {
         max-width: 800px;
-        gap: 1.8rem;
+        gap: 1.5rem;
     }
     
     .memory-btn {
         min-width: 200px;
         max-width: 240px;
-        padding: 16px 32px;
-        font-size: 0.95rem; /* Scritta più piccola per desktop */
+        padding: 16px 30px;
+        font-size: 1.1rem;
     }
     
     .memory-card {
@@ -1034,8 +1034,8 @@ button{cursor:pointer}
     }
 }
 
-/* Bootstrap XL e superiori - Schermi molto grandi */
-@media(min-width: 1200px) {
+@media(min-width: 1441px) and (max-width: 2559px) {
+    /* Schermi molto grandi - Pulsanti molto grandi (220px-260px) */
     .memory-card {
         min-height: 120px;
         margin: 8px;
@@ -1049,12 +1049,36 @@ button{cursor:pointer}
         min-width: 220px;
         max-width: 260px;
         padding: 18px 36px;
-        font-size: 1rem; /* Scritta leggermente più grande per schermi molto grandi */
+        font-size: 1.2rem;
     }
     
     .memory-difficulty-buttons {
         max-width: 900px;
         gap: 2rem;
+    }
+}
+
+@media(min-width: 2560px) {
+    /* Schermi 4K - Layout completamente orizzontale */
+    .memory-btn {
+        min-width: 240px;
+        max-width: 280px;
+        padding: 20px 40px;
+        font-size: 1.3rem;
+    }
+    
+    .memory-difficulty-buttons {
+        max-width: 1200px;
+        gap: 2.5rem;
+    }
+    
+    .memory-card {
+        min-height: 140px;
+        margin: 10px;
+    }
+    
+    .memory-card-front {
+        font-size: 2rem;
     }
 }
 
