@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Momenti Iconici</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ENjdO4Dr2bkBIFxQpeoA6VKHr8zWvZg9lZlY9MZC1l1rZl9FQ51h6Q0Q5r5F5r5F" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="photos-page">
     <header>
         <nav id="navbar-photos">
-            <a href="home.html" class="brand">DOTTORESSA</a>
+            <a href="home.html" class="brand">DOTTORESSA!!!</a>
             <div class="menu-toggle" id="menu-toggle">
                 <div></div>
                 <div></div>
@@ -24,6 +26,32 @@
     </header>
 
     <main>
+        <section id="memory-game-section">
+            <h1 class="gold-text">Gioco del Memory - Momenti Iconici</h1>
+            <div id="memory-game-intro">
+                <p class="memory-intro-text">Metti alla prova la tua memoria con i momenti più iconici di Sofia!</p>
+                <div class="memory-difficulty-buttons">
+                    <button id="memory-easy-btn" class="memory-btn">Facile (6 carte)</button>
+                    <button id="memory-hard-btn" class="memory-btn">Difficile (8 carte)</button>
+                </div>
+            </div>
+            <div id="memory-game-board" class="hidden">
+                <div class="memory-stats">
+                    <span id="memory-errors">Errori: 0/3</span>
+                    <span id="memory-pairs">Coppie trovate: 0</span>
+                </div>
+                <div id="memory-grid" class="memory-grid"></div>
+                <button id="memory-restart-btn" class="memory-btn hidden">Gioca di nuovo</button>
+            </div>
+            <div id="memory-game-over" class="hidden">
+                <div class="memory-result">
+                    <h2 id="memory-result-title"></h2>
+                    <p id="memory-result-message"></p>
+                    <button id="memory-play-again-btn" class="memory-btn">Gioca di nuovo</button>
+                </div>
+            </div>
+        </section>
+
         <section id="all-moments">
             <h1 class="gold-text">Tutti i Momenti più Iconici</h1>
             <div class="gallery" id="photos-gallery">
