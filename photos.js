@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Memory Game Buttons
     const easyBtn = document.getElementById('memory-easy-btn');
+    const mediumBtn = document.getElementById('memory-medium-btn');
     const hardBtn = document.getElementById('memory-hard-btn');
     const restartBtn = document.getElementById('memory-restart-btn');
     const playAgainBtn = document.getElementById('memory-play-again-btn');
@@ -61,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         currentDifficulty = difficulty;
-        const numPairs = difficulty === 'easy' ? 3 : 4;
+        const numPairs = difficulty === 'easy' ? 3 : (difficulty === 'medium' ? 4 : 5);
         const totalCards = numPairs * 2;
         
         // Reset game state
@@ -191,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 500);
 
             // Check if game is won
-            const totalPairs = currentDifficulty === 'easy' ? 3 : 4;
+            const totalPairs = currentDifficulty === 'easy' ? 3 : (currentDifficulty === 'medium' ? 4 : 5);
             if (matchedPairs === totalPairs) {
                 setTimeout(() => endGame(true), 500);
             }
@@ -218,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         flippedCards = [];
-        if (errors < maxErrors && matchedPairs < (currentDifficulty === 'easy' ? 3 : 4)) {
+        if (errors < maxErrors && matchedPairs < (currentDifficulty === 'easy' ? 3 : (currentDifficulty === 'medium' ? 4 : 5))) {
             gameActive = true;
         }
     }
@@ -226,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update memory game stats
     function updateMemoryStats() {
         memoryErrors.textContent = `Errori: ${errors}/${maxErrors}`;
-        const totalPairs = currentDifficulty === 'easy' ? 3 : 4;
+        const totalPairs = currentDifficulty === 'easy' ? 3 : (currentDifficulty === 'medium' ? 4 : 5);
         memoryPairs.textContent = `Coppie trovate: ${matchedPairs}/${totalPairs}`;
     }
 
@@ -281,6 +282,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 startMemoryGame('hard');
             } else {
                 loadMemoryImages().then(() => startMemoryGame('hard'));
+            }
+        });
+    }
+
+    if (mediumBtn) {
+        mediumBtn.addEventListener('click', () => {
+            if (memoryGameImages.length > 0) {
+                startMemoryGame('medium');
+            } else {
+                loadMemoryImages().then(() => startMemoryGame('medium'));
             }
         });
     }
