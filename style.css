@@ -469,6 +469,57 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     box-shadow: 0 10px 30px rgba(2,20,10,0.45);
     backdrop-filter: blur(6px) saturate(120%);
     border: 1px solid rgba(11,90,43,0.08);
+    text-align: center;
+    transform: scale(0.95);
+    animation: loginBoxAppear 0.8s ease-out forwards;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-container > .login-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(228, 184, 75, 0.1), transparent);
+    transform: rotate(45deg);
+    transition: all 0.6s ease;
+    opacity: 0;
+}
+
+.login-container > .login-box:hover {
+    transform: scale(1.02) translateY(-5px);
+    box-shadow: 0 20px 50px rgba(2,20,10,0.55);
+    border-color: rgba(228, 184, 75, 0.3);
+}
+
+.login-container > .login-box:hover::before {
+    opacity: 1;
+    animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes loginBoxAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(30px);
+        box-shadow: 0 5px 15px rgba(2,20,10,0.2);
+    }
+    50% {
+        transform: scale(1.02) translateY(-5px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        box-shadow: 0 10px 30px rgba(2,20,10,0.45);
+    }
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
 }
 
 .login-container h1{
@@ -477,17 +528,61 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     color:var(--verde-dx);
     font-weight:800;
     letter-spacing:0.6px;
+    text-align: center;
+    animation: titleSlideIn 0.8s ease-out 0.2s both;
+    position: relative;
 }
+
 .login-container h2{
     margin:0 0 14px 0;
     font-size:1rem;
     color:#444;
     font-weight:600;
+    text-align: center;
+    animation: subtitleFadeIn 0.8s ease-out 0.4s both;
+    opacity: 0;
+}
+
+@keyframes titleSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes subtitleFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Form elements */
-#login-form{display:block;text-align:left}
-#login-form label{display:block;margin-bottom:8px;color:var(--verde-dx);font-weight:700}
+#login-form{
+    display:block;
+    text-align:center;
+    animation: formSlideUp 0.8s ease-out 0.6s both;
+    opacity: 0;
+}
+
+#login-form label{
+    display:block;
+    margin-bottom:8px;
+    color:var(--verde-dx);
+    font-weight:700;
+    text-align: center;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+}
+
 #login-form input[type="text"]{
     width:100%;
     padding:12px 14px;
@@ -497,12 +592,23 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
     font-size:1rem;
     outline:none;
-    transition:box-shadow .18s ease, transform .12s ease, border-color .12s ease;
+    transition:box-shadow .18s ease, transform .12s ease, border-color .12s ease, background-color .15s ease;
+    text-align: center;
+    font-family: inherit;
+    position: relative;
 }
+
 #login-form input[type="text"]:focus{
-    box-shadow:0 8px 20px rgba(11,90,43,0.12);
-    transform:translateY(-1px);
+    box-shadow:0 8px 20px rgba(11,90,43,0.12), 0 0 0 3px rgba(228, 184, 75, 0.2);
+    transform:translateY(-2px) scale(1.02);
     border-color:var(--verde-dx);
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+}
+
+#login-form input[type="text"]:hover:not(:focus) {
+    border-color: rgba(11,90,43,0.3);
+    box-shadow: 0 4px 12px rgba(11,90,43,0.08);
+    transform: translateY(-1px);
 }
 
 #login-form button{
@@ -515,11 +621,81 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     color:#fff;
     background: linear-gradient(145deg, #d4af37, #ffd700, #d4af37);
     box-shadow: 0 6px 18px rgba(184,134,43,0.18);
-    transition:transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+    transition:transform .12s ease, box-shadow .12s ease, opacity .12s ease, background .15s ease;
+    cursor: pointer;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
 }
-#login-form button:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(11,90,43,0.18)}
 
-#error-message{margin-top:10px;color:#c92a2a;font-weight:700;min-height:1.2em}
+#login-form button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+#login-form button:hover{
+    transform:translateY(-3px) scale(1.02);
+    box-shadow:0 15px 35px rgba(184,134,43,0.25);
+    background: linear-gradient(145deg, #e4b84b, #ffd700, #e4b84b);
+}
+
+#login-form button:hover::before {
+    left: 100%;
+}
+
+#login-form button:active {
+    transform: translateY(-1px) scale(1.01);
+    box-shadow: 0 8px 20px rgba(184,134,43,0.2);
+}
+
+@keyframes formSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#error-message{
+    color:#c92a2a;
+    font-weight:700;
+    text-align: center;
+    transition: all 0.3s ease;
+    margin: 0;
+    padding: 0;
+    /* Completamente invisibile di default */
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+#error-message.show-error {
+    opacity: 1;
+    height: auto;
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: linear-gradient(145deg, rgba(201, 42, 42, 0.1), rgba(220, 53, 69, 0.1));
+    border: 1px solid rgba(201, 42, 42, 0.2);
+    animation: errorShake 0.6s ease-in-out;
+}
+
+@keyframes errorShake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+    20%, 40%, 60%, 80% { transform: translateX(8px); }
+}
 
 /* Small screen tweaks: rendi la card meno larga su mobile */
 @media(max-width:420px){
@@ -601,7 +777,7 @@ button{cursor:pointer}
     color: white;
     border: none;
     padding: 16px 30px;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     font-weight: 700;
     border-radius: 12px;
     cursor: pointer;
@@ -904,7 +1080,7 @@ button{cursor:pointer}
         min-width: unset;
         max-width: 280px;
         padding: 12px 16px;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         flex: none;
     }
     
@@ -944,7 +1120,7 @@ button{cursor:pointer}
     /* Bootstrap XS - Schermi molto piccoli */
     .memory-btn {
         padding: 10px 18px;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         max-width: 250px;
     }
     
@@ -996,7 +1172,7 @@ button{cursor:pointer}
     .memory-btn {
         min-width: 180px;
         max-width: 220px;
-        font-size: 1rem;
+        font-size: 0.9rem;
         padding: 14px 24px;
     }
     
@@ -1021,7 +1197,7 @@ button{cursor:pointer}
         min-width: 200px;
         max-width: 240px;
         padding: 16px 30px;
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
     
     .memory-card {
@@ -1049,7 +1225,7 @@ button{cursor:pointer}
         min-width: 220px;
         max-width: 260px;
         padding: 18px 36px;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
     
     .memory-difficulty-buttons {
@@ -1064,7 +1240,7 @@ button{cursor:pointer}
         min-width: 240px;
         max-width: 280px;
         padding: 20px 40px;
-        font-size: 1.3rem;
+        font-size: 1.2rem;
     }
     
     .memory-difficulty-buttons {
@@ -1101,7 +1277,7 @@ button{cursor:pointer}
     }
     
     .memory-btn {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         padding: 8px 16px;
         max-width: 220px;
     }
@@ -1169,7 +1345,7 @@ button{cursor:pointer}
     }
     
     .memory-btn {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         padding: 6px 12px;
         max-width: 200px;
     }

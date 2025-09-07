@@ -13,7 +13,7 @@
     <div class="login-container">
         <div class="login-box">
             <h1>Entra nel sito di Sofia</h1>
-            <h2>Quanto ne sai sulla neo dottoressa?</h2>
+            <h2>Quanto ne sai sulla neo-dottoressa?</h2>
             
             <!-- Il form invia i dati a login.php usando il metodo POST -->
             <form id="login-form" action="login.php" method="POST">
@@ -22,7 +22,7 @@
                 <button type="submit">Entra</button>
             </form>
 
-            <p id="error-message" class="error">
+            <p id="error-message" class="error<?php echo (isset($_GET['error']) && $_GET['error'] == 1) ? ' show-error' : ''; ?>">
                 <?php
                 // Questo piccolo script PHP controlla se l'URL contiene "?error=1"
                 // e in tal caso stampa un messaggio di errore.

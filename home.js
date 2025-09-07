@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const quizzes = [
         { question: "🤔 Quanto puzza il culo di Sofia?", answer: "tanto" },
         { question: "📚 In che anno ha iniziato l'università?", answer: "1856" },
-        { question: "💭 Qual è il suo soprannome più comune?", answer: "Soffocotto" },
+        { question: "💭 Qual è il suo soprannome più comune?", answer: "Soficacona" },
     ];
 
     let currentQuizIndex = 0;
