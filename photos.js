@@ -314,27 +314,110 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Full Gallery ---
     const photosGallery = document.getElementById('photos-gallery');
 
-    fetch('media/media-list.json')
-        .then(response => response.json())
-        .then(data => {
-            const mediaFiles = data.files;
-            mediaFiles.forEach(file => {
-                const extension = file.split('.').pop().toLowerCase();
-                let mediaElement;
-                if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
-                    mediaElement = document.createElement('img');
-                    mediaElement.src = `media/${file}`;
-                } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
-                    mediaElement = document.createElement('video');
-                    mediaElement.src = `media/${file}`;
-                    mediaElement.autoplay = true;
-                    mediaElement.loop = true;
-                    mediaElement.muted = true;
+    // Function to shuffle an array using Fisher-Yates algorithm
+    function shuffleArray(array) {
+        const shuffled = [...array]; // Create a copy of the array
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+
+    // Function to create media element with lazy loading
+    function createMediaElement(file, index) {
+        const extension = file.split('.').pop().toLowerCase();
+        let mediaElement;
+        
+        if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'].includes(extension)) {
+            mediaElement = document.createElement('img');
+            mediaElement.dataset.src = `media/${file}`;
+            mediaElement.alt = `Foto ${index + 1}`;
+            
+            // Add lazy loading for images after the first 12
+            if (index > 11) {
+                mediaElement.loading = 'lazy';
+            } else {
+                // Load first 12 images immediately
+                mediaElement.src = mediaElement.dataset.src;
+            }
+            
+            // Add error handling
+            mediaElement.onerror = function() {
+                this.style.display = 'none';
+                console.log(`Errore nel caricare: ${file}`);
+            };
+            
+        } else if (['mp4', 'webm', 'ogg', 'mov', 'avi'].includes(extension)) {
+            mediaElement = document.createElement('video');
+            mediaElement.dataset.src = `media/${file}`;
+            mediaElement.autoplay = true; // Ripristinato autoplay
+            mediaElement.loop = true;
+            mediaElement.muted = true;
+            // Rimossi i controls per tornare come prima
+            
+            // Add lazy loading for videos after the first 6
+            if (index > 5) {
+                mediaElement.preload = 'none';
+            } else {
+                mediaElement.src = mediaElement.dataset.src;
+                mediaElement.preload = 'metadata';
+            }
+            
+            // Add error handling
+            mediaElement.onerror = function() {
+                this.style.display = 'none';
+                console.log(`Errore nel caricare: ${file}`);
+            };
+        }
+        
+        return mediaElement;
+    }
+
+    // Intersection Observer for lazy loading
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const mediaElement = entry.target;
+                if (mediaElement.dataset.src) {
+                    mediaElement.src = mediaElement.dataset.src;
+                    observer.unobserve(mediaElement);
                 }
-                if(mediaElement) {
+            }
+        });
+    }, {
+        rootMargin: '50px 0px' // Start loading 50px before element is visible
+    });
+
+    fetch('media/media-list.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Shuffle the media files array to display them in random order
+            const mediaFiles = shuffleArray(data.files);
+            
+            mediaFiles.forEach((file, index) => {
+                const mediaElement = createMediaElement(file, index);
+                
+                if (mediaElement) {
                     photosGallery.appendChild(mediaElement);
+                    
+                    // Set up lazy loading for elements that don't load immediately
+                    if ((mediaElement.tagName === 'IMG' && index > 11) || 
+                        (mediaElement.tagName === 'VIDEO' && index > 5)) {
+                        imageObserver.observe(mediaElement);
+                    }
                 }
             });
+            
+            console.log(`Caricati ${mediaFiles.length} file multimediali in ordine casuale`);
         })
-        .catch(error => console.error('Errore nel caricare la galleria completa:', error));
+        .catch(error => {
+            console.error('Errore nel caricare la galleria completa:', error);
+            photosGallery.innerHTML = '<p>Errore nel caricamento della galleria. Ricarica la pagina.</p>';
+        });
 });
