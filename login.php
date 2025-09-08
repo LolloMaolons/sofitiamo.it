@@ -3,10 +3,11 @@
 
 // Hash sicuri delle password in tutte le lingue
 $validHashes = [
-    '$2y$10$9Zq.UF/.aA251ksqiz6qoe2rXy0658.XyQuAs6Ev6fd1HAsXpY6za',
-    '$2y$10$mzO9gyWLNVFQ99BcUkbx3O8NuzLfKamsVx8oRADfKCi12xCgiXcfe',  
-    '$2y$10$3oNChWdmZaMn83mNDEPudux8ZXZ020w0px3o0lalCWBN1a8iiOYTu',
-    '$2y$10$VFr5acfvNiOROzhspckpZeGkKsElpwLA2ie3ZL6.c6tWwA7RjLm.y' 
+    '$2y$10$CgbITjuvY2j23XETHD.j.uDhvlX1OmZ7WxFmyUN0XzC3cCIIVC0zK',
+    '$2y$10$K3UbhgC0.iL3zyuRhmJ40.aFGQvWw6pxLulUwxFwD/p8TZohpL4fW',
+    '$2y$10$75fYbBg7VYju0oGHT8aEuujXkmBnzuEh.58Y/4HK.mujmUn.7/D9W',
+    '$2y$10$8uXc8jmZYTwjGrFjiuOcNOgZIX0L8V0HPfBQNDj2g6Rmrz6iHLUrG',
+    '$2y$10$Gf7N/iib9iBNR2KCplMK2OdqeSz8hsHHPwJ9XohBJ22FDvEFw3ywW'
 ];
 
 // Controlla se i dati sono stati inviati tramite POST
