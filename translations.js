@@ -559,15 +559,14 @@ class LanguageManager {
         this.setStoredLanguage(lang);
         this.translatePage();
         
-        // Refresh dynamic content if we're on different pages
-        if (typeof showQuiz === 'function' && window.currentQuizIndex !== undefined) {
-            // Refresh home quiz if it exists
-            showQuiz(window.currentQuizIndex);
+        // Aggiorna il quiz della pagina quiz.html, se presente
+        if (typeof window.updateQuizDisplay === 'function') {
+            window.updateQuizDisplay();
         }
-        
-        if (typeof showFullQuiz === 'function' && window.currentFullQuizIndex !== undefined) {
-            // Refresh full quiz if it exists
-            showFullQuiz(window.currentFullQuizIndex);
+
+        // AGGIUNTA: Aggiorna i quiz della home page, se presenti
+        if (typeof window.updateHomeQuizDisplay === 'function') {
+            window.updateHomeQuizDisplay();
         }
     }
     
@@ -597,6 +596,14 @@ class LanguageManager {
             }
         }
     }
+
+    // RIMUOVI la funzione updateDynamicQuizContent. La sua logica verrà spostata
+    // direttamente dentro i rispettivi gestori dei quiz per una maggiore pulizia.
+    /*
+    updateDynamicQuizContent() {
+        // ...tutto il contenuto di questa funzione va rimosso...
+    }
+    */
     
     translate(key) {
         const currentTranslations = translations[this.currentLanguage] || translations.it;

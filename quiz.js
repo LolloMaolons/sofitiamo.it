@@ -30,6 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Make it globally accessible for language changes
     window.currentFullQuizIndex = currentFullQuizIndex;
 
+    // NUOVA FUNZIONE: Questa verrà chiamata da translations.js
+    // per forzare l'aggiornamento del quiz con la nuova lingua.
+    window.updateQuizDisplay = function() {
+        showFullQuiz(window.currentFullQuizIndex);
+    }
+
     function showFullQuiz(index) {
         if (index < quizzesToShow.length) {
             const quiz = quizzesToShow[index];

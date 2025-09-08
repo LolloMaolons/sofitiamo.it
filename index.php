@@ -10,12 +10,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header>
+        <nav>
+            <a href="home.html" class="brand" data-translate="brand">DOTTORESSA!!!</a>
+
+            <div class="menu-toggle" id="menu-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </header>
+
     <div class="login-container">
-        <div class="language-selector">
-            <select class="language-select" id="language-selector">
-                <!-- Options will be populated by JavaScript -->
-            </select>
-        </div>
         <div class="login-box">
             <h1 data-translate="entra_sito">Entra nel sito di Sofia</h1>
             <h2 data-translate="quanto_sai_dottoressa">Quanto ne sai sulla neo-dottoressa?</h2>

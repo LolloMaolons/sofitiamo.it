@@ -63,34 +63,56 @@ header{
 }
 
 .quiz-page header {
-    background: linear-gradient(90deg,var(--bordeaux-sx),var(--bordeaux-dx));
+    background: linear-gradient(135deg, var(--bordeaux-sx), var(--bordeaux-dx));
 }
+
+/* --- INIZIO MODIFICHE NAVBAR --- */
 
 nav {
     display: flex;
     align-items: center;
-    position: relative;
+    justify-content: space-between; /* Spinge brand e menu ai lati */
+    flex-wrap: nowrap; /* Impedisce di andare a capo (tranne su schermi micro) */
     width: 100%;
+    gap: 1rem; /* Spazio minimo tra gli elementi */
 }
 
 .brand {
-    flex: 0 0 auto;
+    flex-shrink: 0; /* Non far restringere il brand */
+    white-space: nowrap; /* Evita che il testo vada a capo */
 }
 
 .language-selector {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
+    /* Nessuna regola di posizionamento speciale, si adatta allo spazio */
+    flex-shrink: 1; /* Permette al contenitore di restringersi se necessario */
+    min-width: 50px; /* Larghezza minima per evitare che scompaia */
 }
 
 .menu-toggle {
-    margin-left: auto;
-    flex: 0 0 auto;
+    flex-shrink: 0; /* Non far restringere il menu hamburger */
 }
+
+/* Per schermi micro, mettiamo il selettore a capo e centrato */
+@media (max-width: 480px) {
+    nav {
+        flex-wrap: wrap; /* Permetti agli elementi di andare a capo */
+        row-gap: 10px;
+    }
+
+    .language-selector {
+        order: 3; /* Manda il selettore in fondo */
+        width: 100%; /* Occupa tutta la larghezza */
+        display: flex;
+        justify-content: center; /* Centra il select */
+    }
+}
+
+/* --- FINE MODIFICHE NAVBAR --- */
+
 
 /* Testo oro più lucente */
 .brand{
+    font-family: "Josefin Sans", sans-serif;
     font-size:1.6rem;
     font-weight:700;
     text-decoration:none;
@@ -716,9 +738,17 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
 
 /* Small screen tweaks: rendi la card meno larga su mobile */
 @media(max-width:420px){
-    .login-container{padding:16px}
-    .login-container > .login-box{padding:18px;border-radius:12px}
-    .login-container h1{font-size:1.3rem}
+    .login-container > .login-box {
+        width: 92%;
+        padding: 20px;
+    }
+    /* Centra il selettore di lingua su schermi molto piccoli */
+    .login-container .language-selector {
+        top: 15px;
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 }
 
 /* Error */
@@ -1504,153 +1534,175 @@ button{cursor:pointer}
 
 /* Responsive adjustments for language selector */
 @media (max-width: 768px) {
-    .language-selector {
-        position: relative;
-        left: auto;
-        transform: none;
-        order: 2;
-        margin: 0 10px;
-    }
-    
-    nav {
-        justify-content: space-between;
-        flex-wrap: wrap;
-    }
-    
-    .brand {
-        order: 1;
-        flex: 1;
-    }
-    
-    .menu-toggle {
-        order: 3;
-        margin-left: 0;
-    }
-    
     .language-select {
         font-size: 12px;
         padding: 6px 8px;
-        min-width: 80px;
-    }
-    
-    .language-select:hover {
-        transform: translateY(-2px);
+        min-width: auto;
     }
 }
 
+/* Schermi piccoli: incolonna il selettore di lingua sotto */
 @media (max-width: 480px) {
+    nav {
+        flex-wrap: wrap; /* Permette agli elementi di andare a capo */
+        justify-content: space-between;
+        row-gap: 10px; /* Aggiunge spazio quando va a capo */
+    }
+
+    .brand {
+        margin-right: 0; /* Rimuove il margine per il layout a capo */
+    }
+
     .language-selector {
-        margin: 5px 0;
+        order: 3; /* Sposta il selettore in fondo */
+        width: 100%; /* Occupa tutta la larghezza */
+        justify-content: center;
+        display: flex;
     }
-    
+
     .language-select {
-        font-size: 11px;
-        padding: 5px 6px;
-        min-width: 60px;
+        min-width: 120px;
     }
 }
 
-/* Responsive integration styles already handled above */
+/* Rimuovi le regole vecchie e ridondanti */
+/*
+@media (max-width: 768px) {…}
 
-#navbar-home, #navbar-photos, #navbar-quiz {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    width: 100%;
-    position: relative;
-}
+@media (max-width: 480px) {…}
+*/
 
-/* Adjust brand positioning */
-.brand {
-    flex: 0 0 auto;
-    margin-right: 15px;
-}
-
-/* Ensure menu toggle stays in original position */
-.menu-toggle {
-    flex: 0 0 auto;
-    margin-left: auto;
-}
-
-/* Position language selector between brand and hamburger */
-.language-selector {
-    flex: 0 0 auto;
-    margin: 0 15px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-}
+/* Rimuovi queste regole che usavano position:absolute */
+/*
+#navbar-home, #navbar-photos, #navbar-quiz {…}
+.brand {…}
+.menu-toggle {…}
+.language-selector {…}
+*/
 
 /* Language selector styles with better flag support */
 .language-select {
+    background: linear-gradient(135deg, var(--verde-sx), var(--verde-dx));
+    border: 2px solid var(--verde-dx);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: "Josefin Sans", sans-serif;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    font-size: 14px;
+    min-width: 120px;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.language-select:hover {
+    background: linear-gradient(135deg, var(--verde-dx), var(--verde-sx));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(11, 90, 43, 0.4);
+}
+
+.language-select:focus {
+    border-color: var(--oro-chiaro);
+    box-shadow: 0 0 0 3px rgba(228, 184, 75, 0.3);
+}
+
+/* Stile del menu dropdown (option) */
+
+/* Default (Home/Index) - Verde */
+.language-select option {
+    background: var(--verde-sx);
+    color: white;
+    padding: 8px;
+    font-weight: 500;
+}
+
+/* Pagina Foto - Lilla */
+.photos-page .language-select option {
+    background: var(--lilla-sx);
+    color: white;
+}
+
+/* Pagina Quiz - Bordeaux */
+.quiz-page .language-select option {
+    background: var(--bordeaux-sx);
+    color: white;
+}
+
+/* Login page styling (oro) - special positioning */
+.login-container .language-selector {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.login-container .language-select {
     background: linear-gradient(135deg, var(--oro-chiaro), var(--oro-scuro));
     border: 2px solid var(--oro-scuro);
     border-radius: 8px;
-    padding: 6px 10px;
+    padding: 8px 12px;
     font-family: "Josefin Sans", sans-serif;
-    font-weight: 500;
+    font-weight: 600;
     color: #333;
     cursor: pointer;
     transition: all 0.3s ease;
     outline: none;
     font-size: 14px;
     min-width: 120px;
+    text-align: center;
 }
 
-.language-select:hover {
+.login-container .language-select:hover {
     background: linear-gradient(135deg, var(--oro-scuro), var(--oro-chiaro));
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(180, 134, 43, 0.3);
-}
-
-.language-select:focus {
-    border-color: var(--verde-dx);
-    box-shadow: 0 0 0 3px rgba(11, 90, 43, 0.2);
-}
-
-.language-select option {
-    background: white;
-    color: #333;
-    padding: 8px;
-    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(180, 134, 43, 0.4);
 }
 
 /* Responsive adjustments for language selector */
 @media (max-width: 768px) {
     .language-selector {
-        position: static;
+        position: static; /* Ritorna nel flusso normale */
         transform: none;
-        margin: 0 10px;
-        left: auto;
+        order: 2; /* Si posiziona tra brand e hamburger */
+        margin: 0;
     }
-    
-    .language-select {
-        font-size: 16px;
-        padding: 4px 6px;
-        min-width: 50px;
-    }
-    
-    /* Hide text on small screens, show only flags */
-    .language-select option {
-        font-size: 14px;
-    }
-}
 
-@media (max-width: 480px) {
-    .language-select {
-        font-size: 18px;
-        padding: 2px 4px;
-        min-width: 40px;
+    .brand {
+        margin-right: 0;
+        order: 1;
     }
-}
 
-@media (max-width: 768px) {
-    .language-selector {
+    .menu-toggle {
+        margin-left: 0;
         order: 3;
-        margin-top: 10px;
-        width: 100%;
+    }
+
+    .language-select {
+        font-size: 12px;
+        padding: 6px 8px;
+        min-width: auto;
+    }
+}
+
+/* Schermi molto piccoli: incolonna tutto */
+@media (max-width: 480px) {
+    nav {
+        flex-wrap: wrap; /* Permette di andare a capo */
+        justify-content: space-between;
+        row-gap: 10px;
+    }
+
+    .language-selector {
+        order: 3; /* Sposta il selettore in fondo */
+        width: 100%; /* Occupa tutta la larghezza */
         justify-content: center;
+        display: flex;
+    }
+
+    .language-select {
+        min-width: 120px;
     }
 }

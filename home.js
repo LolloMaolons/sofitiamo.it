@@ -21,6 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Make it globally accessible for language changes
     window.currentQuizIndex = currentQuizIndex;
 
+    // AGGIUNGI QUESTA FUNZIONE
+    // Verrà chiamata da translations.js per forzare l'aggiornamento del quiz.
+    window.updateHomeQuizDisplay = function() {
+        showQuiz(window.currentQuizIndex);
+    }
+
     function showQuiz(index) {
         if (index < quizzes.length) {
             const quiz = quizzes[index];
@@ -155,3 +161,51 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => console.error('Errore nel caricare la galleria:', error));
 });
+
+// La tua funzione checkHomeAnswer rimane invariata
+function checkHomeAnswer(index) {
+    const quiz = quizzes[index];
+    const correctAnswer = window.languageManager ? window.languageManager.translate(quiz.answerKey) : "tanto";
+    const userAnswer = document.getElementById(`home-answer-${index}`).value.trim();
+    const feedback = document.getElementById(`home-feedback-${index}`);
+    const inputField = document.getElementById(`home-answer-${index}`);
+    const button = inputField.nextElementSibling;
+    
+    const correctText = window.languageManager ? window.languageManager.translate('risposta_corretta') : "🎉 Perfetto! Risposta corretta!";
+    const wrongText = window.languageManager ? window.languageManager.translate('risposta_sbagliata') : "❌ Non proprio! La risposta corretta era:";
+    
+    if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+        feedback.textContent = correctText;
+        feedback.style.color = "green";
+        inputField.style.borderColor = "#28a745";
+        button.disabled = true;
+        button.textContent = window.languageManager ? window.languageManager.translate('corretto') : "Corretto! ✓";
+        button.style.background = "linear-gradient(145deg, #28a745, #20c997)";
+        
+        setTimeout(() => {
+            currentQuizIndex++;
+            window.currentQuizIndex = currentQuizIndex;
+            showQuiz(currentQuizIndex);
+        }, 1500);
+    } else {
+        feedback.textContent = `${wrongText} "${correctAnswer}"`;
+        feedback.style.color = "red";
+        inputField.style.borderColor = "#dc3545";
+        button.disabled = true;
+        button.textContent = window.languageManager ? window.languageManager.translate('sbagliato') : "Sbagliato ✗";
+        button.style.background = "linear-gradient(145deg, #dc3545, #c82333)";
+        
+        // Shake animation effect
+        inputField.style.animation = "shake 0.5s";
+        setTimeout(() => {
+            inputField.style.animation = "";
+        }, 500);
+        
+        // Passa alla domanda successiva dopo aver mostrato la soluzione
+        setTimeout(() => {
+            currentQuizIndex++;
+            window.currentQuizIndex = currentQuizIndex;
+            showQuiz(currentQuizIndex);
+        }, 2500);
+    }
+}
