@@ -8,7 +8,7 @@ const translations = {
         
         // Home page
         congratulazioni: "CONGRATULAZIONI",
-        dottoressa_buco: "Dottoressa del buco del culo",
+        dottoressa_buco: "Dottoressa del buco del cul...",
         piccolo_assaggio: "🧠 Un piccolo assaggio del quiz...",
         video_laurea: "Il Video di Laurea",
         home_title: "Benvenuta nella tua festa di laurea!",
