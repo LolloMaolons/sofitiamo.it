@@ -18,12 +18,20 @@ const translations = {
         gioca_quiz: "Gioca al quiz",
         
         // Home quiz
-        quiz_question_1: "🤔 Quanto puzza il culo di Sofia?",
-        quiz_answer_1: "tanto",
-        quiz_question_2: "📚 In che anno ha iniziato l'università?",
-        quiz_answer_2: "1856",
-        quiz_question_3: "💭 Qual è il suo soprannome più comune?",
-        quiz_answer_3: "Soficacona",
+        quiz_question_1: "💭 Qual è il suo soprannome più comune?",
+        quiz_answer_1: "zingara",
+        quiz_question_2: "🧀 Qual è il suo formaggio preferito?",
+        quiz_answer_2: "feta greca",
+        quiz_question_3: "📅 Quando si è liberata la Bulgaria dal giogo ottomano (dd-mm-aaaa)?",
+        quiz_answer_3: "03-03-1878",
+        quiz_question_4: "👜 Qual è il passatempo preferito di Sofia?",
+        quiz_answer_4: "borseggiare i vecchi",
+        quiz_question_5: "📖 Si legge dimìtrova o dimitròva?",
+        quiz_answer_5: "Dimitròva",
+        quiz_question_6: "🧬 Perché si chiama Sofia 'noveli'?",
+        quiz_answer_6: "Perché è un patronimico",
+        quiz_question_7: "🎵 Qual è il suo genere musicale preferito?",
+        quiz_answer_7: "Pubblicità di Spotify",
         inserisci_risposta: "Inserisci la tua risposta...",
         invia_risposta: "Invia Risposta",
         risposta_corretta: "🎉 Perfetto! Risposta corretta!",
@@ -41,14 +49,20 @@ const translations = {
         si_andiamo: "Sì, andiamo! 🚀",
         
         // Quiz questions for quiz.html
-        quiz_full_question_4: "🌈 Qual è il suo colore preferito?",
-        quiz_full_answer_4: "Verde",
-        quiz_full_question_5: "🐱 Come si chiama il suo gatto?",
-        quiz_full_answer_5: "Pippo",
-        quiz_full_question_6: "🎵 Qual è il suo genere musicale preferito?",
-        quiz_full_answer_6: "Pubblicità di Spotify",
-        quiz_full_question_7: "🍕 Qual è il suo cibo preferito?",
-        quiz_full_answer_7: "Cacca",
+        quiz_full_question_1: "💭 Qual è il suo soprannome più comune?",
+        quiz_full_answer_1: "zingara",
+        quiz_full_question_2: "🧀 Qual è il suo formaggio preferito?",
+        quiz_full_answer_2: "feta greca",
+        quiz_full_question_3: "📅 Quando si è liberata la Bulgaria dal giogo ottomano (dd-mm-aaaa)?",
+        quiz_full_answer_3: "03-03-1878",
+        quiz_full_question_4: "👜 Qual è il passatempo preferito di Sofia?",
+        quiz_full_answer_4: "borseggiare i vecchi",
+        quiz_full_question_5: "📖 Si legge dimìtrova o dimitròva?",
+        quiz_full_answer_5: "Dimitròva",
+        quiz_full_question_6: "🧬 Perché si chiama Sofia 'noveli'?",
+        quiz_full_answer_6: "Perché è un patronimico",
+        quiz_full_question_7: "🎵 Qual è il suo genere musicale preferito?",
+        quiz_full_answer_7: "Pubblicità di Spotify",
         
         // Photos page
         photos_title: "Gioco del Memory - Momenti Iconici",
@@ -112,12 +126,20 @@ const translations = {
         gioca_quiz: "Play the quiz",
         
         // Home quiz
-        quiz_question_1: "🤔 How much does Sofia's ass smell?",
-        quiz_answer_1: "so much",
-        quiz_question_2: "📚 What year did she start university?",
-        quiz_answer_2: "1856",
-        quiz_question_3: "💭 What is her most common nickname?",
-        quiz_answer_3: "Soficacona",
+        quiz_question_1: "💭 What is her most common nickname?",
+        quiz_answer_1: "gypsy",
+        quiz_question_2: "🧀 What is her favorite cheese?",
+        quiz_answer_2: "Greek feta",
+        quiz_question_3: "📅 When was Bulgaria liberated from Ottoman rule (dd-mm-yyyy)?",
+        quiz_answer_3: "03-03-1878",
+        quiz_question_4: "👜 What is Sofia's favorite pastime?",
+        quiz_answer_4: "pickpocketing old people",
+        quiz_question_5: "📖 Is it pronounced dimìtrova or dimitròva?",
+        quiz_answer_5: "Dimitròva",
+        quiz_question_6: "🧬 Why is Sofia called 'noveli'?",
+        quiz_answer_6: "Because it's a patronymic",
+        quiz_question_7: "🎵 What is her favorite music genre?",
+        quiz_answer_7: "Spotify ads",
         inserisci_risposta: "Enter your answer...",
         invia_risposta: "Submit Answer",
         risposta_corretta: "🎉 Perfect! Correct answer!",
@@ -132,14 +154,20 @@ const translations = {
         si_andiamo: "Yes, let's go! 🚀",
         
         // Quiz questions for quiz.html
-        quiz_full_question_4: "🌈 What is her favorite color?",
-        quiz_full_answer_4: "Green",
-        quiz_full_question_5: "🐱 What is her cat's name?",
-        quiz_full_answer_5: "Pippo",
-        quiz_full_question_6: "🎵 What is her favorite music genre?",
-        quiz_full_answer_6: "Spotify ads",
-        quiz_full_question_7: "🍕 What is her favorite food?",
-        quiz_full_answer_7: "Poop",
+        quiz_full_question_1: "💭 What is her most common nickname?",
+        quiz_full_answer_1: "gypsy",
+        quiz_full_question_2: "🧀 What is her favorite cheese?",
+        quiz_full_answer_2: "Greek feta",
+        quiz_full_question_3: "📅 When was Bulgaria liberated from Ottoman rule (dd-mm-yyyy)?",
+        quiz_full_answer_3: "03-03-1878",
+        quiz_full_question_4: "👜 What is Sofia's favorite pastime?",
+        quiz_full_answer_4: "pickpocketing old people",
+        quiz_full_question_5: "📖 Is it pronounced dimìtrova or dimitròva?",
+        quiz_full_answer_5: "Dimitròva",
+        quiz_full_question_6: "🧬 Why is Sofia called 'noveli'?",
+        quiz_full_answer_6: "Because it's a patronymic",
+        quiz_full_question_7: "🎵 What is her favorite music genre?",
+        quiz_full_answer_7: "Spotify ads",
         
         // Photos page
         photos_title: "Memory Game - Iconic Moments",
@@ -203,12 +231,20 @@ const translations = {
         gioca_quiz: "Играй теста",
         
         // Home quiz
-        quiz_question_1: "🤔 Колко много мирише задника на София?",
-        quiz_answer_1: "много",
-        quiz_question_2: "📚 През коя година започна университет?",
-        quiz_answer_2: "1856",
-        quiz_question_3: "💭 Как е най-честото ѝ прякорно име?",
-        quiz_answer_3: "Софикакона",
+        quiz_question_1: "💭 Какъв е най-честият ѝ прякор?",
+        quiz_answer_1: "циганка",
+        quiz_question_2: "🧀 Какво е любимото ѝ сирене?",
+        quiz_answer_2: "гръцко фета",
+        quiz_question_3: "📅 Кога е освободена България от османско владичество (дд-мм-гггг)?",
+        quiz_answer_3: "03-03-1878",
+        quiz_question_4: "👜 Какво е любимото ѝ хоби?",
+        quiz_answer_4: "да джобчосва старци",
+        quiz_question_5: "📖 Произнася ли се димитрова с ударение на и или на о?",
+        quiz_answer_5: "Dimitròva",
+        quiz_question_6: "🧬 Защо София се казва 'noveli'?",
+        quiz_answer_6: "Защото е патроним",
+        quiz_question_7: "🎵 Какъв е любимият ѝ музикален жанр?",
+        quiz_answer_7: "Реклами на Spotify",
         inserisci_risposta: "Въведи отговора си...",
         invia_risposta: "Изпрати отговор",
         risposta_corretta: "🎉 Перфектно! Верен отговор!",
@@ -223,14 +259,20 @@ const translations = {
         si_andiamo: "Да, да тръгваме! 🚀",
         
         // Quiz questions for quiz.html
-        quiz_full_question_4: "🌈 Какъв е любимият ѝ цвят?",
-        quiz_full_answer_4: "Зелен",
-        quiz_full_question_5: "🐱 Как се казва котката ѝ?",
-        quiz_full_answer_5: "Пипо",
-        quiz_full_question_6: "🎵 Какъв е любимият ѝ музикален жанр?",
-        quiz_full_answer_6: "Реклами на Spotify",
-        quiz_full_question_7: "🍕 Какво е любимата ѝ храна?",
-        quiz_full_answer_7: "Какашка",
+        quiz_full_question_1: "💭 Какъв е най-честият ѝ прякор?",
+        quiz_full_answer_1: "циганка",
+        quiz_full_question_2: "🧀 Какво е любимото ѝ сирене?",
+        quiz_full_answer_2: "гръцко фета",
+        quiz_full_question_3: "📅 Кога е освободена България от османско владичество (дд-мм-гггг)?",
+        quiz_full_answer_3: "03-03-1878",
+        quiz_full_question_4: "👜 Какво е любимото ѝ хоби?",
+        quiz_full_answer_4: "да джобчосва старци",
+        quiz_full_question_5: "📖 Произнася ли се димитрова с ударение на и или на о?",
+        quiz_full_answer_5: "Dimitròva",
+        quiz_full_question_6: "🧬 Защо София се казва 'noveli'?",
+        quiz_full_answer_6: "Защото е патроним",
+        quiz_full_question_7: "🎵 Какъв е любимият ѝ музикален жанр?",
+        quiz_full_answer_7: "Реклами на Spotify",
         
         // Photos page
         photos_title: "Игра на паметта - Знакови моменти",
@@ -294,12 +336,20 @@ const translations = {
         gioca_quiz: "Играй в тест",
         
         // Home quiz
-        quiz_question_1: "🤔 Как сильно пахнет задница Софии?",
-        quiz_answer_1: "очень сильно",
-        quiz_question_2: "📚 В каком году она начала университет?",
-        quiz_answer_2: "1856",
-        quiz_question_3: "💭 Как её самое частое прозвище?",
-        quiz_answer_3: "Софикакона",
+        quiz_question_1: "💭 Какое у неё самое частое прозвище?",
+        quiz_answer_1: "цыганка",
+        quiz_question_2: "🧀 Какой её любимый сыр?",
+        quiz_answer_2: "греческая фета",
+        quiz_question_3: "📅 Когда Болгария освободилась от османского ига (дд-мм-гггг)?",
+        quiz_answer_3: "03-03-1878",
+        quiz_question_4: "👜 Какое у Софии любимое занятие?",
+        quiz_answer_4: "обворовывать стариков",
+        quiz_question_5: "📖 Как правильно: димитрОва или дИмитрова?",
+        quiz_answer_5: "Dimitròva",
+        quiz_question_6: "🧬 Почему София называется 'noveli'?",
+        quiz_answer_6: "Потому что это патроним",
+        quiz_question_7: "🎵 Какой её любимый музыкальный жанр?",
+        quiz_answer_7: "Реклама Spotify",
         inserisci_risposta: "Введи свой ответ...",
         invia_risposta: "Отправить ответ",
         risposta_corretta: "🎉 Отлично! Правильный ответ!",
@@ -317,14 +367,20 @@ const translations = {
         si_andiamo: "Да, поехали! 🚀",
         
         // Quiz questions for quiz.html
-        quiz_full_question_4: "🌈 Какой её любимый цвет?",
-        quiz_full_answer_4: "Зелёный",
-        quiz_full_question_5: "🐱 Как зовут её кота?",
-        quiz_full_answer_5: "Пиппо",
-        quiz_full_question_6: "🎵 Какой её любимый музыкальный жанр?",
-        quiz_full_answer_6: "Реклама Spotify",
-        quiz_full_question_7: "🍕 Какая её любимая еда?",
-        quiz_full_answer_7: "Какашка",
+        quiz_full_question_1: "💭 Какое у неё самое частое прозвище?",
+        quiz_full_answer_1: "цыганка",
+        quiz_full_question_2: "🧀 Какой её любимый сыр?",
+        quiz_full_answer_2: "греческая фета",
+        quiz_full_question_3: "📅 Когда Болгария освободилась от османского ига (дд-мм-гггг)?",
+        quiz_full_answer_3: "03-03-1878",
+        quiz_full_question_4: "👜 Какое у Софии любимое занятие?",
+        quiz_full_answer_4: "обворовывать стариков",
+        quiz_full_question_5: "📖 Как правильно: димитрОва или дИмитрова?",
+        quiz_full_answer_5: "Dimitròva",
+        quiz_full_question_6: "🧬 Почему София называется 'noveli'?",
+        quiz_full_answer_6: "Потому что это патроним",
+        quiz_full_question_7: "🎵 Какой её любимый музыкальный жанр?",
+        quiz_full_answer_7: "Реклама Spotify",
         
         // Photos page
         photos_title: "Игра на память - Знаковые моменты",
@@ -388,12 +444,20 @@ const translations = {
         gioca_quiz: "Joue au quiz",
         
         // Home quiz
-        quiz_question_1: "🤔 À quel point le cul de Sofia pue?",
-        quiz_answer_1: "beaucoup",
-        quiz_question_2: "📚 En quelle année a-t-elle commencé l'université?",
-        quiz_answer_2: "1856",
-        quiz_question_3: "💭 Quel est son surnom le plus commun?",
-        quiz_answer_3: "Soficacona",
+        quiz_question_1: "💭 Quel est son surnom le plus courant?",
+        quiz_answer_1: "gitane",
+        quiz_question_2: "🧀 Quel est son fromage préféré?",
+        quiz_answer_2: "feta grecque",
+        quiz_question_3: "📅 Quand la Bulgarie a-t-elle été libérée du joug ottoman (jj-mm-aaaa)?",
+        quiz_answer_3: "03-03-1878",
+        quiz_question_4: "👜 Quel est le passe-temps préféré de Sofia?",
+        quiz_answer_4: "voler les vieux",
+        quiz_question_5: "📖 Est-ce qu'on dit dimìtrova ou dimitròva?",
+        quiz_answer_5: "Dimitròva",
+        quiz_question_6: "🧬 Pourquoi Sofia s'appelle-t-elle 'noveli'?",
+        quiz_answer_6: "Parce que c'est un patronyme",
+        quiz_question_7: "🎵 Quel est son genre musical préféré?",
+        quiz_answer_7: "Publicité Spotify",
         inserisci_risposta: "Saisis ta réponse...",
         invia_risposta: "Envoyer la réponse",
         risposta_corretta: "🎉 Parfait! Bonne réponse!",
@@ -406,56 +470,20 @@ const translations = {
         si_andiamo: "Oui, allons-y! 🚀",
         
         // Quiz questions for quiz.html
-        quiz_full_question_4: "🌈 Quelle est sa couleur préférée?",
-        quiz_full_answer_4: "Vert",
-        quiz_full_question_5: "🐱 Comment s'appelle son chat?",
-        quiz_full_answer_5: "Pippo",
-        quiz_full_question_6: "🎵 Quel est son genre musical préféré?",
-        quiz_full_answer_6: "Publicité Spotify",
-        quiz_full_question_7: "🍕 Quel est son plat préféré?",
-        quiz_full_answer_7: "Caca",
-        
-        // Photos page
-        photos_title: "Jeu de Mémoire - Moments Iconiques",
-        memory_intro: "Teste ta mémoire avec les moments les plus iconiques de Sofia!",
-        facile: "Facile (6 cartes)",
-        intermedio: "Moyen (8 cartes)",
-        difficile: "Difficile (10 cartes)",
-        errori: "Erreurs",
-        coppie_trovate: "Paires trouvées",
-        gioca_ancora: "Jouer encore",
-        complimenti: "🎉 Félicitations! 🎉",
-        hai_vinto: "Tu as gagné le jeu de mémoire! Ta mémoire est fantastique!",
-        game_over: "😔 Game Over",
-        riprova: "Tu as épuisé tes tentatives. Réessaie pour améliorer ta mémoire!",
-        tutti_momenti: "Tous les moments les plus iconiques",
-        
-        // Quiz page
-        quiz_title: "Que connais-tu de Sofia?",
-        quiz_subtitle: "Teste tes connaissances sur Sofia avec ce quiz amusant!",
-        inizia_quiz: "Commencer le quiz",
-        domanda: "Question",
-        di: "de",
-        punteggio: "Score",
-        prossima_domanda: "Question suivante",
-        vedi_risultati: "Voir les résultats",
-        risultati_quiz: "Résultats du quiz",
-        hai_ottenuto: "Tu as obtenu",
-        punti_su: "points sur",
-        esperto_sofia: "🏆 Tu es un vrai expert de Sofia!",
-        conosci_bene: "👍 Tu connais bien Sofia!",
-        puoi_migliorare: "📚 Tu peux améliorer tes connaissances sur Sofia!",
-        riprova_quiz: "Refaire le quiz",
-        
-        // Quiz full page
-        domanda_corrente: "Question {{current}} de {{total}}",
-        punteggio: "Score: {{score}}/{{total}}",
-        completa_quiz: "Terminer le quiz",
-        invia_risposta: "Envoyer la réponse",
-        risposta_corretta: "🎉 Excellent! Bonne réponse!",
-        risposta_sbagliata: "❌ Pas tout à fait! La bonne réponse était:",
-        corretto: "Correct! ✓",
-        sbagliato: "Incorrect ✗",
+        quiz_full_question_1: "💭 Quel est son surnom le plus courant?",
+        quiz_full_answer_1: "gitane",
+        quiz_full_question_2: "🧀 Quel est son fromage préféré?",
+        quiz_full_answer_2: "feta grecque",
+        quiz_full_question_3: "📅 Quand la Bulgarie a-t-elle été libérée du joug ottoman (jj-mm-aaaa)?",
+        quiz_full_answer_3: "03-03-1878",
+        quiz_full_question_4: "👜 Quel est le passe-temps préféré de Sofia?",
+        quiz_full_answer_4: "voler les vieux",
+        quiz_full_question_5: "📖 Est-ce qu'on dit dimìtrova ou dimitròva?",
+        quiz_full_answer_5: "Dimitròva",
+        quiz_full_question_6: "🧬 Pourquoi Sofia s'appelle-t-elle 'noveli'?",
+        quiz_full_answer_6: "Parce que c'est un patronyme",
+        quiz_full_question_7: "🎵 Quel est son genre musical préféré?",
+        quiz_full_answer_7: "Publicité Spotify",
         
         // Language selector
         seleziona_lingua: "Choisir la langue",
@@ -526,7 +554,7 @@ class LanguageManager {
         
         let options = '';
         if (isVerySmall) {
-            // Very small screens: only flags
+            // Schermi molto piccoli: solo bandiere
             options = `
                 <option value="it" ${this.currentLanguage === 'it' ? 'selected' : ''}>🇮🇹</option>
                 <option value="en" ${this.currentLanguage === 'en' ? 'selected' : ''}>🇬🇧</option>
@@ -534,8 +562,17 @@ class LanguageManager {
                 <option value="ru" ${this.currentLanguage === 'ru' ? 'selected' : ''}>🇷🇺</option>
                 <option value="fr" ${this.currentLanguage === 'fr' ? 'selected' : ''}>🇫🇷</option>
             `;
+        } else if (isMobile) {
+            // Tablet/mobile: bandiere + abbreviazioni
+            options = `
+                <option value="it" ${this.currentLanguage === 'it' ? 'selected' : ''}>🇮🇹 IT</option>
+                <option value="en" ${this.currentLanguage === 'en' ? 'selected' : ''}>🇬🇧 EN</option>
+                <option value="bg" ${this.currentLanguage === 'bg' ? 'selected' : ''}>🇧🇬 BG</option>
+                <option value="ru" ${this.currentLanguage === 'ru' ? 'selected' : ''}>🇷🇺 RU</option>
+                <option value="fr" ${this.currentLanguage === 'fr' ? 'selected' : ''}>🇫🇷 FR</option>
+            `;
         } else {
-            // Larger screens: flags + language names
+            // Desktop: bandiere + nomi completi
             options = `
                 <option value="it" ${this.currentLanguage === 'it' ? 'selected' : ''}>🇮🇹 Italiano</option>
                 <option value="en" ${this.currentLanguage === 'en' ? 'selected' : ''}>🇬🇧 English</option>

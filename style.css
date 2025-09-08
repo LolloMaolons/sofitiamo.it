@@ -71,40 +71,45 @@ header{
 nav {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Spinge brand e menu ai lati */
-    flex-wrap: nowrap; /* Impedisce di andare a capo (tranne su schermi micro) */
+    justify-content: space-between;
+    flex-wrap: nowrap; /* Mantieni sempre sulla stessa riga */
     width: 100%;
-    gap: 1rem; /* Spazio minimo tra gli elementi */
+    gap: 0.5rem; /* Spazio ridotto per permettere più elementi */
+    min-height: 44px; /* Altezza minima per consistenza */
 }
 
 .brand {
-    flex-shrink: 0; /* Non far restringere il brand */
-    white-space: nowrap; /* Evita che il testo vada a capo */
+    flex-shrink: 0;
+    white-space: nowrap;
+    order: 1;
 }
 
 .language-selector {
-    /* Nessuna regola di posizionamento speciale, si adatta allo spazio */
-    flex-shrink: 1; /* Permette al contenitore di restringersi se necessario */
-    min-width: 50px; /* Larghezza minima per evitare che scompaia */
+    flex-shrink: 1; /* Può restringersi quando necessario */
+    order: 2; /* Posizione centrale */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px; /* Larghezza minima molto ridotta */
+    max-width: 150px; /* Larghezza massima */
 }
 
 .menu-toggle {
-    flex-shrink: 0; /* Non far restringere il menu hamburger */
+    flex-shrink: 0;
+    order: 3; /* Ultima posizione */
 }
 
-/* Per schermi micro, mettiamo il selettore a capo e centrato */
-@media (max-width: 480px) {
-    nav {
-        flex-wrap: wrap; /* Permetti agli elementi di andare a capo */
-        row-gap: 10px;
-    }
+/* Gestione z-index per sovrapposizione */
+.language-selector {
+    z-index: 5; /* Dietro al menu quando chiuso */
+}
 
-    .language-selector {
-        order: 3; /* Manda il selettore in fondo */
-        width: 100%; /* Occupa tutta la larghezza */
-        display: flex;
-        justify-content: center; /* Centra il select */
-    }
+.language-selector.open {
+    z-index: 15; /* Sopra tutto quando aperto */
+}
+
+.menu-toggle {
+    z-index: 10; /* Sempre davanti al selettore chiuso */
 }
 
 /* --- FINE MODIFICHE NAVBAR --- */
@@ -634,7 +639,6 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     transition:box-shadow .18s ease, transform .12s ease, border-color .12s ease, background-color .15s ease;
     text-align: center;
     font-family: inherit;
-    position: relative;
 }
 
 #login-form input[type="text"]:focus{
@@ -1435,14 +1439,17 @@ button{cursor:pointer}
     max-width: 600px;
 }
 
-/* Language Selector Styles */
+/* Language Selector Styles - versioni responsive migliorate */
 .language-selector {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
     display: flex;
     align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 5; /* Dietro al menu quando chiuso */
+}
+
+.language-selector.open {
+    z-index: 15; /* Sopra tutto quando aperto */
 }
 
 /* Default styling (verde) */
@@ -1450,21 +1457,26 @@ button{cursor:pointer}
     background: linear-gradient(135deg, var(--verde-sx), var(--verde-dx));
     border: 2px solid var(--verde-dx);
     border-radius: 8px;
-    padding: 8px 12px;
+    padding: 6px 10px;
     font-family: "Josefin Sans", sans-serif;
     font-weight: 600;
     color: white;
     cursor: pointer;
     transition: all 0.3s ease;
     outline: none;
-    font-size: 14px;
-    min-width: 120px;
+    font-size: 13px;
+    min-width: 100px;
+    max-width: 140px;
     text-align: center;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .language-select:hover {
     background: linear-gradient(135deg, var(--verde-dx), var(--verde-sx));
-    transform: translateX(-50%) translateY(-2px);
+    transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(11, 90, 43, 0.4);
 }
 
@@ -1474,8 +1486,8 @@ button{cursor:pointer}
 }
 
 .language-select option {
-    background: white;
-    color: #333;
+    background: var(--verde-sx);
+    color: white;
     padding: 8px;
     font-weight: 500;
 }
@@ -1491,6 +1503,11 @@ button{cursor:pointer}
     box-shadow: 0 4px 12px rgba(106, 76, 147, 0.4);
 }
 
+.photos-page .language-select option {
+    background: var(--lilla-sx);
+    color: white;
+}
+
 /* Quiz page styling (bordeaux) */
 .quiz-page .language-select {
     background: linear-gradient(135deg, var(--bordeaux-sx), var(--bordeaux-dx));
@@ -1502,130 +1519,6 @@ button{cursor:pointer}
     box-shadow: 0 4px 12px rgba(139, 21, 56, 0.4);
 }
 
-/* Login page styling (oro) - special positioning */
-.login-container .language-selector {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 100;
-}
-
-.login-container .language-select {
-    background: linear-gradient(135deg, var(--oro-chiaro), var(--oro-scuro));
-    border: 2px solid var(--oro-scuro);
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-family: "Josefin Sans", sans-serif;
-    font-weight: 600;
-    color: #333;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    outline: none;
-    font-size: 14px;
-    min-width: 120px;
-    text-align: center;
-}
-
-.login-container .language-select:hover {
-    background: linear-gradient(135deg, var(--oro-scuro), var(--oro-chiaro));
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(180, 134, 43, 0.4);
-}
-
-/* Responsive adjustments for language selector */
-@media (max-width: 768px) {
-    .language-select {
-        font-size: 12px;
-        padding: 6px 8px;
-        min-width: auto;
-    }
-}
-
-/* Schermi piccoli: incolonna il selettore di lingua sotto */
-@media (max-width: 480px) {
-    nav {
-        flex-wrap: wrap; /* Permette agli elementi di andare a capo */
-        justify-content: space-between;
-        row-gap: 10px; /* Aggiunge spazio quando va a capo */
-    }
-
-    .brand {
-        margin-right: 0; /* Rimuove il margine per il layout a capo */
-    }
-
-    .language-selector {
-        order: 3; /* Sposta il selettore in fondo */
-        width: 100%; /* Occupa tutta la larghezza */
-        justify-content: center;
-        display: flex;
-    }
-
-    .language-select {
-        min-width: 120px;
-    }
-}
-
-/* Rimuovi le regole vecchie e ridondanti */
-/*
-@media (max-width: 768px) {…}
-
-@media (max-width: 480px) {…}
-*/
-
-/* Rimuovi queste regole che usavano position:absolute */
-/*
-#navbar-home, #navbar-photos, #navbar-quiz {…}
-.brand {…}
-.menu-toggle {…}
-.language-selector {…}
-*/
-
-/* Language selector styles with better flag support */
-.language-select {
-    background: linear-gradient(135deg, var(--verde-sx), var(--verde-dx));
-    border: 2px solid var(--verde-dx);
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-family: "Josefin Sans", sans-serif;
-    font-weight: 600;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    outline: none;
-    font-size: 14px;
-    min-width: 120px;
-    text-align: center;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-}
-
-.language-select:hover {
-    background: linear-gradient(135deg, var(--verde-dx), var(--verde-sx));
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(11, 90, 43, 0.4);
-}
-
-.language-select:focus {
-    border-color: var(--oro-chiaro);
-    box-shadow: 0 0 0 3px rgba(228, 184, 75, 0.3);
-}
-
-/* Stile del menu dropdown (option) */
-
-/* Default (Home/Index) - Verde */
-.language-select option {
-    background: var(--verde-sx);
-    color: white;
-    padding: 8px;
-    font-weight: 500;
-}
-
-/* Pagina Foto - Lilla */
-.photos-page .language-select option {
-    background: var(--lilla-sx);
-    color: white;
-}
-
-/* Pagina Quiz - Bordeaux */
 .quiz-page .language-select option {
     background: var(--bordeaux-sx);
     color: white;
@@ -1663,46 +1556,21 @@ button{cursor:pointer}
 
 /* Responsive adjustments for language selector */
 @media (max-width: 768px) {
-    .language-selector {
-        position: static; /* Ritorna nel flusso normale */
-        transform: none;
-        order: 2; /* Si posiziona tra brand e hamburger */
-        margin: 0;
-    }
-
-    .brand {
-        margin-right: 0;
-        order: 1;
-    }
-
-    .menu-toggle {
-        margin-left: 0;
-        order: 3;
-    }
-
     .language-select {
         font-size: 12px;
-        padding: 6px 8px;
-        min-width: auto;
+        padding: 5px 8px;
+        min-width: 80px;
+        max-width: 100px;
     }
 }
 
-/* Schermi molto piccoli: incolonna tutto */
+/* Schermi molto piccoli: solo bandiere */
 @media (max-width: 480px) {
-    nav {
-        flex-wrap: wrap; /* Permette di andare a capo */
-        justify-content: space-between;
-        row-gap: 10px;
-    }
-
-    .language-selector {
-        order: 3; /* Sposta il selettore in fondo */
-        width: 100%; /* Occupa tutta la larghezza */
-        justify-content: center;
-        display: flex;
-    }
-
     .language-select {
-        min-width: 120px;
+        font-size: 14px;
+        padding: 4px 6px;
+        min-width: 50px;
+        max-width: 60px;
+        text-align: center;
     }
 }
