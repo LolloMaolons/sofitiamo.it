@@ -226,9 +226,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update memory game stats
     function updateMemoryStats() {
-        memoryErrors.textContent = `Errori: ${errors}/${maxErrors}`;
+        const errorsText = window.languageManager ? window.languageManager.translate('errori') : 'Errori';
+        const pairsText = window.languageManager ? window.languageManager.translate('coppie_trovate') : 'Coppie trovate';
+        
+        memoryErrors.textContent = `${errorsText}: ${errors}/${maxErrors}`;
         const totalPairs = currentDifficulty === 'easy' ? 3 : (currentDifficulty === 'medium' ? 4 : 5);
-        memoryPairs.textContent = `Coppie trovate: ${matchedPairs}/${totalPairs}`;
+        memoryPairs.textContent = `${pairsText}: ${matchedPairs}/${totalPairs}`;
     }
 
     // End the memory game
@@ -236,13 +239,17 @@ document.addEventListener('DOMContentLoaded', () => {
         gameActive = false;
         
         if (won) {
-            memoryResultTitle.textContent = '🎉 Complimenti! 🎉';
+            const congratsText = window.languageManager ? window.languageManager.translate('complimenti') : '🎉 Complimenti! 🎉';
+            const wonText = window.languageManager ? window.languageManager.translate('hai_vinto') : 'Hai vinto il Memory Game! La tua memoria è fantastica!';
+            memoryResultTitle.textContent = congratsText;
             memoryResultTitle.className = 'gold-text';
-            memoryResultMessage.textContent = 'Hai vinto il Memory Game! La tua memoria è fantastica!';
+            memoryResultMessage.textContent = wonText;
         } else {
-            memoryResultTitle.textContent = '😔 Game Over';
+            const gameOverText = window.languageManager ? window.languageManager.translate('game_over') : '😔 Game Over';
+            const retryText = window.languageManager ? window.languageManager.translate('riprova') : 'Hai esaurito i tentativi. Riprova per migliorare la tua memoria!';
+            memoryResultTitle.textContent = gameOverText;
             memoryResultTitle.style.color = '#c92a2a';
-            memoryResultMessage.textContent = 'Hai esaurito i tentativi. Riprova per migliorare la tua memoria!';
+            memoryResultMessage.textContent = retryText;
         }
 
         setTimeout(() => {

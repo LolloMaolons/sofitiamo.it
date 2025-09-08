@@ -68,8 +68,25 @@ header{
 
 nav {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    position: relative;
+    width: 100%;
+}
+
+.brand {
+    flex: 0 0 auto;
+}
+
+.language-selector {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.menu-toggle {
+    margin-left: auto;
+    flex: 0 0 auto;
 }
 
 /* Testo oro più lucente */
@@ -1386,4 +1403,254 @@ button{cursor:pointer}
     align-items: center;
     text-align: center;
     max-width: 600px;
+}
+
+/* Language Selector Styles */
+.language-selector {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+}
+
+/* Default styling (verde) */
+.language-select {
+    background: linear-gradient(135deg, var(--verde-sx), var(--verde-dx));
+    border: 2px solid var(--verde-dx);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: "Josefin Sans", sans-serif;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    font-size: 14px;
+    min-width: 120px;
+    text-align: center;
+}
+
+.language-select:hover {
+    background: linear-gradient(135deg, var(--verde-dx), var(--verde-sx));
+    transform: translateX(-50%) translateY(-2px);
+    box-shadow: 0 4px 12px rgba(11, 90, 43, 0.4);
+}
+
+.language-select:focus {
+    border-color: var(--oro-chiaro);
+    box-shadow: 0 0 0 3px rgba(228, 184, 75, 0.3);
+}
+
+.language-select option {
+    background: white;
+    color: #333;
+    padding: 8px;
+    font-weight: 500;
+}
+
+/* Photos page styling (lilla) */
+.photos-page .language-select {
+    background: linear-gradient(135deg, var(--lilla-sx), var(--lilla-dx));
+    border-color: var(--lilla-dx);
+}
+
+.photos-page .language-select:hover {
+    background: linear-gradient(135deg, var(--lilla-dx), var(--lilla-sx));
+    box-shadow: 0 4px 12px rgba(106, 76, 147, 0.4);
+}
+
+/* Quiz page styling (bordeaux) */
+.quiz-page .language-select {
+    background: linear-gradient(135deg, var(--bordeaux-sx), var(--bordeaux-dx));
+    border-color: var(--bordeaux-dx);
+}
+
+.quiz-page .language-select:hover {
+    background: linear-gradient(135deg, var(--bordeaux-dx), var(--bordeaux-sx));
+    box-shadow: 0 4px 12px rgba(139, 21, 56, 0.4);
+}
+
+/* Login page styling (oro) - special positioning */
+.login-container .language-selector {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.login-container .language-select {
+    background: linear-gradient(135deg, var(--oro-chiaro), var(--oro-scuro));
+    border: 2px solid var(--oro-scuro);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: "Josefin Sans", sans-serif;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    font-size: 14px;
+    min-width: 120px;
+    text-align: center;
+}
+
+.login-container .language-select:hover {
+    background: linear-gradient(135deg, var(--oro-scuro), var(--oro-chiaro));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(180, 134, 43, 0.4);
+}
+
+/* Responsive adjustments for language selector */
+@media (max-width: 768px) {
+    .language-selector {
+        position: relative;
+        left: auto;
+        transform: none;
+        order: 2;
+        margin: 0 10px;
+    }
+    
+    nav {
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    
+    .brand {
+        order: 1;
+        flex: 1;
+    }
+    
+    .menu-toggle {
+        order: 3;
+        margin-left: 0;
+    }
+    
+    .language-select {
+        font-size: 12px;
+        padding: 6px 8px;
+        min-width: 80px;
+    }
+    
+    .language-select:hover {
+        transform: translateY(-2px);
+    }
+}
+
+@media (max-width: 480px) {
+    .language-selector {
+        margin: 5px 0;
+    }
+    
+    .language-select {
+        font-size: 11px;
+        padding: 5px 6px;
+        min-width: 60px;
+    }
+}
+
+/* Responsive integration styles already handled above */
+
+#navbar-home, #navbar-photos, #navbar-quiz {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    width: 100%;
+    position: relative;
+}
+
+/* Adjust brand positioning */
+.brand {
+    flex: 0 0 auto;
+    margin-right: 15px;
+}
+
+/* Ensure menu toggle stays in original position */
+.menu-toggle {
+    flex: 0 0 auto;
+    margin-left: auto;
+}
+
+/* Position language selector between brand and hamburger */
+.language-selector {
+    flex: 0 0 auto;
+    margin: 0 15px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+/* Language selector styles with better flag support */
+.language-select {
+    background: linear-gradient(135deg, var(--oro-chiaro), var(--oro-scuro));
+    border: 2px solid var(--oro-scuro);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-family: "Josefin Sans", sans-serif;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    font-size: 14px;
+    min-width: 120px;
+}
+
+.language-select:hover {
+    background: linear-gradient(135deg, var(--oro-scuro), var(--oro-chiaro));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(180, 134, 43, 0.3);
+}
+
+.language-select:focus {
+    border-color: var(--verde-dx);
+    box-shadow: 0 0 0 3px rgba(11, 90, 43, 0.2);
+}
+
+.language-select option {
+    background: white;
+    color: #333;
+    padding: 8px;
+    font-weight: 500;
+}
+
+/* Responsive adjustments for language selector */
+@media (max-width: 768px) {
+    .language-selector {
+        position: static;
+        transform: none;
+        margin: 0 10px;
+        left: auto;
+    }
+    
+    .language-select {
+        font-size: 16px;
+        padding: 4px 6px;
+        min-width: 50px;
+    }
+    
+    /* Hide text on small screens, show only flags */
+    .language-select option {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .language-select {
+        font-size: 18px;
+        padding: 2px 4px;
+        min-width: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .language-selector {
+        order: 3;
+        margin-top: 10px;
+        width: 100%;
+        justify-content: center;
+    }
 }

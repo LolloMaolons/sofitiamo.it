@@ -12,21 +12,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Home Quiz ---
     const homeQuizContainer = document.getElementById('home-quiz-section');
     const quizzes = [
-        { question: "🤔 Quanto puzza il culo di Sofia?", answer: "tanto" },
-        { question: "📚 In che anno ha iniziato l'università?", answer: "1856" },
-        { question: "💭 Qual è il suo soprannome più comune?", answer: "Soficacona" },
+        { questionKey: "quiz_question_1", answerKey: "quiz_answer_1" },
+        { questionKey: "quiz_question_2", answerKey: "quiz_answer_2" },
+        { questionKey: "quiz_question_3", answerKey: "quiz_answer_3" },
     ];
 
     let currentQuizIndex = 0;
+    // Make it globally accessible for language changes
+    window.currentQuizIndex = currentQuizIndex;
 
     function showQuiz(index) {
         if (index < quizzes.length) {
             const quiz = quizzes[index];
+            const questionText = window.languageManager ? window.languageManager.translate(quiz.questionKey) : "🤔 Quanto puzza il culo di Sofia?";
+            const placeholderText = window.languageManager ? window.languageManager.translate('inserisci_risposta') : "Inserisci la tua risposta...";
+            const submitText = window.languageManager ? window.languageManager.translate('invia_risposta') : "Invia Risposta";
+            
             homeQuizContainer.innerHTML = `
                 <div class="quiz-question">
-                    <p>${quiz.question}</p>
-                    <input type="text" id="quiz-answer-${index}" placeholder="Inserisci la tua risposta...">
-                    <button onclick="checkAnswer(${index}, '${quiz.answer}')">Invia Risposta</button>
+                    <p>${questionText}</p>
+                    <input type="text" id="quiz-answer-${index}" placeholder="${placeholderText}">
+                    <button onclick="checkAnswer(${index})">${submitText}</button>
                     <p id="feedback-${index}"></p>
                 </div>
             `;
@@ -36,47 +42,57 @@ document.addEventListener('DOMContentLoaded', () => {
             inputField.addEventListener('keypress', function(event) {
                 if (event.key === 'Enter') {
                     event.preventDefault();
-                    checkAnswer(index, quiz.answer);
+                    checkAnswer(index);
                 }
             });
             
             // Focus on input field for better UX
             inputField.focus();
         } else {
+            const completedText = window.languageManager ? window.languageManager.translate('completato_home_quiz') : "🎉 Complimenti! Hai completato tutti i quiz della home!";
+            const continueText = window.languageManager ? window.languageManager.translate('vuoi_continuare') : "Vuoi continuare con il quiz completo?";
+            const goText = window.languageManager ? window.languageManager.translate('si_andiamo') : "Sì, andiamo! 🚀";
+            
             homeQuizContainer.innerHTML = `
                 <div class="quiz-question">
-                    <p>🎉 Complimenti! Hai completato tutti i quiz della home!</p>
-                    <p>Vuoi continuare con il quiz completo?</p>
-                    <button onclick="goToQuizPage()" style="background: linear-gradient(145deg, var(--verde-sx), var(--verde-dx)); margin-top: 1rem;">Sì, andiamo! 🚀</button>
+                    <p>${completedText}</p>
+                    <p>${continueText}</p>
+                    <button onclick="goToQuizPage()" style="background: linear-gradient(145deg, var(--verde-sx), var(--verde-dx)); margin-top: 1rem;">${goText}</button>
                 </div>
             `;
         }
     }
 
-    window.checkAnswer = function(index, correctAnswer) {
+    window.checkAnswer = function(index) {
+        const quiz = quizzes[index];
+        const correctAnswer = window.languageManager ? window.languageManager.translate(quiz.answerKey) : "tanto";
         const userAnswer = document.getElementById(`quiz-answer-${index}`).value.trim();
         const feedback = document.getElementById(`feedback-${index}`);
         const inputField = document.getElementById(`quiz-answer-${index}`);
         const button = inputField.nextElementSibling;
         
+        const correctText = window.languageManager ? window.languageManager.translate('risposta_corretta') : "🎉 Perfetto! Risposta corretta!";
+        const wrongText = window.languageManager ? window.languageManager.translate('risposta_sbagliata') : "❌ Non proprio! La risposta corretta era:";
+        
         if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
-            feedback.textContent = "🎉 Perfetto! Risposta corretta!";
+            feedback.textContent = correctText;
             feedback.style.color = "green";
             inputField.style.borderColor = "#28a745";
             button.disabled = true;
-            button.textContent = "Corretto! ✓";
+            button.textContent = window.languageManager ? window.languageManager.translate('corretto') : "Corretto! ✓";
             button.style.background = "linear-gradient(145deg, #28a745, #20c997)";
             
             setTimeout(() => {
                 currentQuizIndex++;
+                window.currentQuizIndex = currentQuizIndex;
                 showQuiz(currentQuizIndex);
             }, 1500);
         } else {
-            feedback.textContent = `❌ Non proprio! La risposta corretta era: "${correctAnswer}"`;
+            feedback.textContent = `${wrongText} "${correctAnswer}"`;
             feedback.style.color = "red";
             inputField.style.borderColor = "#dc3545";
             button.disabled = true;
-            button.textContent = "Sbagliato ✗";
+            button.textContent = window.languageManager ? window.languageManager.translate('sbagliato') : "Sbagliato ✗";
             button.style.background = "linear-gradient(145deg, #dc3545, #c82333)";
             
             // Shake animation effect
@@ -88,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Passa alla domanda successiva dopo aver mostrato la soluzione
             setTimeout(() => {
                 currentQuizIndex++;
+                window.currentQuizIndex = currentQuizIndex;
                 showQuiz(currentQuizIndex);
             }, 2500);
         }

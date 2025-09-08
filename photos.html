@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Momenti Iconici</title>
+    <title data-translate="momenti_iconici">Momenti Iconici</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ENjdO4Dr2bkBIFxQpeoA6VKHr8zWvZg9lZlY9MZC1l1rZl9FQ51h6Q0Q5r5F5r5F" crossorigin="anonymous">
@@ -12,7 +12,7 @@
 <body class="photos-page">
     <header>
         <nav id="navbar-photos">
-            <a href="home.html" class="brand">DOTTORESSA!!!</a>
+            <a href="home.html" class="brand" data-translate="brand">DOTTORESSA!!!</a>
             <div class="menu-toggle" id="menu-toggle">
                 <div></div>
                 <div></div>
@@ -20,47 +20,48 @@
             </div>
         </nav>
         <div class="menu-links" id="menu-links">
-            <a href="photos.html">Momenti iconici</a>
-            <a href="quiz.html">Quanto ne sai su Sofia?</a>
+            <a href="photos.html" data-translate="momenti_iconici">Momenti iconici</a>
+            <a href="quiz.html" data-translate="quanto_ne_sai">Quanto ne sai su Sofia?</a>
         </div>
     </header>
 
     <main>
         <section id="memory-game-section">
-            <h1 class="gold-text">Gioco del Memory - Momenti Iconici</h1>
+            <h1 class="gold-text" data-translate="photos_title">Gioco del Memory - Momenti Iconici</h1>
             <div id="memory-game-intro">
-                <p class="memory-intro-text">Metti alla prova la tua memoria con i momenti più iconici di Sofia!</p>
+                <p class="memory-intro-text" data-translate="memory_intro">Metti alla prova la tua memoria con i momenti più iconici di Sofia!</p>
                 <div class="memory-difficulty-buttons">
-                    <button id="memory-easy-btn" class="memory-btn">Facile (6 carte)</button>
-                    <button id="memory-medium-btn" class="memory-btn">Intermedio (8 carte)</button>
-                    <button id="memory-hard-btn" class="memory-btn">Difficile (10 carte)</button>
+                    <button id="memory-easy-btn" class="memory-btn" data-translate="facile">Facile (6 carte)</button>
+                    <button id="memory-medium-btn" class="memory-btn" data-translate="intermedio">Intermedio (8 carte)</button>
+                    <button id="memory-hard-btn" class="memory-btn" data-translate="difficile">Difficile (10 carte)</button>
                 </div>
             </div>
             <div id="memory-game-board" class="hidden">
                 <div class="memory-stats">
-                    <span id="memory-errors">Errori: 0/3</span>
-                    <span id="memory-pairs">Coppie trovate: 0</span>
+                    <span id="memory-errors"><span data-translate="errori">Errori</span>: 0/3</span>
+                    <span id="memory-pairs"><span data-translate="coppie_trovate">Coppie trovate</span>: 0</span>
                 </div>
                 <div id="memory-grid" class="memory-grid"></div>
-                <button id="memory-restart-btn" class="memory-btn hidden">Gioca di nuovo</button>
+                <button id="memory-restart-btn" class="memory-btn hidden" data-translate="gioca_ancora">Gioca di nuovo</button>
             </div>
             <div id="memory-game-over" class="hidden">
                 <div class="memory-result">
                     <h2 id="memory-result-title"></h2>
                     <p id="memory-result-message"></p>
-                    <button id="memory-play-again-btn" class="memory-btn">Gioca di nuovo</button>
+                    <button id="memory-play-again-btn" class="memory-btn" data-translate="gioca_ancora">Gioca di nuovo</button>
                 </div>
             </div>
         </section>
 
         <section id="all-moments">
-            <h1 class="gold-text">Tutti i Momenti più Iconici</h1>
+            <h1 class="gold-text" data-translate="tutti_momenti">Tutti i Momenti più Iconici</h1>
             <div class="gallery" id="photos-gallery">
                 <!-- Le immagini e i video verranno inseriti qui da photos.js -->
             </div>
         </section>
     </main>
 
+    <script src="translations.js"></script>
     <script src="photos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
