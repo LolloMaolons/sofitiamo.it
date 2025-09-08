@@ -16,7 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['frutto'])) {
     $rispostaUtente = $_POST['frutto'];
 
     // Normalizza la risposta dell'utente in minuscolo per renderla case-insensitive
-    $rispostaUtente = strtolower(trim($rispostaUtente));
+    // Usa mb_strtolower per supportare caratteri UTF-8 come cirillico
+    $rispostaUtente = mb_strtolower(trim($rispostaUtente), 'UTF-8');
 
     // Verifica se la risposta dell'utente corrisponde a uno degli hash validi
     $loginValido = false;
