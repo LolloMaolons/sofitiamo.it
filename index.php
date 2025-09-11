@@ -52,19 +52,56 @@
         document.addEventListener('DOMContentLoaded', function() {
             const input = document.getElementById('frutto');
             const loginBox = document.querySelector('.login-box');
+            const loginContainer = document.querySelector('.login-container');
             
             if (input && /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                 // Mobile device detected
+                
+                // Handle focus to ensure visibility
                 input.addEventListener('focus', function() {
-                    // Scroll the input into view after a small delay
+                    // Add keyboard-open class for mobile styling
+                    if (loginContainer) {
+                        loginContainer.classList.add('keyboard-open');
+                    }
+                    
+                    // Scroll the entire form into view
                     setTimeout(function() {
-                        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        loginBox.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start',
+                            inline: 'nearest' 
+                        });
+                    }, 100);
+                });
+                
+                // Handle blur to restore centering
+                input.addEventListener('blur', function() {
+                    setTimeout(function() {
+                        if (loginContainer && !input.matches(':focus')) {
+                            loginContainer.classList.remove('keyboard-open');
+                        }
                     }, 300);
                 });
                 
                 // Prevent zoom on input focus for iOS
                 input.addEventListener('touchstart', function() {
                     input.style.fontSize = '16px';
+                });
+                
+                // Handle viewport resize (keyboard show/hide)
+                let initialHeight = window.innerHeight;
+                window.addEventListener('resize', function() {
+                    if (window.innerHeight < initialHeight * 0.75) {
+                        // Keyboard likely shown
+                        if (loginContainer) {
+                            loginContainer.classList.add('keyboard-open');
+                        }
+                    } else {
+                        // Keyboard likely hidden
+                        if (loginContainer && !input.matches(':focus')) {
+                            loginContainer.classList.remove('keyboard-open');
+                        }
+                    }
                 });
             }
         });

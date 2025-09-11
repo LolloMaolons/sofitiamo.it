@@ -1,5 +1,8 @@
 <?php
-// --- BACKEND DI LOGIN SICURO MULTILINGUE ---
+// --- BACKEND DI LOGIN    if ($loginValido) {
+        // Password CORRETTA: reindirizza alla home page
+        header('Location: ./home.html');
+        exit(); // Termina sempre lo script dopo un reindirizzamentoURO MULTILINGUE ---
 
 // Hash sicuri delle password in tutte le lingue
 $validHashes = [
