@@ -1,8 +1,7 @@
 <?php
-// --- BACKEND DI LOGIN    if ($loginValido) {
-        // Password CORRETTA: reindirizza alla home page
-        header('Location: ./home.html');
-        exit(); // Termina sempre lo script dopo un reindirizzamentoURO MULTILINGUE ---
+session_start();
+
+// --- BACKEND DI LOGIN SICURO CON TOKENIZZAZIONE ---
 
 // Hash sicuri delle password in tutte le lingue
 $validHashes = [
@@ -32,9 +31,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['frutto'])) {
     }
 
     if ($loginValido) {
-        // Password CORRETTA: reindirizza alla home page
-        header('Location: home.html');
-        exit(); // Termina sempre lo script dopo un reindirizzamento
+        // Password CORRETTA: genera token sicuro e salvalo nel localStorage via JavaScript
+        $token = bin2hex(random_bytes(32));
+        $timestamp = time();
+        
+        // Genera una pagina temporanea per impostare il token
+        echo "<!DOCTYPE html>
+        <html>
+        <head><title>Login...</title></head>
+        <body>
+        <script>
+            localStorage.setItem('auth_token', '$token');
+            localStorage.setItem('auth_time', '$timestamp');
+            window.location.replace('home.html');
+        </script>
+        </body>
+        </html>";
+        exit();
     } else {
         // Password SBAGLIATA: torna alla pagina di login con un messaggio di errore
         header('Location: index.php?error=1');
