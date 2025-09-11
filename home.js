@@ -124,6 +124,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     showQuiz(currentQuizIndex);
 
+    // --- Random Music Song ---
+    const songUrls = [
+        'https://open.spotify.com/embed/track/2ZWlPOoWh0626oTaHrnl2a?utm_source=generator',
+        'https://open.spotify.com/embed/track/0JXXNGljqupsJaZsgSbMZV?utm_source=generator',
+        'https://open.spotify.com/embed/track/1uAOCTevGnyKIDbgZdOCnE?utm_source=generator',
+        'https://open.spotify.com/embed/track/1MrSbSu9UNo7Aucwrf32WJ?utm_source=generator',
+        'https://open.spotify.com/embed/track/1oAwsWBovWRIp7qLMGPIet?utm_source=generator'
+    ];
+
+    // Load random song
+    const randomSongContainer = document.getElementById('random-song-container');
+    if (randomSongContainer) {
+        const randomIndex = Math.floor(Math.random() * songUrls.length);
+        const randomSongUrl = songUrls[randomIndex];
+        
+        randomSongContainer.innerHTML = `
+            <iframe data-testid="embed-iframe" style="border-radius:8px" 
+                    src="${randomSongUrl}" 
+                    width="100%" height="200" frameBorder="0" allowfullscreen="" 
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                    loading="lazy">
+            </iframe>
+        `;
+    }
 
     // --- Iconic Moments Gallery ---
     const homeGallery = document.getElementById('home-gallery');
