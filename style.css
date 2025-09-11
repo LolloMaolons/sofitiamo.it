@@ -37,6 +37,15 @@ body{
     overflow-x: hidden;
 }
 
+/* Nasconde scrollbar per la pagina di login */
+.login-page body {
+    overflow: hidden;
+}
+
+.login-page html {
+    overflow: hidden;
+}
+
 /* Force scroll to top for home page */
 html, body {
     scroll-behavior: auto !important;
@@ -517,36 +526,50 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
 
 /* Login container fallback */
 .login-container{
-    /* Posizione fissa per desktop, flessibile per mobile */
+    /* Posizionamento centrato a schermo intero STATICO */
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
     height: 100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:24px;
-    overflow-y: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    margin: 0;
     z-index: 1000;
+    box-sizing: border-box;
+    overflow: hidden;
+    /* Impedisce qualsiasi scroll */
+    overscroll-behavior: none;
+    touch-action: manipulation;
 }
 
 /* Card del form di login */
 .login-container > .login-box{
-    width:100%;
-    max-width:460px;
+    width: 100%;
+    max-width: 460px;
+    min-width: 320px;
     background: rgba(255,255,255,0.94);
-    border-radius:16px;
-    padding:28px;
+    border-radius: 16px;
+    padding: 28px;
     box-shadow: 0 10px 30px rgba(2,20,10,0.45);
     backdrop-filter: blur(6px) saturate(120%);
     border: 1px solid rgba(11,90,43,0.08);
     text-align: center;
-    transform: scale(0.95);
+    transform: scale(1);
     animation: loginBoxAppear 0.8s ease-out forwards;
     transition: all 0.4s ease;
-    position: relative;
-    overflow: hidden;
+    position: static;
+    overflow: visible;
+    margin: 0 auto;
+    box-sizing: border-box;
+    height: auto;
+    max-height: fit-content;
+    /* Box statico senza scroll */
+    flex-shrink: 0;
 }
 
 .login-container > .login-box::before {
@@ -643,6 +666,8 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     text-align:center;
     animation: formSlideUp 0.8s ease-out 0.6s both;
     opacity: 0;
+    overflow: visible;
+    height: auto;
 }
 
 #login-form label{
@@ -829,6 +854,53 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     #login-form button {
         font-size: 1rem;
         padding: 16px 20px;
+    }
+}
+
+/* Media query per mobile - login page */
+@media(max-width:768px){
+    .login-container {
+        padding: 20px;
+        overflow: hidden;
+    }
+    
+    .login-container > .login-box {
+        max-width: 400px;
+        padding: 24px;
+        position: static;
+        overflow: visible;
+    }
+    
+    /* SOLO quando la tastiera è attiva, sposta il contenuto */
+    .login-container.keyboard-open {
+        align-items: flex-start;
+        padding-top: 10vh;
+        justify-content: center;
+        overflow: hidden;
+    }
+}
+
+@media(max-width:480px){
+    .login-container {
+        padding: 16px;
+    }
+    
+    .login-container > .login-box {
+        max-width: 340px;
+        padding: 20px;
+    }
+    
+    .login-container h1 {
+        font-size: 1.4rem;
+    }
+    
+    .login-container h2 {
+        font-size: 0.9rem;
+    }
+    
+    #login-form input[type="text"] {
+        font-size: 16px;
+        padding: 14px 16px;
     }
 }
 
@@ -1785,4 +1857,36 @@ button{cursor:pointer}
 .music-page .language-select option {
     background: var(--navy-sx);
     color: white;
+}
+
+
+/* Login page specific styles */
+.login-page {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    /* Impedisce scroll su tutta la pagina */
+    position: fixed;
+    overscroll-behavior: none;
+}
+.login-page header {
+    background: linear-gradient(90deg,var(--verde-sx),var(--verde-dx));
+}
+.login-page main {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+}
+.login-page .language-selector {
+    order: 2;
+}
+
+.login-page .brand {
+    order: 1;
+}
+
+.login-page .menu-toggle {
+    display: none; /* Nasconde il menu hamburger nella pagina di login */
 }

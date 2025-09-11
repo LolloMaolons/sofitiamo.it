@@ -28,7 +28,11 @@
     }
     
     function redirectToLogin() {
-        if (window.location.pathname !== '/index.php' && !window.location.pathname.endsWith('index.php')) {
+        const currentPath = window.location.pathname;
+        const currentFile = currentPath.split('/').pop();
+        
+        // Se non siamo già nella pagina di login, reindirizza
+        if (currentFile !== 'index.php' && currentPath !== '/index.php') {
             window.location.href = 'index.php';
         }
     }

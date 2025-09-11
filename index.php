@@ -11,18 +11,20 @@
 <body class="login-page">
     <header>
         <nav>
-            <a href="home.html" class="brand" data-translate="brand">DOTTORESSA!!!</a>
+            <a href="#" class="brand" data-translate="brand">DOTTORESSA!!!</a>
+        
 
             <div class="menu-toggle" id="menu-toggle">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
+                <div></div>
+                <div></div>
+                <div></div>
             </div>
         </nav>
     </header>
 
-    <div class="login-container">
-        <div class="login-box">
+    <main>
+        <div class="login-container">
+            <div class="login-box">
             <h1 data-translate="entra_sito">Entra nel sito di Sofia</h1>
             <h2 data-translate="quanto_sai_dottoressa">Quanto ne sai sulla neo-dottoressa?</h2>
             
@@ -42,8 +44,9 @@
                 }
                 ?>
             </p>
+            </div>
         </div>
-    </div>
+    </main>
     
     <script src="translations.js"></script>
     <script>
@@ -103,6 +106,17 @@
                     }
                 });
             }
+        });
+        
+        // Inizializza il language manager per la pagina di login
+        document.addEventListener('DOMContentLoaded', function() {
+            // Nascondi eventuali errori del server
+            const serverErrors = document.querySelectorAll('[style*="color: red"]');
+            serverErrors.forEach(error => {
+                if (error.textContent.includes('server') || error.textContent.includes('404')) {
+                    error.style.display = 'none';
+                }
+            });
         });
     </script>
 </body>
