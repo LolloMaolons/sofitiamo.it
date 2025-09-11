@@ -9,6 +9,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Close menu when clicking outside
+    document.addEventListener('click', (event) => {
+        if (menuLinks && menuToggle) {
+            const isClickInsideMenu = menuLinks.contains(event.target);
+            const isClickOnToggle = menuToggle.contains(event.target);
+            
+            if (!isClickInsideMenu && !isClickOnToggle && menuLinks.classList.contains('active')) {
+                menuLinks.classList.remove('active');
+            }
+        }
+    });
+
     // --- Home Quiz ---
     const homeQuizContainer = document.getElementById('home-quiz-section');
     const quizzes = [

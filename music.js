@@ -8,4 +8,16 @@ document.addEventListener('DOMContentLoaded', () => {
             menuLinks.classList.toggle('active');
         });
     }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (event) => {
+        if (menuLinks && menuToggle) {
+            const isClickInsideMenu = menuLinks.contains(event.target);
+            const isClickOnToggle = menuToggle.contains(event.target);
+            
+            if (!isClickInsideMenu && !isClickOnToggle && menuLinks.classList.contains('active')) {
+                menuLinks.classList.remove('active');
+            }
+        }
+    });
 });
