@@ -167,35 +167,103 @@ document.addEventListener('DOMContentLoaded', () => {
     // Crea un file 'media-list.json' nella cartella 'media' con questo formato:
     // { "files": ["foto1.jpg", "video1.mp4", "foto2.png"] }
     fetch('media/media-list.json')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
         .then(data => {
-            const mediaFiles = data.files;
-            const shuffled = mediaFiles.sort(() => 0.5 - Math.random());
-            const selectedMedia = shuffled.slice(0, 4); // Mostra 4 elementi a caso
+            // Normalizza l'array dei file
+            const mediaFiles = Array.isArray(data) ? data : (Array.isArray(data.files) ? data.files : []);
+            // Shuffle in modo sicuro (non modificare originale se non necessario)
+            const shuffled = mediaFiles.slice().sort(() => 0.5 - Math.random());
+            // Se ci sono meno di 4 elementi, verranno duplicati fino a 4;
+            // se non ce ne sono, verranno usati placeholder
+            let selectedMedia = shuffled.slice(0, 4);
+
+            if (selectedMedia.length === 0) {
+                // Nessun file: crea 4 placeholder
+                selectedMedia = ['__placeholder__', '__placeholder__', '__placeholder__', '__placeholder__'];
+            } else if (selectedMedia.length < 4) {
+                // Duplica elementi esistenti fino ad avere 4 elementi
+                let i = 0;
+                while (selectedMedia.length < 4) {
+                    selectedMedia.push(selectedMedia[i % selectedMedia.length]);
+                    i++;
+                }
+            }
+
+            // In caso homeGallery non esista, esci silenziosamente
+            if (!homeGallery) return;
+
+            // Pulisci eventuali contenuti precedenti
+            homeGallery.innerHTML = '';
 
             selectedMedia.forEach(file => {
-                const extension = file.split('.').pop().toLowerCase();
                 let mediaElement;
-                if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
+                if (file === '__placeholder__') {
+                    // Placeholder SVG inline
                     mediaElement = document.createElement('img');
-                    mediaElement.src = `media/${file}`;
-                } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
-                    mediaElement = document.createElement('video');
-                    mediaElement.src = `media/${file}`;
-                    mediaElement.autoplay = true;
-                    mediaElement.loop = true;
-                    mediaElement.muted = true;
+                    mediaElement.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360"><rect width="100%" height="100%" fill="%23042a12"/><text x="50%" y="50%" font-size="20" fill="%23ffffff" font-family="Arial" text-anchor="middle" dominant-baseline="middle">Momenti iconici (apri la galleria)</text></svg>';
+                    mediaElement.alt = 'Placeholder - Momenti iconici';
+                } else {
+                    const extension = String(file).split('.').pop().toLowerCase();
+                    if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) {
+                        mediaElement = document.createElement('img');
+                        mediaElement.src = `media/${file}`;
+                        mediaElement.alt = `Momento: ${file}`;
+                    } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
+                        mediaElement = document.createElement('video');
+                        mediaElement.src = `media/${file}`;
+                        mediaElement.autoplay = true;
+                        mediaElement.loop = true;
+                        mediaElement.muted = true;
+                        mediaElement.playsInline = true;
+                        mediaElement.controls = false; // mantiene aspetto gallery
+                    } else {
+                        // Se estensione sconosciuta, usa placeholder
+                        mediaElement = document.createElement('img');
+                        mediaElement.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360"><rect width="100%" height="100%" fill="%23042a12"/><text x="50%" y="50%" font-size="20" fill="%23ffffff" font-family="Arial" text-anchor="middle" dominant-baseline="middle">Formato non supportato</text></svg>';
+                        mediaElement.alt = 'Formato non supportato';
+                    }
                 }
-                if(mediaElement) {
-                    // Crea un link che avvolge l'elemento media
-                    const linkElement = document.createElement('a');
-                    linkElement.href = 'photos.html';
-                    linkElement.appendChild(mediaElement);
-                    homeGallery.appendChild(linkElement);
+
+                // Assicura classi/attributi di stile coerenti
+                if (mediaElement) {
+                    mediaElement.style.width = '100%';
+                    mediaElement.style.height = '160px';
+                    mediaElement.style.objectFit = 'cover';
+                    mediaElement.style.borderRadius = '10px';
+                    mediaElement.style.boxShadow = '0 6px 14px rgba(0,0,0,0.12)';
                 }
+
+                // Crea link che avvolge l'elemento media
+                const linkElement = document.createElement('a');
+                linkElement.href = 'photos.html';
+                linkElement.appendChild(mediaElement);
+                homeGallery.appendChild(linkElement);
             });
         })
-        .catch(error => console.error('Errore nel caricare la galleria:', error));
+        .catch(error => {
+            console.error('Errore nel caricare la galleria:', error);
+            // Fallback: mostra sempre 4 placeholder
+            if (homeGallery) {
+                homeGallery.innerHTML = '';
+                for (let i = 0; i < 4; i++) {
+                    const a = document.createElement('a');
+                    a.href = 'photos.html';
+                    const img = document.createElement('img');
+                    img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360"><rect width="100%" height="100%" fill="%23042a12"/><text x="50%" y="50%" font-size="20" fill="%23ffffff" font-family="Arial" text-anchor="middle" dominant-baseline="middle">Momenti iconici (apri la galleria)</text></svg>';
+                    img.alt = 'Placeholder - Momenti iconici';
+                    img.style.width = '100%';
+                    img.style.height = '160px';
+                    img.style.objectFit = 'cover';
+                    img.style.borderRadius = '10px';
+                    img.style.boxShadow = '0 6px 14px rgba(0,0,0,0.12)';
+                    a.appendChild(img);
+                    homeGallery.appendChild(a);
+                }
+            }
+        });
 });
 
 // La tua funzione checkHomeAnswer rimane invariata
