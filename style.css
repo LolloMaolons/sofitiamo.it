@@ -532,8 +532,7 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     left: 0;
     right: 0;
     bottom: 0;
-    width: 100vw;
-    height: 100vh;
+    
     display: flex;
     align-items: center;
     justify-content: center;
@@ -559,63 +558,61 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     backdrop-filter: blur(6px) saturate(120%);
     border: 1px solid rgba(11,90,43,0.08);
     text-align: center;
-    transform: scale(1);
     animation: loginBoxAppear 0.8s ease-out forwards;
-    transition: all 0.4s ease;
-    position: static;
-    overflow: visible;
+    position: relative;
     margin: 0 auto;
     box-sizing: border-box;
     height: auto;
     max-height: fit-content;
-    /* Box statico senza scroll */
+    /* Box statico senza movimenti dopo il caricamento */
     flex-shrink: 0;
+    /* Rimuovi tutte le transizioni di movimento */
+    transition: none;
 }
 
 .login-container > .login-box::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent, rgba(228, 184, 75, 0.1), transparent);
-    transform: rotate(45deg);
-    transition: all 0.6s ease;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(228, 184, 75, 0.2), transparent);
     opacity: 0;
+    z-index: 1;
+    /* Rimuovi la transizione per evitare movimenti */
+    transition: none;
 }
 
+/* Rimuovi completamente l'effetto hover che causava movimento */
 .login-container > .login-box:hover {
-    transform: scale(1.02) translateY(-5px);
-    box-shadow: 0 20px 50px rgba(2,20,10,0.55);
-    border-color: rgba(228, 184, 75, 0.3);
+    /* Mantieni solo effetti visivi senza movimento */
+    box-shadow: 0 10px 30px rgba(2,20,10,0.45);
+    border-color: rgba(11,90,43,0.08);
+    /* Nessun transform per evitare movimenti */
 }
 
-.login-container > .login-box:hover::before {
-    opacity: 1;
-    animation: shimmer 2s ease-in-out infinite;
+/* Effetto di illuminazione quando l'input è in focus - SOLO effetti visivi */
+.login-container.input-focused > .login-box {
+    background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(248,249,250,0.95)),
+                radial-gradient(circle at center, rgba(228, 184, 75, 0.08) 0%, rgba(11, 90, 43, 0.04) 70%, transparent 100%);
+    box-shadow: 0 0 30px rgba(228, 184, 75, 0.3), 0 10px 30px rgba(2,20,10,0.45);
+    border: 2px solid rgba(228, 184, 75, 0.4);
+    /* Mantieni solo l'animazione di glow senza movimento */
+    animation: loginBoxGlow 2s ease-in-out infinite alternate;
 }
 
-@keyframes loginBoxAppear {
-    0% {
-        opacity: 0;
-        transform: scale(0.8) translateY(30px);
-        box-shadow: 0 5px 15px rgba(2,20,10,0.2);
+@keyframes loginBoxGlow {
+    0% { 
+        box-shadow: 0 0 25px rgba(228, 184, 75, 0.25), 0 10px 30px rgba(2,20,10,0.45);
+        border-color: rgba(228, 184, 75, 0.3);
     }
-    50% {
-        transform: scale(1.02) translateY(-5px);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-        box-shadow: 0 10px 30px rgba(2,20,10,0.45);
+    100% { 
+        box-shadow: 0 0 40px rgba(228, 184, 75, 0.4), 0 15px 40px rgba(2,20,10,0.55);
+        border-color: rgba(228, 184, 75, 0.5);
     }
 }
 
-@keyframes shimmer {
-    0% { transform: translateX(-100%) rotate(45deg); }
-    100% { transform: translateX(100%) rotate(45deg); }
-}
 
 .login-container h1{
     margin:0 0 6px 0;
@@ -696,15 +693,15 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
 
 #login-form input[type="text"]:focus{
     box-shadow:0 8px 20px rgba(11,90,43,0.12), 0 0 0 3px rgba(228, 184, 75, 0.2);
-    transform:translateY(-2px) scale(1.02);
     border-color:var(--verde-dx);
     background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    /* Rimuovi il movimento al focus */
 }
 
 #login-form input[type="text"]:hover:not(:focus) {
     border-color: rgba(11,90,43,0.3);
     box-shadow: 0 4px 12px rgba(11,90,43,0.08);
-    transform: translateY(-1px);
+    /* Rimuovi il movimento al hover */
 }
 
 #login-form button{
@@ -738,9 +735,9 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
 }
 
 #login-form button:hover{
-    transform:translateY(-3px) scale(1.02);
     box-shadow:0 15px 35px rgba(184,134,43,0.25);
     background: linear-gradient(145deg, #e4b84b, #ffd700, #e4b84b);
+    /* Rimuovi il movimento al hover */
 }
 
 #login-form button:hover::before {
@@ -748,8 +745,8 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
 }
 
 #login-form button:active {
-    transform: translateY(-1px) scale(1.01);
     box-shadow: 0 8px 20px rgba(184,134,43,0.2);
+    /* Rimuovi il movimento al click */
 }
 
 @keyframes formSlideUp {
@@ -793,30 +790,33 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     20%, 40%, 60%, 80% { transform: translateX(8px); }
 }
 
-/* Small screen tweaks: rendi la card meno larga su mobile */
+/* Small screen tweaks: migliora la gestione della tastiera mobile */
 @media(max-width:420px){
     .login-container {
-        /* Migliora la gestione della tastiera mobile */
+        /* Posizionamento fisso per gestire meglio la tastiera */
         position: fixed;
         height: 100vh;
         align-items: center;
         padding: 20px 16px;
-        transition: all 0.3s ease;
+        /* Rimuovi la transizione per evitare movimenti indesiderati */
+        transition: none;
     }
     
+    /* Quando appare la tastiera, sposta solo il contenuto senza animazioni */
     .login-container.keyboard-open {
         align-items: flex-start;
         padding-top: 20px;
+        /* Transizione istantanea */
+        transition: none;
     }
     
     .login-container > .login-box {
         width: 92%;
         padding: 20px;
         margin: 0;
-        /* Assicura visibilità quando appare la tastiera */
         max-height: calc(100vh - 40px);
-        overflow-y: auto;
-        transition: all 0.3s ease;
+        /* Nessuna transizione per movimenti fluidi */
+        transition: none;
     }
     
     /* Centra il selettore di lingua su schermi molto piccoli */
@@ -871,38 +871,10 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
         overflow: visible;
     }
     
-    /* SOLO quando la tastiera è attiva, sposta il contenuto */
-    .login-container.keyboard-open {
-        align-items: flex-start;
-        padding-top: 10vh;
-        justify-content: center;
-        overflow: hidden;
-    }
+    /* Quando la tastiera è attiva, sposta il contenuto senza animazioni */
+    
 }
 
-@media(max-width:480px){
-    .login-container {
-        padding: 16px;
-    }
-    
-    .login-container > .login-box {
-        max-width: 340px;
-        padding: 20px;
-    }
-    
-    .login-container h1 {
-        font-size: 1.4rem;
-    }
-    
-    .login-container h2 {
-        font-size: 0.9rem;
-    }
-    
-    #login-form input[type="text"] {
-        font-size: 16px;
-        padding: 14px 16px;
-    }
-}
 
 /* Error */
 .error{color:#c92a2a;font-weight:600}
@@ -1713,7 +1685,6 @@ button{cursor:pointer}
     }
 }
 
-/* Schermi molto piccoli: solo bandiere */
 @media (max-width: 480px) {
     .language-select {
         font-size: 14px;
@@ -1889,4 +1860,25 @@ button{cursor:pointer}
 
 .login-page .menu-toggle {
     display: none; /* Nasconde il menu hamburger nella pagina di login */
+}
+
+/* Effetto di illuminazione quando l'input è in focus - applicato solo al login-box */
+.login-container.input-focused > .login-box {
+    background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(248,249,250,0.95)),
+                radial-gradient(circle at center, rgba(228, 184, 75, 0.08) 0%, rgba(11, 90, 43, 0.04) 70%, transparent 100%);
+    box-shadow: 0 0 30px rgba(228, 184, 75, 0.3), 0 10px 30px rgba(2,20,10,0.45);
+    border: 2px solid rgba(228, 184, 75, 0.4);
+    /* Mantieni solo l'animazione di glow senza movimento */
+    animation: loginBoxGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes loginBoxGlow {
+    0% { 
+        box-shadow: 0 0 25px rgba(228, 184, 75, 0.25), 0 10px 30px rgba(2,20,10,0.45);
+        border-color: rgba(228, 184, 75, 0.3);
+    }
+    100% { 
+        box-shadow: 0 0 40px rgba(228, 184, 75, 0.4), 0 15px 40px rgba(2,20,10,0.55);
+        border-color: rgba(228, 184, 75, 0.5);
+    }
 }
