@@ -524,28 +524,6 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     animation: pulse 2s infinite;
 }
 
-/* Login container fallback */
-.login-container{
-    /* Posizionamento centrato a schermo intero STATICO */
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    margin: 0;
-    z-index: 1000;
-    box-sizing: border-box;
-    overflow: hidden;
-    /* Impedisce qualsiasi scroll */
-    overscroll-behavior: none;
-    touch-action: manipulation;
-}
-
 /* Card del form di login */
 .login-container > .login-box{
     width: 100%;
