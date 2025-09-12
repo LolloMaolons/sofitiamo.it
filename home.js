@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Crea un file 'media-list.json' nella cartella 'media' con questo formato:
     // { "files": ["foto1.jpg", "video1.mp4", "foto2.png"] }
-    fetch('media/media-list.json')
+    fetch('media-protection.php?file=media-list.json')
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
@@ -209,11 +209,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     const extension = String(file).split('.').pop().toLowerCase();
                     if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) {
                         mediaElement = document.createElement('img');
-                        mediaElement.src = `media/${file}`;
+                        mediaElement.src = `media-protection.php?file=${file}`;
                         mediaElement.alt = `Momento: ${file}`;
                     } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
                         mediaElement = document.createElement('video');
-                        mediaElement.src = `media/${file}`;
+                        mediaElement.src = `media-protection.php?file=${file}`;
                         mediaElement.autoplay = true;
                         mediaElement.loop = true;
                         mediaElement.muted = true;

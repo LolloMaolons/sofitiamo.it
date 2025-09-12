@@ -3,7 +3,7 @@ session_start();
 
 // --- BACKEND DI LOGIN SICURO CON TOKENIZZAZIONE ---
 
-// Hash sicuri delle password in tutte le lingue
+// Hash sicuri delle password in tutte le lingue (SOLO hash fissi pre-generati)
 $validHashes = [
     '$2y$10$CgbITjuvY2j23XETHD.j.uDhvlX1OmZ7WxFmyUN0XzC3cCIIVC0zK',
     '$2y$10$K3UbhgC0.iL3zyuRhmJ40.aFGQvWw6pxLulUwxFwD/p8TZohpL4fW',
@@ -31,7 +31,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['frutto'])) {
     }
 
     if ($loginValido) {
-        // Password CORRETTA: genera token sicuro e salvalo nel localStorage via JavaScript
+        // Password CORRETTA: imposta SESSIONE PHP per i media protetti
+        $_SESSION['authenticated'] = true;
+        $_SESSION['user_logged_in'] = true;
+        
+        // Debug log per verificare sessione
+        error_log("Login successful - Session authenticated: " . $_SESSION['authenticated']);
+        
+        // Genera token sicuro per localStorage
         $token = bin2hex(random_bytes(32));
         $timestamp = time();
         
@@ -43,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['frutto'])) {
         <script>
             localStorage.setItem('auth_token', '$token');
             localStorage.setItem('auth_time', '$timestamp');
+            console.log('Session should be authenticated, redirecting...');
             window.location.replace('home.html');
         </script>
         </body>

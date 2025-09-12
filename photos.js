@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load memory game images
     function loadMemoryImages() {
-        return fetch('media/media-list.json')
+        return fetch('media-protection.php?file=media-list.json')
             .then(response => response.json())
             .then(data => {
                 // Filter only image files (exclude videos)
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="memory-card-inner">
                 <div class="memory-card-front">?</div>
                 <div class="memory-card-back">
-                    <img src="media/${image}" alt="Memory Card">
+                    <img src="media-protection.php?file=${image}" alt="Memory Card">
                 </div>
             </div>
         `;
@@ -350,7 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'].includes(extension)) {
             mediaElement = document.createElement('img');
-            mediaElement.dataset.src = `media/${file}`;
+            mediaElement.dataset.src = `media-protection.php?file=${file}`;
             mediaElement.alt = `Foto ${index + 1}`;
             
             // Add lazy loading for images after the first 12
@@ -369,11 +369,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
         } else if (['mp4', 'webm', 'ogg', 'mov', 'avi'].includes(extension)) {
             mediaElement = document.createElement('video');
-            mediaElement.dataset.src = `media/${file}`;
-            mediaElement.autoplay = true; // Ripristinato autoplay
+            mediaElement.dataset.src = `media-protection.php?file=${file}`;
+            mediaElement.autoplay = true;
             mediaElement.loop = true;
             mediaElement.muted = true;
-            // Rimossi i controls per tornare come prima
             
             // Add lazy loading for videos after the first 6
             if (index > 5) {
@@ -408,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
         rootMargin: '50px 0px' // Start loading 50px before element is visible
     });
 
-    fetch('media/media-list.json')
+    fetch('media-protection.php?file=media-list.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
