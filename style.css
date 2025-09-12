@@ -524,6 +524,27 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     animation: pulse 2s infinite;
 }
 
+
+/* Login container fallback */
+.login-container{
+    /* Ora il container si adatta al contenuto (same-size del .login-box)
+       e rimane centrato nello schermo */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* Shrink-wrap: il container avrà le dimensioni del .login-box */
+    display: inline-block;
+    padding: 0; /* il padding è gestito dal .login-box */
+    margin: 0;
+    z-index: 1000;
+    box-sizing: border-box;
+    overflow: visible; /* lascia che il box gestisca il proprio overflow */
+    overscroll-behavior: none;
+    touch-action: manipulation;
+}
+
 /* Card del form di login */
 .login-container > .login-box{
     width: 100%;
@@ -769,24 +790,27 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
 /* Small screen tweaks: migliora la gestione della tastiera mobile */
 @media(max-width:420px){
     .login-container {
-        /* Posizionamento fisso per gestire meglio la tastiera */
+        /* Mantieni lo stesso comportamento shrink-wrap anche su mobile */
         position: fixed;
-        height: 100vh;
-        align-items: center;
-        padding: 20px 16px;
-        /* Rimuovi la transizione per evitare movimenti indesiderati */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+        z-index: 1000;
+        box-sizing: border-box;
+        overflow: visible;
         transition: none;
     }
     
-    /* Quando appare la tastiera, sposta solo il contenuto senza animazioni */
-    
-    
     .login-container > .login-box {
-        width: 92%;
+        /* Assicurati che il box occupi tutto lo spazio disponibile del container */
+        width: 100%;
+        max-width: 92vw; /* su schermi piccoli limita la larghezza massima */
         padding: 20px;
         margin: 0;
         max-height: calc(100vh - 40px);
-        /* Nessuna transizione per movimenti fluidi */
         transition: none;
     }
     
