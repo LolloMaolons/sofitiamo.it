@@ -21,6 +21,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Funzione per caricare il video di laurea (solo se autenticato)
+    function loadGraduationVideo() {
+        const videoContainer = document.getElementById('graduation-video');
+        if (!videoContainer) return;
+
+        // Crea solo il video senza titolo duplicato (il titolo è già nell'HTML)
+        videoContainer.innerHTML = `
+            <video controls class="graduation-video-player">
+                <source src="media-protection.php?file=videolaurea.mp4" type="video/mp4">
+                Il tuo browser non supporta il tag video.
+            </video>
+        `;
+    }
+
+    // CARICA IL VIDEO DI LAUREA QUI
+    loadGraduationVideo();
+
     // --- Home Quiz ---
     const homeQuizContainer = document.getElementById('home-quiz-section');
     const quizzes = [
@@ -138,11 +155,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Random Music Song ---
     const songUrls = [
+        'https://open.spotify.com/embed/track/0KzAbK6nItSqNh8q70tb0K?utm_source=generator',
+        'https://open.spotify.com/embed/track/0jWgAnTrNZmOGmqgvHhZEm?utm_source=generator',
+        'https://open.spotify.com/embed/track/0xahPNJVFHGMEFxu9kergk?utm_source=generator',
+        'https://open.spotify.com/embed/track/474uVhyGgK5MtY9gMcDgGl?utm_source=generator',
         'https://open.spotify.com/embed/track/2ZWlPOoWh0626oTaHrnl2a?utm_source=generator',
+        'https://open.spotify.com/embed/track/1mBSWayaS9nnqLvZNdOdL7?utm_source=generator',
+        'https://open.spotify.com/embed/track/4kzOYNpDNmkSGs9w6Z7dVB?utm_source=generator',
+        'https://open.spotify.com/embed/track/6VzcQuzTNTMFnJ6rBSaLH9?utm_source=generator',
         'https://open.spotify.com/embed/track/0JXXNGljqupsJaZsgSbMZV?utm_source=generator',
         'https://open.spotify.com/embed/track/1uAOCTevGnyKIDbgZdOCnE?utm_source=generator',
         'https://open.spotify.com/embed/track/1MrSbSu9UNo7Aucwrf32WJ?utm_source=generator',
-        'https://open.spotify.com/embed/track/1oAwsWBovWRIp7qLMGPIet?utm_source=generator'
+        'https://open.spotify.com/embed/track/1oAwsWBovWRIp7qLMGPIet?utm_source=generator',
+        'https://open.spotify.com/embed/track/3xwNG8evnrOMelmAJ9RxJ1?utm_source=generator',
+        'https://open.spotify.com/embed/track/1UZOjK1BwmwWU14Erba9CZ?utm_source=generator',
+        'https://open.spotify.com/embed/track/0WI4Oe17LXAWCekzAEPCWi?utm_source=generator',
+        'https://open.spotify.com/embed/track/37C6DyoMu75ViTiwqxV4bY?utm_source=generator',
+        'https://open.spotify.com/embed/track/6BsxtJ3aKkc3KqB734VaYJ?utm_source=generator'
     ];
 
     // Load random song

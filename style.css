@@ -62,7 +62,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 }
 
 /* Regola specifica per container principali */
-main, .congratulations, #memory-game-section, #iconic-moments, #graduation-video, #home-quiz-section, #home-music-section {
+main, .congratulations, #memory-game-section, #iconic-moments, #graduation-video-container, #home-quiz-section, #home-music-section {
     max-width: 100%;
     box-sizing: border-box;
 }
@@ -257,8 +257,75 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
 .gallery a{text-decoration:none;display:block;cursor:pointer}
 .gallery a:hover img, .gallery a:hover video{transform:scale(1.03)}
 
-/* Video area responsive */
-#graduation-video video{width:100%;border-radius:10px;display:block}
+/* Video area responsive - Fixed */
+#graduation-video video, .graduation-video-player {
+    width: 100% !important;
+    max-width: 500px !important;
+    max-height: 350px !important; /* Aggiungi altezza massima */
+    height: auto !important;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    outline: none;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    background: #000;
+    display: block !important;
+    margin: 0 auto !important;
+    position: static !important; /* Remove fixed positioning */
+}
+
+/* Effetti hover per il video */
+#graduation-video video:hover, .graduation-video-player:hover {
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Graduation video container styling */
+#graduation-video {
+    background: linear-gradient(90deg,var(--verde-sx),var(--verde-dx)) !important;
+    padding: 2rem !important;
+    border-radius: 15px !important;
+    margin-bottom: 2rem !important;
+    text-align: center !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Responsive adjustments per il video */
+@media(max-width: 768px) {
+    #graduation-video {
+        padding: 1.5rem 1rem !important;
+    }
+    
+    #graduation-video video, .graduation-video-player {
+        max-width: 100% !important;
+        max-height: 280px !important; /* Altezza ridotta su mobile */
+        border-width: 2px;
+    }
+}
+
+@media(max-width: 480px) {
+    #graduation-video {
+        padding: 1rem 0.5rem !important;
+    }
+    
+    #graduation-video video, .graduation-video-player {
+        max-width: 95% !important;
+        max-height: 220px !important; /* Altezza ancora più ridotta su mobile piccolo */
+        border-radius: 8px;
+        border-width: 2px;
+    }
+}
+
+@media(min-width: 1025px) {
+    #graduation-video video, .graduation-video-player {
+        max-width: 600px !important;
+        max-height: 400px !important; /* Altezza leggermente maggiore su desktop */
+    }
+}
 
 /* Quiz cards */
 .quiz-card{padding:12px;border-radius:10px;background:linear-gradient(180deg,#fff,#fbfbfb);box-shadow:0 4px 12px rgba(0,0,0,0.06);margin-bottom:12px}
@@ -1319,7 +1386,7 @@ button{cursor:pointer}
     }
     
     /* Riduci padding generale su schermi molto piccoli */
-    .congratulations, #memory-game-section, #iconic-moments, #graduation-video {
+    .congratulations, #memory-game-section, #iconic-moments, #graduation-video-container {
         padding: 1rem 0.8rem;
         margin: 0 0.3rem 1rem 0.3rem;
     }
@@ -1509,12 +1576,6 @@ button{cursor:pointer}
     #memory-game-section {
         padding: 1rem 0.5rem;
         margin: 0 0.1rem 1rem 0.1rem;
-    }
-    
-    .memory-btn {
-        font-size: 0.7rem;
-        padding: 6px 12px;
-        max-width: 200px;
     }
 }
 
