@@ -27,10 +27,12 @@ body{
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-    background-image: url('sfondo.jpg');
+    background-image: url('sfondo.webp'); /* Converti JPG in WebP */
     background-size: cover;
-    background-position: center;
     background-attachment: fixed;
+    background-position: center;
+    /* Fallback per browser senza WebP */
+    background-image: url('sfondo.jpg'), url('sfondo.webp');
     color:#222;
     -webkit-font-smoothing:antialiased;
     /* Previeni overflow orizzontale globalmente */
@@ -281,50 +283,49 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Graduation video container styling */
+/* Stili per graduation video - centrato con gradiente verde coerente */
 #graduation-video {
-    background: linear-gradient(90deg,var(--verde-sx),var(--verde-dx)) !important;
-    padding: 2rem !important;
-    border-radius: 15px !important;
-    margin-bottom: 2rem !important;
-    text-align: center !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    background: linear-gradient(90deg, var(--verde-sx), var(--verde-dx)); /* Gradiente verde come gli altri container */
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    padding: 20px;
 }
 
-/* Responsive adjustments per il video */
-@media(max-width: 768px) {
-    #graduation-video {
-        padding: 1.5rem 1rem !important;
-    }
-    
-    #graduation-video video, .graduation-video-player {
-        max-width: 100% !important;
-        max-height: 280px !important; /* Altezza ridotta su mobile */
-        border-width: 2px;
-    }
+#graduation-video video {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-@media(max-width: 480px) {
-    #graduation-video {
-        padding: 1rem 0.5rem !important;
-    }
-    
-    #graduation-video video, .graduation-video-player {
-        max-width: 95% !important;
-        max-height: 220px !important; /* Altezza ancora più ridotta su mobile piccolo */
-        border-radius: 8px;
-        border-width: 2px;
-    }
+/* Alternativa se vuoi dimensioni specifiche */
+#graduation-video video.fixed-size {
+    width: 640px;
+    height: 360px;
+    max-width: 90vw;
+    max-height: 50vh;
 }
 
-@media(min-width: 1025px) {
-    #graduation-video video, .graduation-video-player {
-        max-width: 600px !important;
-        max-height: 400px !important; /* Altezza leggermente maggiore su desktop */
-    }
+/* Loading e error states centrati */
+#graduation-video .video-error {
+    text-align: center;
+    color: white;
+    padding: 2rem;
+}
+
+#graduation-video:empty::before {
+    content: "🎓 Caricamento video di laurea...";
+    color: white;
+    font-size: 1.1em;
+    text-align: center;
 }
 
 /* Quiz cards */

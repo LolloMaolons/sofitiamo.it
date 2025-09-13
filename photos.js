@@ -343,22 +343,38 @@ document.addEventListener('DOMContentLoaded', () => {
         return shuffled;
     }
 
-    // Function to create media element with lazy loading
+    // Function to create media element with responsive images
     function createMediaElement(file, index) {
         const extension = file.split('.').pop().toLowerCase();
         let mediaElement;
         
         if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'].includes(extension)) {
             mediaElement = document.createElement('img');
-            mediaElement.dataset.src = `media-protection.php?file=${file}`;
+            
+            // Responsive images con srcset per diversi breakpoints
+            const baseSrc = `media-protection.php?file=${file}`;
+            mediaElement.dataset.src = baseSrc;
+            mediaElement.dataset.srcset = `
+                ${baseSrc}&w=300 300w,
+                ${baseSrc}&w=600 600w,
+                ${baseSrc}&w=900 900w,
+                ${baseSrc}&w=1200 1200w
+            `;
+            mediaElement.sizes = `
+                (max-width: 640px) 50vw,
+                (max-width: 1024px) 33vw,
+                25vw
+            `;
+            
             mediaElement.alt = `Foto ${index + 1}`;
             
-            // Add lazy loading for images after the first 12
-            if (index > 11) {
-                mediaElement.loading = 'lazy';
+            // Priorità alta per prime 6 immagini (LCP)
+            if (index < 6) {
+                mediaElement.fetchPriority = 'high';
+                mediaElement.src = `${baseSrc}&w=600`; // Carica subito in media risoluzione
+                mediaElement.srcset = mediaElement.dataset.srcset;
             } else {
-                // Load first 12 images immediately
-                mediaElement.src = mediaElement.dataset.src;
+                mediaElement.loading = 'lazy';
             }
             
             // Add error handling
@@ -392,31 +408,40 @@ document.addEventListener('DOMContentLoaded', () => {
         return mediaElement;
     }
 
-    // Intersection Observer for lazy loading
+    // Intersection Observer ottimizzato per performance
     const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const mediaElement = entry.target;
+                
                 if (mediaElement.dataset.src) {
-                    mediaElement.src = mediaElement.dataset.src;
+                    // Per immagini: carica srcset appropriato
+                    if (mediaElement.tagName === 'IMG') {
+                        mediaElement.src = mediaElement.dataset.src + '&w=600'; // Default size
+                        if (mediaElement.dataset.srcset) {
+                            mediaElement.srcset = mediaElement.dataset.srcset;
+                        }
+                    } else {
+                        // Per video
+                        mediaElement.src = mediaElement.dataset.src;
+                    }
+                    
                     observer.unobserve(mediaElement);
                 }
             }
         });
     }, {
-        rootMargin: '50px 0px' // Start loading 50px before element is visible
+        rootMargin: '100px 0px', // Aumenta il pre-caricamento
+        threshold: 0.1
     });
 
     fetch('media-protection.php?file=media-list.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            // Shuffle the media files array to display them in random order
             const mediaFiles = shuffleArray(data.files);
+            
+            // Carica prime 3 immagini immediatamente (sopra la piega)
+            const priorityCount = 3;
             
             mediaFiles.forEach((file, index) => {
                 const mediaElement = createMediaElement(file, index);
@@ -424,15 +449,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (mediaElement) {
                     photosGallery.appendChild(mediaElement);
                     
-                    // Set up lazy loading for elements that don't load immediately
-                    if ((mediaElement.tagName === 'IMG' && index > 11) || 
-                        (mediaElement.tagName === 'VIDEO' && index > 5)) {
+                    // Solo lazy load dopo le prime 3
+                    if (index >= priorityCount) {
                         imageObserver.observe(mediaElement);
                     }
                 }
             });
-            
-            console.log(`Caricati ${mediaFiles.length} file multimediali in ordine casuale`);
         })
         .catch(error => {
             console.error('Errore nel caricare la galleria completa:', error);
