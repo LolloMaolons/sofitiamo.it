@@ -1,28 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Logic for menu toggle
-    const menuToggle = document.getElementById('menu-toggle');
-    const menuLinks = document.getElementById('menu-links');
+    // Cache elementi DOM per evitare query multiple
+    const elements = {
+        menuToggle: document.getElementById('menu-toggle'),
+        menuLinks: document.getElementById('menu-links'),
+        quizContainer: document.getElementById('quiz-section')
+    };
 
-    if (menuToggle) {
-        menuToggle.addEventListener('click', () => {
-            menuLinks.classList.toggle('active');
+    // Menu toggle ottimizzato con event delegation
+    if (elements.menuToggle) {
+        elements.menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            elements.menuLinks.classList.toggle('active');
         });
     }
 
-    // Close menu when clicking outside
+    // Close menu ottimizzato - single listener
     document.addEventListener('click', (event) => {
-        if (menuLinks && menuToggle) {
-            const isClickInsideMenu = menuLinks.contains(event.target);
-            const isClickOnToggle = menuToggle.contains(event.target);
-            
-            if (!isClickInsideMenu && !isClickOnToggle && menuLinks.classList.contains('active')) {
-                menuLinks.classList.remove('active');
-            }
+        if (!elements.menuLinks.contains(event.target) && 
+            !elements.menuToggle.contains(event.target)) {
+            elements.menuLinks.classList.remove('active');
         }
     });
 
     // --- Full Quiz Section ---
-    const quizContainer = document.getElementById('quiz-section');
     const allQuizzes = [
         // I primi 3 sono gli stessi della home
         { questionKey: "quiz_question_1", answerKey: "quiz_answer_1" },
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const placeholderText = window.languageManager ? window.languageManager.translate('inserisci_risposta') : "Inserisci la tua risposta...";
             const submitText = window.languageManager ? window.languageManager.translate('invia_risposta') : "Invia Risposta";
             
-            quizContainer.innerHTML = `
+            elements.quizContainer.innerHTML = `
                 <h1 class="gold-text">${quizTitle}</h1>
                 <div class="quiz-progress">
                     <p>${questionText} ${questionNumber} ${ofText} ${totalQuestions}</p>
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             const congratsTitle = window.languageManager ? window.languageManager.translate('complimenti') : '🏆 Congratulazioni!';
             
-            quizContainer.innerHTML = `
+            elements.quizContainer.innerHTML = `
                 <div class="quiz-completion">
                     <h1 class="gold-text">${congratsTitle}</h1>
                     <div class="quiz-question">
@@ -151,6 +151,52 @@ document.addEventListener('DOMContentLoaded', () => {
             window.currentFullQuizIndex = currentFullQuizIndex;
             showFullQuiz(currentFullQuizIndex);
         }, 2500);
+    }
+
+    // Lazy loading delle domande quiz solo quando necessario
+    let quizData = null;
+    
+    async function loadQuizData() {
+        if (quizData) return quizData;
+        
+        try {
+            const response = await fetch('/quiz-data.json', {
+                cache: 'force-cache' // Usa cache quando possibile
+            });
+            quizData = await response.json();
+            return quizData;
+        } catch (error) {
+            console.error('Quiz data loading error:', error);
+            return getDefaultQuestions();
+        }
+    }
+
+    // Rendering ottimizzato con DocumentFragment
+    function renderAnswers(answers) {
+        const fragment = document.createDocumentFragment();
+        
+        answers.forEach((answer, index) => {
+            const button = document.createElement('button');
+            button.className = 'answer-btn';
+            button.textContent = answer;
+            button.addEventListener('click', () => handleAnswer(index), { once: true });
+            fragment.appendChild(button);
+        });
+        
+        // Single DOM update
+        document.getElementById('answers-container').replaceChildren(fragment);
+    }
+
+    // Throttle progress updates per performance
+    let updateProgressTimeout;
+    function updateProgress(progress) {
+        clearTimeout(updateProgressTimeout);
+        updateProgressTimeout = setTimeout(() => {
+            const progressBar = document.getElementById('progress-fill');
+            if (progressBar) {
+                progressBar.style.width = `${progress}%`;
+            }
+        }, 16); // ~60fps
     }
 
     showFullQuiz(currentFullQuizIndex);
