@@ -104,10 +104,22 @@ function renderHomeGallery(files) {
             mediaElement = document.createElement('img');
             mediaElement.src = `media-protection.php?file=${file}`;
             mediaElement.alt = `Momento ${index + 1}`;
-            
+
             mediaElement.onload = () => console.log('✅ IMG OK:', file);
-            mediaElement.onerror = () => {
-                console.error('❌ IMG ERROR:', file);
+            mediaElement.onerror = (e) => {
+                console.error('❌ IMG ERROR:', file, e);
+                // Prova a fare una fetch per vedere la risposta HTTP
+                fetch(`media-protection.php?file=${file}`)
+                    .then(resp => {
+                        if (!resp.ok) {
+                            console.error(`❌ HTTP ERROR: ${resp.status} ${resp.statusText} per ${file}`);
+                        } else {
+                            console.error(`❌ IMG ERROR: Il file sembra esistere ma non è un'immagine valida o c'è un problema di CORS.`);
+                        }
+                    })
+                    .catch(fetchErr => {
+                        console.error('❌ FETCH ERROR:', fetchErr);
+                    });
                 mediaElement.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="160"><rect width="100%" height="100%" fill="%23ddd"/><text x="50%" y="50%" font-size="14" fill="%23999" text-anchor="middle" dominant-baseline="middle">Immagine non disponibile</text></svg>';
             };
         } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
