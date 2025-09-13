@@ -452,7 +452,7 @@ function showQuiz(index) {
         homeQuizContainer.innerHTML = `
             <div class="quiz-question">
                 <p>${questionText}</p>
-                <input type="text" id="quiz-answer-${index}" placeholder="${placeholderText}" disabled>
+                <input type="text" id="quiz-answer-${index}" placeholder="${placeholderText}" readonly>
                 <button id="quiz-submit-${index}" disabled>${submitText}</button>
                 <p id="feedback-${index}"></p>
             </div>
@@ -460,23 +460,25 @@ function showQuiz(index) {
 
         const inputField = document.getElementById(`quiz-answer-${index}`);
         const button = document.getElementById(`quiz-submit-${index}`);
-        if (inputField) {
-            // Abilita input e bottone al primo click sull'input
-            inputField.addEventListener('click', function enableInputOnce() {
-                inputField.disabled = false;
+        if (inputField && button) {
+            // Abilita input e bottone al primo click o focus sull'input
+            const enableInputOnce = () => {
+                inputField.readOnly = false;
                 button.disabled = false;
-                inputField.focus();
-                // Rimuovi questo event listener dopo il primo click
                 inputField.removeEventListener('click', enableInputOnce);
-            });
+                inputField.removeEventListener('focus', enableInputOnce);
+                inputField.focus();
+            };
+            inputField.addEventListener('click', enableInputOnce);
+            inputField.addEventListener('focus', enableInputOnce);
+
             inputField.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter' && !inputField.disabled) {
+                if (event.key === 'Enter' && !button.disabled) {
                     event.preventDefault();
                     checkAnswer(index);
                 }
             });
-        }
-        if (button) {
+
             button.addEventListener('click', function() {
                 if (!button.disabled) checkAnswer(index);
             });
