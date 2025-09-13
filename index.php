@@ -31,7 +31,7 @@
             <!-- Il form invia i dati a login.php usando il metodo POST -->
             <form id="login-form" action="login.php" method="POST">
                 <label for="frutto" data-translate="frutto_preferito">Qual è il suo frutto preferito?</label>
-                <input type="text" id="frutto" name="frutto" required autocomplete="off" autofocus placeholder="lampone / raspberry / малина / framboise">
+                <input type="text" id="frutto" name="frutto" required autocomplete="off">
                 <button type="submit" data-translate="entra">Entra</button>
             </form>
 
