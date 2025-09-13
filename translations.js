@@ -648,6 +648,42 @@ class LanguageManager {
     }
 }
 
+// Cache translations per performance
+let cachedTranslations = null;
+
+async function loadTranslations() {
+    if (cachedTranslations) return cachedTranslations;
+    
+    try {
+        const response = await fetch('translations.json', {
+            cache: 'force-cache'
+        });
+        cachedTranslations = await response.json();
+        return cachedTranslations;
+    } catch (error) {
+        console.error('Translations loading error:', error);
+        return null;
+    }
+}
+
+// Batch DOM updates per performance
+function updateTranslations(lang) {
+    if (!cachedTranslations) return;
+    
+    const elements = document.querySelectorAll('[data-translate]');
+    const translations = cachedTranslations[lang] || {};
+    
+    // Batch updates con requestAnimationFrame
+    requestAnimationFrame(() => {
+        elements.forEach(element => {
+            const key = element.getAttribute('data-translate');
+            if (translations[key]) {
+                element.textContent = translations[key];
+            }
+        });
+    });
+}
+
 // Initialize language manager when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.languageManager = new LanguageManager();
