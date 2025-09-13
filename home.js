@@ -263,7 +263,7 @@ async function loadMemoryImages() {
     try {
         const response = await fetch('media-protection.php?file=media-list.json');
         const data = await response.json();
-        
+
         const imageFiles = (data.files || []).filter(file => {
             const ext = file.split('.').pop().toLowerCase();
             return ['jpg', 'jpeg', 'png', 'webp'].includes(ext);
@@ -452,8 +452,8 @@ function showQuiz(index) {
         homeQuizContainer.innerHTML = `
             <div class="quiz-question">
                 <p>${questionText}</p>
-                <input type="text" id="quiz-answer-${index}" placeholder="${placeholderText}">
-                <button id="quiz-submit-${index}">${submitText}</button>
+                <input type="text" id="quiz-answer-${index}" placeholder="${placeholderText}" disabled>
+                <button id="quiz-submit-${index}" disabled>${submitText}</button>
                 <p id="feedback-${index}"></p>
             </div>
         `;
@@ -461,17 +461,24 @@ function showQuiz(index) {
         const inputField = document.getElementById(`quiz-answer-${index}`);
         const button = document.getElementById(`quiz-submit-${index}`);
         if (inputField) {
+            // Abilita input e bottone al primo click sull'input
+            inputField.addEventListener('click', function enableInputOnce() {
+                inputField.disabled = false;
+                button.disabled = false;
+                inputField.focus();
+                // Rimuovi questo event listener dopo il primo click
+                inputField.removeEventListener('click', enableInputOnce);
+            });
             inputField.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
+                if (event.key === 'Enter' && !inputField.disabled) {
                     event.preventDefault();
                     checkAnswer(index);
                 }
             });
-            inputField.focus();
         }
         if (button) {
             button.addEventListener('click', function() {
-                checkAnswer(index);
+                if (!button.disabled) checkAnswer(index);
             });
         }
     } else {

@@ -32,9 +32,9 @@ body{
     background-attachment: fixed;
     background-position: center;
     /* Fallback per browser senza WebP */
-    background-image: url('sfondo.jpg'), url('sfondo.webp');
-    color:#222;
-    -webkit-font-smoothing:antialiased;
+    background-image: url('sfondo.webp');
+    color: #222;
+    -webkit-font-smoothing: antialiased;
     /* Previeni overflow orizzontale globalmente */
     overflow-x: hidden;
 }
