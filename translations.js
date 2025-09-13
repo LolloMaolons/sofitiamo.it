@@ -105,7 +105,13 @@ const translations = {
         quanto_sai_dottoressa: "Quanto ne sai sulla neo-dottoressa?",
         frutto_preferito: "Qual è il suo frutto preferito?",
         entra: "Entra",
-        risposta_sbagliata: "Risposta sbagliata, riprova!"
+        risposta_sbagliata: "Risposta sbagliata, riprova!",
+        
+        // Music page
+        musica_sofia: "Musica di Sofia",
+        musica_sofia_title: "🎵 Musica che ha il Sapore di Sofia 🎵",
+        musica_intro: "Le canzoni che catturano l'essenza della nostra dottoressa!",
+        ascolta_tutte: "Ascolta tutte le canzoni 🎵",
     },
     
     en: {
@@ -210,7 +216,13 @@ const translations = {
         quanto_sai_dottoressa: "How much do you know about the new doctor?",
         frutto_preferito: "What is her favorite fruit?",
         entra: "Enter",
-        risposta_sbagliata: "Wrong answer, try again!"
+        risposta_sbagliata: "Wrong answer, try again!",
+        
+        // Music page
+        musica_sofia: "Sofia's Music",
+        musica_sofia_title: "🎵 Music with Sofia's Flavor 🎵",
+        musica_intro: "Songs that capture the essence of our doctor!",
+        ascolta_tutte: "Listen to all songs 🎵",
     },
     
     bg: {
@@ -315,7 +327,13 @@ const translations = {
         quanto_sai_dottoressa: "Колко знаеш за новата докторка?",
         frutto_preferito: "Какъв е любимият ѝ плод?",
         entra: "Влез",
-        risposta_sbagliata: "Грешен отговор, опитай пак!"
+        risposta_sbagliata: "Грешен отговор, опитай пак!",
+        
+        // Music page
+        musica_sofia: "Музика на София",
+        musica_sofia_title: "🎵 Музика със Софийски вкус 🎵",
+        musica_intro: "Песните, които улавят същността на нашата докторка!",
+        ascolta_tutte: "Чуй всички песни 🎵",
     },
     
     ru: {
@@ -423,7 +441,13 @@ const translations = {
         quanto_sai_dottoressa: "Сколько ты знаешь о новом докторе?",
         frutto_preferito: "Какой её любимый фрукт?",
         entra: "Войти",
-        risposta_sbagliata: "Неправильный ответ, попробуй ещё раз!"
+        risposta_sbagliata: "Неправильный ответ, попробуй ещё раз!",
+        
+        // Music page
+        musica_sofia: "Музыка Софии",
+        musica_sofia_title: "🎵 Музыка со вкусом Софии 🎵",
+        musica_intro: "Песни, которые отражают суть нашей докторши!",
+        ascolta_tutte: "Слушать все песни 🎵",
     },
     
     fr: {
@@ -494,7 +518,13 @@ const translations = {
         quanto_sai_dottoressa: "Que sais-tu sur la nouvelle docteure?",
         frutto_preferito: "Quel est son fruit préféré?",
         entra: "Entrer",
-        risposta_sbagliata: "Mauvaise réponse, réessaie!"
+        risposta_sbagliata: "Mauvaise réponse, réessaie!",
+        
+        // Music page
+        musica_sofia: "Musique de Sofia",
+        musica_sofia_title: "🎵 Musique au goût de Sofia 🎵",
+        musica_intro: "Les chansons qui capturent l'essence de notre docteure !",
+        ascolta_tutte: "Écoute toutes les chansons 🎵",
     }
 };
 
@@ -646,42 +676,6 @@ class LanguageManager {
         const currentTranslations = translations[this.currentLanguage] || translations.it;
         return currentTranslations[key] || key;
     }
-}
-
-// Cache translations per performance
-let cachedTranslations = null;
-
-async function loadTranslations() {
-    if (cachedTranslations) return cachedTranslations;
-    
-    try {
-        const response = await fetch('translations.json', {
-            cache: 'force-cache'
-        });
-        cachedTranslations = await response.json();
-        return cachedTranslations;
-    } catch (error) {
-        console.error('Translations loading error:', error);
-        return null;
-    }
-}
-
-// Batch DOM updates per performance
-function updateTranslations(lang) {
-    if (!cachedTranslations) return;
-    
-    const elements = document.querySelectorAll('[data-translate]');
-    const translations = cachedTranslations[lang] || {};
-    
-    // Batch updates con requestAnimationFrame
-    requestAnimationFrame(() => {
-        elements.forEach(element => {
-            const key = element.getAttribute('data-translate');
-            if (translations[key]) {
-                element.textContent = translations[key];
-            }
-        });
-    });
 }
 
 // Initialize language manager when DOM is loaded

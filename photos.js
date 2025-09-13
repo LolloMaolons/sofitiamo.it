@@ -48,15 +48,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const restartBtn = document.getElementById('memory-restart-btn');
     const playAgainBtn = document.getElementById('memory-play-again-btn');
 
-    // Load memory game images
-    function loadMemoryImages() {
+    // Load memory game images (prioritize loading when user clicks)
+    function loadMemoryImages(forceReload = false) {
+        if (memoryGameImages.length > 0 && !forceReload) return Promise.resolve();
         return fetch('media-protection.php?file=media-list.json')
             .then(response => response.json())
             .then(data => {
                 // Filter only image files (exclude videos)
                 const imageFiles = data.files.filter(file => {
                     const extension = file.split('.').pop().toLowerCase();
-                    return ['jpg', 'jpeg', 'png', 'gif'].includes(extension);
+                    return ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension);
                 });
                 memoryGameImages = imageFiles;
             })
@@ -68,52 +69,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start memory game
     function startMemoryGame(difficulty) {
-        if (memoryGameImages.length === 0) {
-            alert('Errore nel caricamento delle immagini. Riprova più tardi.');
-            return;
-        }
+        // Always reload images for memory to prioritize loading
+        loadMemoryImages(true).then(() => {
+            if (memoryGameImages.length === 0) {
+                alert('Errore nel caricamento delle immagini. Riprova più tardi.');
+                return;
+            }
 
-        currentDifficulty = difficulty;
-        const numPairs = difficulty === 'easy' ? 3 : (difficulty === 'medium' ? 4 : 5);
-        const totalCards = numPairs * 2;
-        
-        // Reset game state
-        gameCards = [];
-        flippedCards = [];
-        matchedPairs = 0;
-        errors = 0;
-        gameActive = true;
+            currentDifficulty = difficulty;
+            const numPairs = difficulty === 'easy' ? 3 : (difficulty === 'medium' ? 4 : 5);
+            const totalCards = numPairs * 2;
 
-        // Select random images for the game
-        const shuffledImages = [...memoryGameImages].sort(() => Math.random() - 0.5);
-        const selectedImages = shuffledImages.slice(0, numPairs);
-        
-        // Create pairs
-        const cardImages = [...selectedImages, ...selectedImages];
-        
-        // Shuffle cards
-        cardImages.sort(() => Math.random() - 0.5);
+            // Reset game state
+            gameCards = [];
+            flippedCards = [];
+            matchedPairs = 0;
+            errors = 0;
+            gameActive = false;
 
-        // Create card elements
-        memoryGrid.innerHTML = '';
-        memoryGrid.className = `memory-grid ${difficulty}`;
-        
-        cardImages.forEach((image, index) => {
-            const card = createMemoryCard(image, index);
-            gameCards.push(card);
-            memoryGrid.appendChild(card.element);
+            // Select random images for the game
+            const shuffledImages = [...memoryGameImages].sort(() => Math.random() - 0.5);
+            const selectedImages = shuffledImages.slice(0, numPairs);
+
+            // Create pairs
+            const cardImages = [...selectedImages, ...selectedImages];
+
+            // Shuffle cards
+            cardImages.sort(() => Math.random() - 0.5);
+
+            // Create card elements
+            memoryGrid.innerHTML = '';
+            memoryGrid.className = `memory-grid ${difficulty}`;
+
+            cardImages.forEach((image, index) => {
+                const card = createMemoryCard(image, index);
+                gameCards.push(card);
+                memoryGrid.appendChild(card.element);
+            });
+
+            // Show all cards briefly then flip them
+            setTimeout(() => {
+                showAllCardsTemporarily();
+            }, 300);
+
+            // Update UI
+            updateMemoryStats();
+            memoryIntro.classList.add('hidden');
+            memoryBoard.classList.remove('hidden');
+            memoryGameOver.classList.add('hidden');
         });
-
-        // Show all cards briefly then flip them
-        setTimeout(() => {
-            showAllCardsTemporarily();
-        }, 500);
-
-        // Update UI
-        updateMemoryStats();
-        memoryIntro.classList.add('hidden');
-        memoryBoard.classList.remove('hidden');
-        memoryGameOver.classList.add('hidden');
     }
 
     // Create a memory card element
@@ -124,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="memory-card-inner">
                 <div class="memory-card-front">?</div>
                 <div class="memory-card-back">
-                    <img src="media-protection.php?file=${image}" alt="Memory Card">
+                    <img src="media-protection.php?file=${image}" alt="Memory Card" loading="eager" fetchpriority="high">
                 </div>
             </div>
         `;
@@ -138,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         cardElement.addEventListener('click', () => flipCard(card));
-        
+
         return card;
     }
 
@@ -155,16 +159,16 @@ document.addEventListener('DOMContentLoaded', () => {
             gameCards.forEach(card => {
                 card.element.classList.add('shuffle');
             });
-        }, 1500);
+        }, 2000);
 
-        // Then flip them back after showing for 3 seconds
+        // Then flip them back after showing for 5 seconds (increased time)
         setTimeout(() => {
             gameCards.forEach(card => {
                 card.element.classList.remove('flipped', 'shuffle');
                 card.isFlipped = false;
             });
             gameActive = true; // Now the game is active
-        }, 3500);
+        }, 5000);
     }
 
     // Flip a card
@@ -287,31 +291,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listeners for memory game
     if (easyBtn) {
         easyBtn.addEventListener('click', () => {
-            if (memoryGameImages.length > 0) {
-                startMemoryGame('easy');
-            } else {
-                loadMemoryImages().then(() => startMemoryGame('easy'));
-            }
+            startMemoryGame('easy');
         });
     }
 
     if (hardBtn) {
         hardBtn.addEventListener('click', () => {
-            if (memoryGameImages.length > 0) {
-                startMemoryGame('hard');
-            } else {
-                loadMemoryImages().then(() => startMemoryGame('hard'));
-            }
+            startMemoryGame('hard');
         });
     }
 
     if (mediumBtn) {
         mediumBtn.addEventListener('click', () => {
-            if (memoryGameImages.length > 0) {
-                startMemoryGame('medium');
-            } else {
-                loadMemoryImages().then(() => startMemoryGame('medium'));
-            }
+            startMemoryGame('medium');
         });
     }
 
@@ -327,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playAgainBtn.addEventListener('click', resetMemoryGame);
     }
 
-    // Load memory images on page load
+    // Load memory images on page load (for gallery, not for game)
     loadMemoryImages();
 
     // --- Full Gallery ---

@@ -1,250 +1,430 @@
+console.log('🚀 HOME.JS: Script iniziato');
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Cache elementi DOM per evitare query multiple
-    const elements = {
-        menuToggle: document.getElementById('menu-toggle'),
-        menuLinks: document.getElementById('menu-links'),
-        languageBtn: document.getElementById('language-btn'),
-        languageDropdown: document.getElementById('language-dropdown')
-    };
-
-    // Menu toggle ottimizzato
-    if (elements.menuToggle && elements.menuLinks) {
-        elements.menuToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            elements.menuLinks.classList.toggle('active');
-        });
+    console.log('✅ DOM LOADED: Pagina caricata');
+    
+    // ✅ MENU - Sempre per primo
+    initBasicMenu();
+    
+    // ✅ GALLERY HOME - Usa l'elemento che ESISTE (home-gallery)
+    const homeGallery = document.getElementById('home-gallery');
+    const graduationVideo = document.getElementById('graduation-video');
+    
+    console.log('📋 ELEMENTI REALI TROVATI:');
+    console.log('- home-gallery:', !!homeGallery);
+    console.log('- graduation-video:', !!graduationVideo);
+    
+    // ✅ CARICA SUBITO IL HOME-GALLERY (che esiste)
+    if (homeGallery) {
+        console.log('🏠 HOME-GALLERY: Caricamento...');
+        loadHomeGalleryNow();
     }
-
-    // Language selector ottimizzato
-    if (elements.languageBtn && elements.languageDropdown) {
-        elements.languageBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            elements.languageDropdown.classList.toggle('show');
-        });
+    
+    // ✅ VIDEO DOPO
+    if (graduationVideo) {
+        setTimeout(() => {
+            console.log('🎬 VIDEO: Inizializing...');
+            loadVideoNow();
+        }, 1000);
     }
-
-    // Single document click listener per performance
-    document.addEventListener('click', (event) => {
-        const target = event.target;
-        
-        // Close menu se click fuori
-        if (elements.menuLinks && 
-            !elements.menuLinks.contains(target) && 
-            !elements.menuToggle?.contains(target)) {
-            elements.menuLinks.classList.remove('active');
-        }
-        
-        // Close language dropdown se click fuori
-        if (elements.languageDropdown && 
-            !elements.languageDropdown.contains(target) && 
-            !elements.languageBtn?.contains(target)) {
-            elements.languageDropdown.classList.remove('show');
-        }
-    });
-
-    // ✅ FIX: Caricamento video laurea
-    loadGraduationVideo();
-
-    // Lazy loading per gallery se presente
-    const photosGallery = document.getElementById('photos-gallery');
-    if (photosGallery) {
-        loadGalleryWhenVisible();
-    }
-
-    // Memory game ottimizzato se presente
-    initMemoryGameOptimized();
-
-    // Quiz e music preview ottimizzati
-    initPreviewButtons();
+    
+    // ✅ RESTO DEL CODICE ESISTENTE
+    initExistingFeatures();
 });
 
-// ✅ FIX: Funzione corretta per video laurea
-function loadGraduationVideo() {
-    const graduationVideo = document.getElementById('graduation-video');
-    if (!graduationVideo) {
-        console.log('❌ Elemento graduation-video non trovato');
-        return;
-    }
+function initBasicMenu() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuLinks = document.getElementById('menu-links');
     
-    console.log('🎬 Inizializing graduation video...');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                console.log('👀 Video laurea ora visibile, caricamento...');
-                
-                const video = document.createElement('video');
-                video.src = 'media-protection.php?file=graduation/videolaurea.mp4';
-                video.controls = true;
-                video.preload = 'metadata';
-                video.setAttribute('playsinline', '');
-                video.style.width = '100%';
-                video.style.maxWidth = '800px';
-                video.style.height = 'auto';
-                
-                // Error handling
-                video.onerror = () => {
-                    console.error('❌ Errore caricamento video laurea');
-                    graduationVideo.innerHTML = `
-                        <div class="alert alert-warning text-center">
-                            <p>⚠️ Video di laurea temporaneamente non disponibile</p>
-                            <small>Percorso: media-protection.php?file=graduation/videolaurea.mp4</small>
-                        </div>
-                    `;
-                };
-                
-                // Loading completato
-                video.onloadedmetadata = () => {
-                    console.log('✅ Video laurea caricato correttamente');
-                };
-                
-                // Aggiungi video al container
-                graduationVideo.innerHTML = ''; // Pulisci contenuto esistente
-                graduationVideo.appendChild(video);
-                
-                // Stop observing
-                observer.unobserve(entry.target);
-            }
+    if (menuToggle && menuLinks) {
+        console.log('📱 MENU: OK');
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menuLinks.classList.toggle('active');
         });
-    }, { rootMargin: '50px' });
-    
-    observer.observe(graduationVideo);
-}
-
-// Lazy loading gallery con Intersection Observer
-function loadGalleryWhenVisible() {
-    const photosGallery = document.getElementById('photos-gallery');
-    if (!photosGallery) return;
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                loadGalleryContent();
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { rootMargin: '100px' });
-
-    observer.observe(photosGallery);
-}
-
-async function loadGalleryContent() {
-    const photosGallery = document.getElementById('photos-gallery');
-    if (!photosGallery) return;
-
-    try {
-        const response = await fetch('media-protection.php?file=media-list.json', {
-            cache: 'force-cache'
-        });
-        const data = await response.json();
         
-        if (data.files && data.files.length > 0) {
-            renderGalleryPreview(data.files.slice(0, 6));
-        }
-    } catch (error) {
-        console.error('Gallery loading error:', error);
+        // Close menu on outside click
+        document.addEventListener('click', (e) => {
+            if (!menuLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+                menuLinks.classList.remove('active');
+            }
+        });
     }
 }
 
-function renderGalleryPreview(files) {
-    const photosGallery = document.getElementById('photos-gallery');
-    if (!photosGallery) return;
+function loadHomeGalleryNow() {
+    const homeGallery = document.getElementById('home-gallery');
+    
+    console.log('🔄 LOADING HOME GALLERY...');
+    
+    fetch('media-protection.php?file=media-list.json')
+        .then(response => {
+            console.log('🌐 FETCH STATUS:', response.status);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.json();
+        })
+        .then(data => {
+            console.log('📊 DATA RECEIVED:', data);
+            
+            const mediaFiles = Array.isArray(data) ? data : (Array.isArray(data.files) ? data.files : []);
+            console.log('📁 MEDIA FILES:', mediaFiles.length);
+            
+            if (mediaFiles.length === 0) {
+                throw new Error('No files found');
+            }
+            
+            // Shuffle e prendi 4 per home
+            const shuffled = mediaFiles.slice().sort(() => 0.5 - Math.random());
+            let selectedMedia = shuffled.slice(0, 4);
+            
+            console.log('🎯 SELECTED MEDIA:', selectedMedia);
+            
+            // Render immediato
+            renderHomeGallery(selectedMedia);
+            
+        })
+        .catch(error => {
+            console.error('❌ GALLERY ERROR:', error);
+            showGalleryPlaceholders();
+        });
+}
 
-    const fragment = document.createDocumentFragment();
-
+function renderHomeGallery(files) {
+    const homeGallery = document.getElementById('home-gallery');
+    console.log('🎨 RENDERING HOME GALLERY...');
+    
+    // Clear existing
+    homeGallery.innerHTML = '';
+    
     files.forEach((file, index) => {
-        const mediaElement = createOptimizedMediaElement(file, index);
+        const extension = String(file).split('.').pop().toLowerCase();
+        let mediaElement;
+        
+        if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) {
+            mediaElement = document.createElement('img');
+            mediaElement.src = `media-protection.php?file=${file}`;
+            mediaElement.alt = `Momento ${index + 1}`;
+            
+            mediaElement.onload = () => console.log('✅ IMG OK:', file);
+            mediaElement.onerror = () => {
+                console.error('❌ IMG ERROR:', file);
+                mediaElement.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="160"><rect width="100%" height="100%" fill="%23ddd"/><text x="50%" y="50%" font-size="14" fill="%23999" text-anchor="middle" dominant-baseline="middle">Immagine non disponibile</text></svg>';
+            };
+        } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
+            mediaElement = document.createElement('video');
+            mediaElement.src = `media-protection.php?file=${file}`;
+            mediaElement.autoplay = true;
+            mediaElement.loop = true;
+            mediaElement.muted = true;
+            mediaElement.playsInline = true;
+            mediaElement.controls = false;
+        } else {
+            // Fallback
+            mediaElement = document.createElement('img');
+            mediaElement.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="160"><rect width="100%" height="100%" fill="%23042a12"/><text x="50%" y="50%" font-size="14" fill="%23ffffff" text-anchor="middle" dominant-baseline="middle">Momento Iconico</text></svg>';
+            mediaElement.alt = 'Momento iconico';
+        }
+        
+        // Styles
         if (mediaElement) {
-            fragment.appendChild(mediaElement);
+            mediaElement.style.width = '100%';
+            mediaElement.style.height = '160px';
+            mediaElement.style.objectFit = 'cover';
+            mediaElement.style.borderRadius = '10px';
+            mediaElement.style.boxShadow = '0 6px 14px rgba(0,0,0,0.12)';
         }
+        
+        // Link wrapper
+        const linkElement = document.createElement('a');
+        linkElement.href = 'photos.html';
+        linkElement.appendChild(mediaElement);
+        homeGallery.appendChild(linkElement);
     });
-
-    photosGallery.appendChild(fragment);
-}
-
-function createOptimizedMediaElement(file, index) {
-    const ext = file.split('.').pop().toLowerCase();
-
-    if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
-        const img = document.createElement('img');
-        img.src = `media-protection.php?file=${file}`;
-        img.alt = `Foto ${index + 1}`;
-        img.loading = index < 3 ? 'eager' : 'lazy';
-        return img;
-    } else if (['mp4', 'webm'].includes(ext)) {
-        const video = document.createElement('video');
-        video.src = `media-protection.php?file=${file}`;
-        video.muted = true;
-        video.loop = true;
-        video.preload = 'metadata';
-        return video;
-    }
-
-    return null;
-}
-
-function initMemoryGameOptimized() {
-    const memoryButtons = ['memory-easy-btn', 'memory-medium-btn', 'memory-hard-btn'];
     
-    memoryButtons.forEach(buttonId => {
-        const button = document.getElementById(buttonId);
-        if (button) {
-            button.addEventListener('click', () => handleMemoryGameStart(buttonId));
-        }
-    });
+    console.log('✅ HOME GALLERY RENDERED');
 }
 
-function handleMemoryGameStart(difficulty) {
-    // Lazy load memory game data solo quando necessario
-    loadMemoryGameData().then(images => {
-        if (images && images.length > 0) {
-            initMemoryGame(difficulty, images);
-        }
-    });
+function showGalleryPlaceholders() {
+    const homeGallery = document.getElementById('home-gallery');
+    console.log('🔄 SHOWING PLACEHOLDERS...');
+    
+    homeGallery.innerHTML = '';
+    
+    for (let i = 0; i < 4; i++) {
+        const a = document.createElement('a');
+        a.href = 'photos.html';
+        
+        const img = document.createElement('img');
+        img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="160"><rect width="100%" height="100%" fill="%23042a12"/><text x="50%" y="50%" font-size="14" fill="%23ffffff" text-anchor="middle" dominant-baseline="middle">Momento Iconico</text></svg>';
+        img.alt = `Placeholder ${i + 1}`;
+        img.style.width = '100%';
+        img.style.height = '160px';
+        img.style.objectFit = 'cover';
+        img.style.borderRadius = '10px';
+        img.style.boxShadow = '0 6px 14px rgba(0,0,0,0.12)';
+        
+        a.appendChild(img);
+        homeGallery.appendChild(a);
+    }
 }
 
-async function loadMemoryGameData() {
-    try {
-        const response = await fetch('media-protection.php?file=media-list.json', {
-            cache: 'force-cache'
+function loadVideoNow() {
+    const graduationVideo = document.getElementById('graduation-video');
+    
+    console.log('🎬 LOADING VIDEO...');
+    
+    const video = document.createElement('video');
+    video.src = 'media-protection.php?file=graduation/videolaurea.mp4';
+    video.controls = true;
+    video.preload = 'metadata';
+    video.style.width = '100%';
+    video.style.maxWidth = '600px';
+    
+    video.onloadedmetadata = () => {
+        console.log('✅ VIDEO LOADED');
+    };
+    
+    video.onerror = () => {
+        console.error('❌ VIDEO ERROR');
+        graduationVideo.innerHTML = `
+            <div class="alert alert-warning text-center">
+                <h5>⚠️ Video di laurea non disponibile</h5>
+                <small>File: graduation/videolaurea.mp4</small>
+            </div>
+        `;
+    };
+    
+    graduationVideo.innerHTML = '';
+    graduationVideo.appendChild(video);
+}
+
+function initExistingFeatures() {
+    // Language selector
+    const languageBtn = document.getElementById('language-btn');
+    const languageDropdown = document.getElementById('language-dropdown');
+    
+    if (languageBtn && languageDropdown) {
+        languageBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            languageDropdown.classList.toggle('show');
         });
+        
+        document.addEventListener('click', (e) => {
+            if (!languageDropdown.contains(e.target) && !languageBtn.contains(e.target)) {
+                languageDropdown.classList.remove('show');
+            }
+        });
+    }
+    
+    // ✅ MEMORY GAME - CODICE COMPLETO RIPRISTINATO
+    initMemoryGame();
+    
+    // Preview buttons
+    const quizBtn = document.querySelector('.quiz-preview-btn, .start-quiz-btn');
+    if (quizBtn) {
+        quizBtn.addEventListener('click', () => window.location.href = 'quiz.html');
+    }
+    
+    const musicBtn = document.querySelector('.music-preview-btn, .start-music-btn');
+    if (musicBtn) {
+        musicBtn.addEventListener('click', () => window.location.href = 'music.html');
+    }
+}
+
+// ✅ MEMORY GAME - CODICE COMPLETO ORIGINALE
+let memoryGameImages = [];
+let gameCards = [];
+let flippedCards = [];
+let matchedPairs = 0;
+let errors = 0;
+let maxErrors = 3;
+let gameActive = false;
+
+function initMemoryGame() {
+    const memoryButtons = {
+        easy: document.getElementById('memory-easy-btn'),
+        medium: document.getElementById('memory-medium-btn'),
+        hard: document.getElementById('memory-hard-btn')
+    };
+
+    Object.entries(memoryButtons).forEach(([difficulty, button]) => {
+        if (button) {
+            button.addEventListener('click', () => {
+                console.log('🧠 Memory game started:', difficulty);
+                startMemoryGame(difficulty);
+            });
+        }
+    });
+}
+
+async function loadMemoryImages() {
+    if (memoryGameImages.length > 0) return memoryGameImages;
+    
+    try {
+        const response = await fetch('media-protection.php?file=media-list.json');
         const data = await response.json();
         
-        return data.files?.filter(file => {
+        const imageFiles = (data.files || []).filter(file => {
             const ext = file.split('.').pop().toLowerCase();
             return ['jpg', 'jpeg', 'png', 'webp'].includes(ext);
-        }).slice(0, 8) || [];
+        });
+        
+        memoryGameImages = imageFiles.slice(0, 8);
+        return memoryGameImages;
     } catch (error) {
-        console.error('Memory game data loading error:', error);
+        console.error('Memory images loading error:', error);
         return [];
     }
 }
 
-function initMemoryGame(difficulty, images) {
-    // Logica memory game esistente mantenuta identica
-    // ...existing memory game logic...
+function startMemoryGame(difficulty) {
+    const memoryGrid = document.getElementById('memory-grid');
+    const memoryGameIntro = document.getElementById('memory-game-intro');
+    
+    if (!memoryGrid) return;
+    
+    gameActive = true;
+    errors = 0;
+    matchedPairs = 0;
+    flippedCards = [];
+    
+    loadMemoryImages().then(images => {
+        if (images.length === 0) return;
+        
+        const pairs = difficulty === 'easy' ? 3 : (difficulty === 'medium' ? 4 : 6);
+        const selectedImages = images.slice(0, pairs);
+        const gameImages = [...selectedImages, ...selectedImages];
+        
+        // Shuffle
+        for (let i = gameImages.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [gameImages[i], gameImages[j]] = [gameImages[j], gameImages[i]];
+        }
+        
+        renderMemoryGrid(gameImages);
+        
+        if (memoryGameIntro) {
+            memoryGameIntro.style.display = 'none';
+        }
+        if (memoryGrid) {
+            memoryGrid.style.display = 'grid';
+        }
+    });
 }
 
-// Preview buttons ottimizzati
-function initPreviewButtons() {
-    // Quiz preview
-    const quizBtn = document.querySelector('.quiz-preview-btn, .start-quiz-btn');
-    if (quizBtn) {
-        quizBtn.addEventListener('click', () => {
-            window.location.href = 'quiz.html';
-        });
-    }
+function renderMemoryGrid(images) {
+    const memoryGrid = document.getElementById('memory-grid');
+    if (!memoryGrid) return;
+    
+    gameCards = [];
+    memoryGrid.innerHTML = '';
+    
+    images.forEach((image, index) => {
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.dataset.image = image;
+        card.dataset.index = index;
+        
+        const cardInner = document.createElement('div');
+        cardInner.className = 'memory-card-inner';
+        
+        const cardFront = document.createElement('div');
+        cardFront.className = 'memory-card-front';
+        cardFront.textContent = '?';
+        
+        const cardBack = document.createElement('div');
+        cardBack.className = 'memory-card-back';
+        const img = document.createElement('img');
+        img.src = `media-protection.php?file=${image}`;
+        img.alt = 'Memory card';
+        img.loading = 'lazy';
+        cardBack.appendChild(img);
+        
+        cardInner.appendChild(cardFront);
+        cardInner.appendChild(cardBack);
+        card.appendChild(cardInner);
+        
+        card.addEventListener('click', () => flipCard(card));
+        
+        gameCards.push(card);
+        memoryGrid.appendChild(card);
+    });
+}
 
-    // Music preview  
-    const musicBtn = document.querySelector('.music-preview-btn, .start-music-btn');
-    if (musicBtn) {
-        musicBtn.addEventListener('click', () => {
-            window.location.href = 'music.html';
-        });
+function flipCard(card) {
+    if (!gameActive || flippedCards.length >= 2 || card.classList.contains('flipped')) {
+        return;
+    }
+    
+    card.classList.add('flipped');
+    flippedCards.push(card);
+    
+    if (flippedCards.length === 2) {
+        gameActive = false;
+        setTimeout(() => {
+            checkMatch();
+        }, 600);
     }
 }
 
-// --- Home Quiz ---
+function checkMatch() {
+    const [card1, card2] = flippedCards;
+    const match = card1.dataset.image === card2.dataset.image;
+    
+    if (match) {
+        card1.classList.add('matched');
+        card2.classList.add('matched');
+        matchedPairs++;
+        
+        if (matchedPairs === gameCards.length / 2) {
+            setTimeout(() => showGameResult('win'), 500);
+            return;
+        }
+    } else {
+        errors++;
+        updateErrorDisplay();
+        
+        if (errors >= maxErrors) {
+            setTimeout(() => showGameResult('lose'), 500);
+            return;
+        }
+        
+        setTimeout(() => {
+            card1.classList.remove('flipped');
+            card2.classList.remove('flipped');
+        }, 1000);
+    }
+    
+    flippedCards = [];
+    gameActive = true;
+}
+
+function updateErrorDisplay() {
+    const errorDisplay = document.getElementById('memory-errors');
+    if (errorDisplay) {
+        errorDisplay.textContent = errors;
+    }
+}
+
+function showGameResult(result) {
+    const memoryGrid = document.getElementById('memory-grid');
+    const memoryGameIntro = document.getElementById('memory-game-intro');
+    
+    if (result === 'win') {
+        alert('🎉 Complimenti! Hai vinto!');
+    } else {
+        alert('😔 Hai perso! Troppi errori.');
+    }
+    
+    if (memoryGameIntro) {
+        memoryGameIntro.style.display = 'block';
+    }
+    if (memoryGrid) {
+        memoryGrid.style.display = 'none';
+    }
+}
+
+// ✅ HOME QUIZ - CODICE COMPLETO ORIGINALE
 const homeQuizContainer = document.getElementById('home-quiz-section');
 const quizzes = [
     { questionKey: "quiz_question_1", answerKey: "quiz_answer_1" },
@@ -255,40 +435,50 @@ const quizzes = [
 let currentQuizIndex = 0;
 window.currentQuizIndex = currentQuizIndex;
 
-window.updateHomeQuizDisplay = function() {
-    showQuiz(window.currentQuizIndex);
-}
-
+// Funzione per mostrare il quiz corrente
 function showQuiz(index) {
+    if (!homeQuizContainer) return;
+
+    // Sincronizza currentQuizIndex con window.currentQuizIndex
+    currentQuizIndex = index;
+    window.currentQuizIndex = index;
+
     if (index < quizzes.length) {
         const quiz = quizzes[index];
         const questionText = window.languageManager ? window.languageManager.translate(quiz.questionKey) : "🤔 Quanto puzza il culo di Sofia?";
         const placeholderText = window.languageManager ? window.languageManager.translate('inserisci_risposta') : "Inserisci la tua risposta...";
         const submitText = window.languageManager ? window.languageManager.translate('invia_risposta') : "Invia Risposta";
-        
+
         homeQuizContainer.innerHTML = `
             <div class="quiz-question">
                 <p>${questionText}</p>
                 <input type="text" id="quiz-answer-${index}" placeholder="${placeholderText}">
-                <button onclick="checkAnswer(${index})">${submitText}</button>
+                <button id="quiz-submit-${index}">${submitText}</button>
                 <p id="feedback-${index}"></p>
             </div>
         `;
-        
+
         const inputField = document.getElementById(`quiz-answer-${index}`);
-        inputField.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
+        const button = document.getElementById(`quiz-submit-${index}`);
+        if (inputField) {
+            inputField.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    checkAnswer(index);
+                }
+            });
+            inputField.focus();
+        }
+        if (button) {
+            button.addEventListener('click', function() {
                 checkAnswer(index);
-            }
-        });
-        
-        inputField.focus();
+            });
+        }
     } else {
         const completedText = window.languageManager ? window.languageManager.translate('completato_home_quiz') : "🎉 Complimenti! Hai completato tutti i quiz della home!";
         const continueText = window.languageManager ? window.languageManager.translate('vuoi_continuare') : "Vuoi continuare con il quiz completo?";
         const goText = window.languageManager ? window.languageManager.translate('si_andiamo') : "Sì, andiamo! 🚀";
-        
+
         homeQuizContainer.innerHTML = `
             <div class="quiz-question">
                 <p>${completedText}</p>
@@ -299,17 +489,20 @@ function showQuiz(index) {
     }
 }
 
-window.checkAnswer = function(index) {
+// Funzione per controllare la risposta
+function checkAnswer(index) {
     const quiz = quizzes[index];
     const correctAnswer = window.languageManager ? window.languageManager.translate(quiz.answerKey) : "tanto";
-    const userAnswer = document.getElementById(`quiz-answer-${index}`).value.trim();
+    const userAnswer = document.getElementById(`quiz-answer-${index}`)?.value.trim();
     const feedback = document.getElementById(`feedback-${index}`);
     const inputField = document.getElementById(`quiz-answer-${index}`);
-    const button = inputField.nextElementSibling;
-    
+    const button = document.getElementById(`quiz-submit-${index}`);
+
+    if (!userAnswer || !feedback || !inputField || !button) return;
+
     const correctText = window.languageManager ? window.languageManager.translate('risposta_corretta') : "🎉 Perfetto! Risposta corretta!";
     const wrongText = window.languageManager ? window.languageManager.translate('risposta_sbagliata') : "❌ Non proprio! La risposta corretta era:";
-    
+
     if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
         feedback.textContent = correctText;
         feedback.style.color = "green";
@@ -317,7 +510,7 @@ window.checkAnswer = function(index) {
         button.disabled = true;
         button.textContent = window.languageManager ? window.languageManager.translate('corretto') : "Corretto! ✓";
         button.style.background = "linear-gradient(145deg, #28a745, #20c997)";
-        
+
         setTimeout(() => {
             currentQuizIndex++;
             window.currentQuizIndex = currentQuizIndex;
@@ -330,12 +523,12 @@ window.checkAnswer = function(index) {
         button.disabled = true;
         button.textContent = window.languageManager ? window.languageManager.translate('sbagliato') : "Sbagliato ✗";
         button.style.background = "linear-gradient(145deg, #dc3545, #c82333)";
-        
+
         inputField.style.animation = "shake 0.5s";
         setTimeout(() => {
             inputField.style.animation = "";
         }, 500);
-        
+
         setTimeout(() => {
             currentQuizIndex++;
             window.currentQuizIndex = currentQuizIndex;
@@ -344,14 +537,23 @@ window.checkAnswer = function(index) {
     }
 }
 
+// Espone le funzioni globalmente per il cambio lingua e per i bottoni
+window.updateHomeQuizDisplay = function() {
+    currentQuizIndex = window.currentQuizIndex || 0;
+    showQuiz(currentQuizIndex);
+};
+window.checkAnswer = checkAnswer;
 window.goToQuizPage = function() {
     sessionStorage.setItem('completedHomeQuizzes', 'true');
     window.location.href = 'quiz.html';
+};
+
+// Mostra il primo quiz all'avvio
+if (homeQuizContainer) {
+    showQuiz(currentQuizIndex);
 }
 
-showQuiz(currentQuizIndex);
-
-// --- Random Music Song ---
+// ✅ RANDOM SPOTIFY SONG - CODICE COMPLETO ORIGINALE
 const songUrls = [
     'https://open.spotify.com/embed/track/0KzAbK6nItSqNh8q70tb0K?utm_source=generator',
     'https://open.spotify.com/embed/track/0jWgAnTrNZmOGmqgvHhZEm?utm_source=generator',
@@ -373,7 +575,7 @@ const songUrls = [
 ];
 
 const randomSongContainer = document.getElementById('random-song-container');
-if (randomSongContainer) {
+if (randomSongContainer && songUrls.length > 0) {
     const randomIndex = Math.floor(Math.random() * songUrls.length);
     const randomSongUrl = songUrls[randomIndex];
     
@@ -387,103 +589,105 @@ if (randomSongContainer) {
     `;
 }
 
-// --- Iconic Moments Gallery ---
-const homeGallery = document.getElementById('home-gallery');
+// ✅ ICONIC MOMENTS GALLERY - CODICE DUPLICATO MA MANTENUTO PER COMPATIBILITÀ
+const homeGalleryDuplicate = document.getElementById('home-gallery');
 
-fetch('media-protection.php?file=media-list.json')
-    .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        return response.json();
-    })
-    .then(data => {
-        const mediaFiles = Array.isArray(data) ? data : (Array.isArray(data.files) ? data.files : []);
-        const shuffled = mediaFiles.slice().sort(() => 0.5 - Math.random());
-        let selectedMedia = shuffled.slice(0, 4);
+if (homeGalleryDuplicate && !homeGalleryDuplicate.hasChildNodes()) {
+    fetch('media-protection.php?file=media-list.json')
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(data => {
+            const mediaFiles = Array.isArray(data) ? data : (Array.isArray(data.files) ? data.files : []);
+            const shuffled = mediaFiles.slice().sort(() => 0.5 - Math.random());
+            let selectedMedia = shuffled.slice(0, 4);
 
-        if (selectedMedia.length === 0) {
-            selectedMedia = ['__placeholder__', '__placeholder__', '__placeholder__', '__placeholder__'];
-        } else if (selectedMedia.length < 4) {
-            let i = 0;
-            while (selectedMedia.length < 4) {
-                selectedMedia.push(selectedMedia[i % selectedMedia.length]);
-                i++;
-            }
-        }
-
-        if (!homeGallery) return;
-
-        homeGallery.innerHTML = '';
-
-        selectedMedia.forEach(file => {
-            let mediaElement;
-            if (file === '__placeholder__') {
-                mediaElement = document.createElement('img');
-                mediaElement.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360"><rect width="100%" height="100%" fill="%23042a12"/><text x="50%" y="50%" font-size="20" fill="%23ffffff" font-family="Arial" text-anchor="middle" dominant-baseline="middle">Momenti iconici (apri la galleria)</text></svg>';
-                mediaElement.alt = 'Placeholder - Momenti iconici';
-            } else {
-                const extension = String(file).split('.').pop().toLowerCase();
-                if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) {
-                    mediaElement = document.createElement('img');
-                    mediaElement.src = `media-protection.php?file=${file}`;
-                    mediaElement.alt = `Momento: ${file}`;
-                } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
-                    mediaElement = document.createElement('video');
-                    mediaElement.src = `media-protection.php?file=${file}`;
-                    mediaElement.autoplay = true;
-                    mediaElement.loop = true;
-                    mediaElement.muted = true;
-                    mediaElement.playsInline = true;
-                    mediaElement.controls = false;
-                } else {
-                    mediaElement = document.createElement('img');
-                    mediaElement.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360"><rect width="100%" height="100%" fill="%23042a12"/><text x="50%" y="50%" font-size="20" fill="%23ffffff" font-family="Arial" text-anchor="middle" dominant-baseline="middle">Formato non supportato</text></svg>';
-                    mediaElement.alt = 'Formato non supportato';
+            if (selectedMedia.length === 0) {
+                selectedMedia = ['__placeholder__', '__placeholder__', '__placeholder__', '__placeholder__'];
+            } else if (selectedMedia.length < 4) {
+                let i = 0;
+                while (selectedMedia.length < 4) {
+                    selectedMedia.push(selectedMedia[i % selectedMedia.length]);
+                    i++;
                 }
             }
 
-            if (mediaElement) {
-                mediaElement.style.width = '100%';
-                mediaElement.style.height = '160px';
-                mediaElement.style.objectFit = 'cover';
-                mediaElement.style.borderRadius = '10px';
-                mediaElement.style.boxShadow = '0 6px 14px rgba(0,0,0,0.12)';
-            }
+            homeGalleryDuplicate.innerHTML = '';
 
-            const linkElement = document.createElement('a');
-            linkElement.href = 'photos.html';
-            linkElement.appendChild(mediaElement);
-            homeGallery.appendChild(linkElement);
+            selectedMedia.forEach(file => {
+                let mediaElement;
+                if (file === '__placeholder__') {
+                    mediaElement = document.createElement('img');
+                    mediaElement.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360"><rect width="100%" height="100%" fill="%23042a12"/><text x="50%" y="50%" font-size="20" fill="%23ffffff" font-family="Arial" text-anchor="middle" dominant-baseline="middle">Momenti iconici (apri la galleria)</text></svg>';
+                    mediaElement.alt = 'Placeholder - Momenti iconici';
+                } else {
+                    const extension = String(file).split('.').pop().toLowerCase();
+                    if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) {
+                        mediaElement = document.createElement('img');
+                        mediaElement.src = `media-protection.php?file=${file}`;
+                        mediaElement.alt = `Momento: ${file}`;
+                    } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
+                        mediaElement = document.createElement('video');
+                        mediaElement.src = `media-protection.php?file=${file}`;
+                        mediaElement.autoplay = true;
+                        mediaElement.loop = true;
+                        mediaElement.muted = true;
+                        mediaElement.playsInline = true;
+                        mediaElement.controls = false;
+                    } else {
+                        mediaElement = document.createElement('img');
+                        mediaElement.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360"><rect width="100%" height="100%" fill="%23042a12"/><text x="50%" y="50%" font-size="20" fill="%23ffffff" font-family="Arial" text-anchor="middle" dominant-baseline="middle">Formato non supportato</text></svg>';
+                        mediaElement.alt = 'Formato non supportato';
+                    }
+                }
+
+                if (mediaElement) {
+                    mediaElement.style.width = '100%';
+                    mediaElement.style.height = '160px';
+                    mediaElement.style.objectFit = 'cover';
+                    mediaElement.style.borderRadius = '10px';
+                    mediaElement.style.boxShadow = '0 6px 14px rgba(0,0,0,0.12)';
+                }
+
+                const linkElement = document.createElement('a');
+                linkElement.href = 'photos.html';
+                linkElement.appendChild(mediaElement);
+                homeGalleryDuplicate.appendChild(linkElement);
+            });
+        })
+        .catch(error => {
+            console.error('Errore nel caricare la galleria:', error);
+            if (homeGalleryDuplicate) {
+                homeGalleryDuplicate.innerHTML = '';
+                for (let i = 0; i < 4; i++) {
+                    const a = document.createElement('a');
+                    a.href = 'photos.html';
+                    const img = document.createElement('img');
+                    img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360"><rect width="100%" height="100%" fill="%23042a12"/><text x="50%" y="50%" font-size="20" fill="%23ffffff" font-family="Arial" text-anchor="middle" dominant-baseline="middle">Momenti iconici (apri la galleria)</text></svg>';
+                    img.alt = 'Placeholder - Momenti iconici';
+                    img.style.width = '100%';
+                    img.style.height = '160px';
+                    img.style.objectFit = 'cover';
+                    img.style.borderRadius = '10px';
+                    img.style.boxShadow = '0 6px 14px rgba(0,0,0,0.12)';
+                    a.appendChild(img);
+                    homeGalleryDuplicate.appendChild(a);
+                }
+            }
         });
-    })
-    .catch(error => {
-        console.error('Errore nel caricare la galleria:', error);
-        if (homeGallery) {
-            homeGallery.innerHTML = '';
-            for (let i = 0; i < 4; i++) {
-                const a = document.createElement('a');
-                a.href = 'photos.html';
-                const img = document.createElement('img');
-                img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360"><rect width="100%" height="100%" fill="%23042a12"/><text x="50%" y="50%" font-size="20" fill="%23ffffff" font-family="Arial" text-anchor="middle" dominant-baseline="middle">Momenti iconici (apri la galleria)</text></svg>';
-                img.alt = 'Placeholder - Momenti iconici';
-                img.style.width = '100%';
-                img.style.height = '160px';
-                img.style.objectFit = 'cover';
-                img.style.borderRadius = '10px';
-                img.style.boxShadow = '0 6px 14px rgba(0,0,0,0.12)';
-                a.appendChild(img);
-                homeGallery.appendChild(a);
-            }
-        }
-    });
+}
 
-// La tua funzione checkHomeAnswer rimane invariata
+// ✅ FUNZIONI HELPER ORIGINALI
 function checkHomeAnswer(index) {
     const quiz = quizzes[index];
     const correctAnswer = window.languageManager ? window.languageManager.translate(quiz.answerKey) : "tanto";
-    const userAnswer = document.getElementById(`home-answer-${index}`).value.trim();
+    const userAnswer = document.getElementById(`home-answer-${index}`)?.value.trim();
     const feedback = document.getElementById(`home-feedback-${index}`);
     const inputField = document.getElementById(`home-answer-${index}`);
-    const button = inputField.nextElementSibling;
+    const button = inputField?.nextElementSibling;
+    
+    if (!userAnswer || !feedback || !inputField || !button) return;
     
     const correctText = window.languageManager ? window.languageManager.translate('risposta_corretta') : "🎉 Perfetto! Risposta corretta!";
     const wrongText = window.languageManager ? window.languageManager.translate('risposta_sbagliata') : "❌ Non proprio! La risposta corretta era:";
@@ -509,13 +713,11 @@ function checkHomeAnswer(index) {
         button.textContent = window.languageManager ? window.languageManager.translate('sbagliato') : "Sbagliato ✗";
         button.style.background = "linear-gradient(145deg, #dc3545, #c82333)";
         
-        // Shake animation effect
         inputField.style.animation = "shake 0.5s";
         setTimeout(() => {
             inputField.style.animation = "";
         }, 500);
         
-        // Passa alla domanda successiva dopo aver mostrato la soluzione
         setTimeout(() => {
             currentQuizIndex++;
             window.currentQuizIndex = currentQuizIndex;
@@ -523,3 +725,5 @@ function checkHomeAnswer(index) {
         }, 2500);
     }
 }
+
+console.log('📄 HOME.JS: Script completato');
