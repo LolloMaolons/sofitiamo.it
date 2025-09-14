@@ -381,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mediaElement.autoplay = true;
             mediaElement.loop = true;
             mediaElement.muted = true;
-            
+            mediaElement.playsInline = true;
             // Add lazy loading for videos after the first 6
             if (index > 5) {
                 mediaElement.preload = 'none';

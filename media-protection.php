@@ -14,18 +14,30 @@ if (empty($file)) {
     exit('File not found');
 }
 
-// Security: prevent directory traversal
-$file = basename($file);
-$filePath = __DIR__ . '/media/' . $file;
-
-// Check if file exists
-if (!file_exists($filePath)) {
+// Security: prevent directory traversal e supporto sottocartelle
+$file = str_replace(['..', "\\", "\0"], '', $file);
+$allowedDirs = ['media/', 'media/graduation/'];
+$filePath = realpath(__DIR__ . '/media/' . ltrim($file, '/'));
+if (!$filePath) {
+    http_response_code(404);
+    exit('File not found');
+}
+// Check if file is inside allowed directories
+$isAllowed = false;
+foreach ($allowedDirs as $dir) {
+    $dirPath = realpath(__DIR__ . '/' . $dir);
+    if ($dirPath && strpos($filePath, $dirPath) === 0) {
+        $isAllowed = true;
+        break;
+    }
+}
+if (!$isAllowed || !file_exists($filePath)) {
     http_response_code(404);
     exit('File not found');
 }
 
 // Set content type
-$extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+$extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
 $contentTypes = [
     'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png',
     'gif' => 'image/gif', 'webp' => 'image/webp', 'heic' => 'image/heic',
@@ -33,12 +45,22 @@ $contentTypes = [
     'mov' => 'video/quicktime', 'avi' => 'video/x-msvideo', 'json' => 'application/json'
 ];
 
+if ($extension === 'mp4') {
+    header('Content-Type: video/mp4');
+    header('Accept-Ranges: bytes');
+    $fileSize = filesize($filePath);
+    if (isset($_SERVER['HTTP_RANGE'])) {
+        handleRangeRequest($filePath, $fileSize);
+    } else {
+        header('Content-Length: ' . $fileSize);
+        readfile($filePath);
+    }
+    exit;
+}
 if (isset($contentTypes[$extension])) {
     header('Content-Type: ' . $contentTypes[$extension]);
 }
-
 header('Content-Length: ' . filesize($filePath));
-
 error_log("Serving file: " . $filePath);
 readfile($filePath);
 exit();
