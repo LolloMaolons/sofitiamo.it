@@ -1959,24 +1959,7 @@ button{cursor:pointer}
     margin: 0 auto;
 }
 
-.song-card {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 1rem;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
 
-.song-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-}
-
-.song-card iframe {
-    width: 100%;
-    height: 130px;
-    border-radius: 12px;
-}
 
 .music-preview-grid {
     display: grid;
@@ -1990,16 +1973,10 @@ button{cursor:pointer}
     background: linear-gradient(90deg,var(--verde-sx),var(--verde-dx));
 }
 
-.preview-song-card {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 0.8rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
 
-.preview-song-card iframe {
+#random-song-container iframe {
     width: 100%;
-    height: 200px;
+    height: 170px;
     border-radius: 8px;
 }
 

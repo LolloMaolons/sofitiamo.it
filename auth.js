@@ -5,17 +5,25 @@
     function checkAuth() {
         const token = localStorage.getItem('auth_token');
         const authTime = localStorage.getItem('auth_time');
-        
+
         // Se non c'è token, reindirizza al login
         if (!token || !authTime) {
             redirectToLogin();
             return false;
         }
-        
+
+        // Controlla che il token sia almeno 32 caratteri alfanumerici
+        if (typeof token !== 'string' || !/^[a-zA-Z0-9]{32,}$/.test(token)) {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('auth_time');
+            redirectToLogin();
+            return false;
+        }
+
         // Controlla se il token è scaduto (24 ore = 86400 secondi)
         const currentTime = Math.floor(Date.now() / 1000);
         const loginTime = parseInt(authTime);
-        
+
         if (currentTime - loginTime > 86400) {
             // Token scaduto, pulisci e reindirizza
             localStorage.removeItem('auth_token');
@@ -23,7 +31,7 @@
             redirectToLogin();
             return false;
         }
-        
+
         return true;
     }
     

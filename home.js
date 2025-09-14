@@ -689,7 +689,7 @@ if (randomSongContainer && songUrls.length > 0) {
     randomSongContainer.innerHTML = `
         <iframe data-testid="embed-iframe" style="border-radius:8px" 
                 src="${randomSongUrl}" 
-                width="100%" height="200" frameBorder="0" allowfullscreen="" 
+                width="100%" height="170" frameBorder="0" allowfullscreen="" 
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
                 loading="lazy">
         </iframe>
