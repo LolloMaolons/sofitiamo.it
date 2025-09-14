@@ -523,15 +523,13 @@ function showHomeQuiz(index) {
         const continueText = window.languageManager ? window.languageManager.translate('vuoi_continuare') : "Vuoi continuare con il quiz completo?";
         const goText = window.languageManager ? window.languageManager.translate('si_andiamo') : "Sì, andiamo! 🚀";
         homeQuizContainer.innerHTML = `
-            <div class="quiz-completion" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 320px;">
+            <div class="quiz-question" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 320px;">
                 <h2 class="gold-text" style="text-align: center;">Quiz Home Completato</h2>
-                <div class="quiz-question" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
-                    <p style="text-align: center;">${continueText}</p>
-                    <div id="home-quiz-score" class="quiz-progress" style="margin: 1rem auto 1.5rem auto; background: #f8f9fa; color: #b8862b; font-size: 1.2rem; font-weight: bold; text-align: center;">
-                        Punteggio: <span id="home-score-value">${window.homeQuizScore || 0}</span>
-                    </div>
-                    <button id="go-to-quiz-page-btn" style="background: linear-gradient(145deg, var(--verde-sx), var(--verde-dx)); margin-top: 1rem; align-self: center;">${goText}</button>
+                <p style="text-align: center;">${continueText}</p>
+                <div id="home-quiz-score" class="quiz-progress" style="margin: 1rem auto 1.5rem auto; background: #f8f9fa; color: #b8862b; font-size: 1.2rem; font-weight: bold; text-align: center;">
+                    Punteggio: <span id="home-score-value">${window.homeQuizScore || 0}</span>
                 </div>
+                <button id="go-to-quiz-page-btn" style="background: linear-gradient(145deg, var(--verde-sx), var(--verde-dx)); margin-top: 1rem; align-self: center;">${goText}</button>
             </div>
         `;
         // Salva in sessione che sono state fatte le prime 3 domande e il punteggio
@@ -541,7 +539,12 @@ function showHomeQuiz(index) {
         // Attach event listener to the continue button
         const goBtn = document.getElementById('go-to-quiz-page-btn');
         if (goBtn) {
-            goBtn.addEventListener('click', goToQuizPage);
+            goBtn.addEventListener('click', function() {
+                sessionStorage.setItem('completedHomeQuizzes', 'true');
+                sessionStorage.setItem('homeQuizScore', window.homeQuizScore || 0);
+                sessionStorage.setItem('homeQuizCount', maxHomeQuestions);
+                window.location.href = 'quiz.html';
+            });
         }
     }
 }
