@@ -474,24 +474,30 @@ function showHomeQuiz(index) {
 
         let optionsHtml = '';
         quiz.options.forEach((opt, i) => {
-            optionsHtml += `<label class="multi-answer-label"><input type="checkbox" class="multi-answer" value="${i}"> ${opt}</label><br>`;
+            optionsHtml += `<label class=\"multi-answer-label\"><input type=\"checkbox\" class=\"multi-answer\" value=\"${i}\"> ${opt}</label><br>`;
         });
 
+        // Show score above the quiz
         homeQuizContainer.innerHTML = `
-            <h2 class="gold-text">${quizTitle}</h2>
-            <div class="quiz-progress">
+            <div id=\"home-quiz-score\" class=\"quiz-progress\" style=\"margin: 1rem auto 1.5rem auto; background: #f8f9fa; color: #b8862b; font-size: 1.2rem; font-weight: bold; text-align: center;\">
+                Punteggio: <span id=\"home-score-value\">${window.homeQuizScore || 0}</span>
+            </div>
+            <h2 class=\"gold-text\">${quizTitle}</h2>
+            <div class=\"quiz-progress\">
                 <p>${questionText} ${questionNumber} ${ofText} ${totalQuestions}</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${((index + 1) / quizzes.length) * 100}%"></div>
+                <div class=\"progress-bar\">
+                    <div class=\"progress-fill\" style=\"width: ${((index + 1) / quizzes.length) * 100}%\"></div>
                 </div>
             </div>
-            <div class="quiz-question">
+            <div class=\"quiz-question\">
                 <p>${quiz.question}</p>
-                <form id="home-multi-answer-form-${index}">
-                    ${optionsHtml}
-                    <button type="button" id="home-multi-submit-${index}">${submitText}</button>
+                <form id=\"home-multi-answer-form-${index}\">
+                    <div class=\"quiz-options-group\">${optionsHtml}</div>
+                    <div style=\"display: flex; justify-content: center; margin: 18px 0 0 0;\">
+                        <button type=\"button\" id=\"home-multi-submit-${index}\">${submitText}</button>
+                    </div>
                 </form>
-                <p id="home-full-feedback-${index}"></p>
+                <div style=\"margin-top: 18px; min-height: 32px; text-align: center;\"><p id=\"home-full-feedback-${index}\" style=\"margin:0;\"></p></div>
             </div>
         `;
 
@@ -510,6 +516,33 @@ function showHomeQuiz(index) {
                 </div>
             </div>
         `;
+    }
+    const maxHomeQuestions = 3;
+    if (index >= maxHomeQuestions) {
+        // Dopo 3 domande mostra il pulsante per continuare
+        const continueText = window.languageManager ? window.languageManager.translate('vuoi_continuare') : "Vuoi continuare con il quiz completo?";
+        const goText = window.languageManager ? window.languageManager.translate('si_andiamo') : "Sì, andiamo! 🚀";
+        homeQuizContainer.innerHTML = `
+            <div class="quiz-completion" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 320px;">
+                <h2 class="gold-text" style="text-align: center;">Quiz Home Completato</h2>
+                <div class="quiz-question" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+                    <p style="text-align: center;">${continueText}</p>
+                    <div id="home-quiz-score" class="quiz-progress" style="margin: 1rem auto 1.5rem auto; background: #f8f9fa; color: #b8862b; font-size: 1.2rem; font-weight: bold; text-align: center;">
+                        Punteggio: <span id="home-score-value">${window.homeQuizScore || 0}</span>
+                    </div>
+                    <button id="go-to-quiz-page-btn" style="background: linear-gradient(145deg, var(--verde-sx), var(--verde-dx)); margin-top: 1rem; align-self: center;">${goText}</button>
+                </div>
+            </div>
+        `;
+        // Salva in sessione che sono state fatte le prime 3 domande e il punteggio
+        sessionStorage.setItem('completedHomeQuizzes', 'true');
+        sessionStorage.setItem('homeQuizScore', window.homeQuizScore || 0);
+        sessionStorage.setItem('homeQuizCount', maxHomeQuestions);
+        // Attach event listener to the continue button
+        const goBtn = document.getElementById('go-to-quiz-page-btn');
+        if (goBtn) {
+            goBtn.addEventListener('click', goToQuizPage);
+        }
     }
 }
 
@@ -530,6 +563,8 @@ function checkHomeFullAnswer(index) {
         submitBtn.disabled = true;
         submitBtn.textContent = window.languageManager ? window.languageManager.translate('corretto') : "Corretto! ✓";
         submitBtn.style.background = "linear-gradient(145deg, #28a745, #20c997)";
+        // Increment score
+        window.homeQuizScore = (window.homeQuizScore || 0) + 1;
     } else {
         let correctLabels = quiz.correct.map(i => quiz.options[i]).join(', ');
         feedback.textContent = `${wrongText} ${correctLabels}`;
@@ -537,6 +572,14 @@ function checkHomeFullAnswer(index) {
         submitBtn.disabled = true;
         submitBtn.textContent = window.languageManager ? window.languageManager.translate('sbagliato') : "Sbagliato ✗";
         submitBtn.style.background = "linear-gradient(145deg, #dc3545, #c82333)";
+    }
+
+    // Update and persist score in sessionStorage
+    sessionStorage.setItem('homeQuizScore', window.homeQuizScore || 0);
+    // Update score display in real time if present
+    const scoreValue = document.getElementById('home-score-value');
+    if (scoreValue) {
+        scoreValue.textContent = window.homeQuizScore || 0;
     }
 
     // Update progress bar
