@@ -438,140 +438,130 @@ function showGameResult(result) {
 
 // ✅ HOME QUIZ - CODICE COMPLETO ORIGINALE
 const homeQuizContainer = document.getElementById('home-quiz-section');
-const quizzes = [
-    { questionKey: "quiz_question_1", answerKey: "quiz_answer_1" },
-    { questionKey: "quiz_question_2", answerKey: "quiz_answer_2" },
-    { questionKey: "quiz_question_3", answerKey: "quiz_answer_3" },
-];
+let currentHomeQuizIndex = 0;
+window.currentHomeQuizIndex = currentHomeQuizIndex;
 
-let currentQuizIndex = 0;
-window.currentQuizIndex = currentQuizIndex;
+function getHomeMultiQuizzes() {
+    const lang = window.languageManager ? window.languageManager.currentLanguage : 'it';
+    const t = window.languageManager ? translations[lang] : translations.it;
+    const quizzes = [];
+    for (let i = 1; i <= 15; i++) {
+        if (t[`quiz_multi_${i}_q`] && Array.isArray(t[`quiz_multi_${i}_opts`]) && Array.isArray(t[`quiz_multi_${i}_ans`])) {
+            quizzes.push({
+                question: t[`quiz_multi_${i}_q`],
+                options: t[`quiz_multi_${i}_opts`],
+                correct: t[`quiz_multi_${i}_ans`]
+            });
+        }
+    }
+    return quizzes;
+}
 
-// Funzione per mostrare il quiz corrente
-function showQuiz(index) {
+function showHomeQuiz(index) {
     if (!homeQuizContainer) return;
-
-    // Sincronizza currentQuizIndex con window.currentQuizIndex
-    currentQuizIndex = index;
-    window.currentQuizIndex = index;
+    const quizzes = getHomeMultiQuizzes();
+    currentHomeQuizIndex = index;
+    window.currentHomeQuizIndex = index;
 
     if (index < quizzes.length) {
         const quiz = quizzes[index];
-        const questionText = window.languageManager ? window.languageManager.translate(quiz.questionKey) : "🤔 Quanto puzza il culo di Sofia?";
-        const placeholderText = window.languageManager ? window.languageManager.translate('inserisci_risposta') : "Inserisci la tua risposta...";
+        const questionNumber = index + 1;
+        const totalQuestions = quizzes.length;
+        const quizTitle = window.languageManager ? window.languageManager.translate('quiz_title') : 'Quanto ne sai su Sofia?';
+        const questionText = window.languageManager ? window.languageManager.translate('domanda') : 'Domanda';
+        const ofText = window.languageManager ? window.languageManager.translate('di') : 'di';
         const submitText = window.languageManager ? window.languageManager.translate('invia_risposta') : "Invia Risposta";
 
+        let optionsHtml = '';
+        quiz.options.forEach((opt, i) => {
+            optionsHtml += `<label class="multi-answer-label"><input type="checkbox" class="multi-answer" value="${i}"> ${opt}</label><br>`;
+        });
+
         homeQuizContainer.innerHTML = `
+            <h2 class="gold-text">${quizTitle}</h2>
+            <div class="quiz-progress">
+                <p>${questionText} ${questionNumber} ${ofText} ${totalQuestions}</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${((index + 1) / quizzes.length) * 100}%"></div>
+                </div>
+            </div>
             <div class="quiz-question">
-                <p>${questionText}</p>
-                <input type="text" id="quiz-answer-${index}" placeholder="${placeholderText}" readonly>
-                <button id="quiz-submit-${index}" disabled>${submitText}</button>
-                <p id="feedback-${index}"></p>
+                <p>${quiz.question}</p>
+                <form id="home-multi-answer-form-${index}">
+                    ${optionsHtml}
+                    <button type="button" id="home-multi-submit-${index}">${submitText}</button>
+                </form>
+                <p id="home-full-feedback-${index}"></p>
             </div>
         `;
 
-        const inputField = document.getElementById(`quiz-answer-${index}`);
-        const button = document.getElementById(`quiz-submit-${index}`);
-        if (inputField && button) {
-            // Abilita input e bottone al primo click o focus sull'input
-            const enableInputOnce = () => {
-                inputField.readOnly = false;
-                button.disabled = false;
-                inputField.removeEventListener('click', enableInputOnce);
-                inputField.removeEventListener('focus', enableInputOnce);
-                inputField.focus();
-            };
-            inputField.addEventListener('click', enableInputOnce);
-            inputField.addEventListener('focus', enableInputOnce);
-
-            inputField.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter' && !button.disabled) {
-                    event.preventDefault();
-                    checkAnswer(index);
-                }
-            });
-
-            button.addEventListener('click', function() {
-                if (!button.disabled) checkAnswer(index);
-            });
-        }
+        document.getElementById(`home-multi-submit-${index}`).addEventListener('click', function() {
+            checkHomeFullAnswer(index);
+        });
     } else {
-        const completedText = window.languageManager ? window.languageManager.translate('completato_home_quiz') : "🎉 Complimenti! Hai completato tutti i quiz della home!";
-        const continueText = window.languageManager ? window.languageManager.translate('vuoi_continuare') : "Vuoi continuare con il quiz completo?";
-        const goText = window.languageManager ? window.languageManager.translate('si_andiamo') : "Sì, andiamo! 🚀";
-
+        const congratsTitle = window.languageManager ? window.languageManager.translate('complimenti') : '� Congratulazioni!';
         homeQuizContainer.innerHTML = `
-            <div class="quiz-question">
-                <p>${completedText}</p>
-                <p>${continueText}</p>
-                <button onclick="goToQuizPage()" style="background: linear-gradient(145deg, var(--verde-sx), var(--verde-dx)); margin-top: 1rem;">${goText}</button>
+            <div class="quiz-completion">
+                <h2 class="gold-text">${congratsTitle}</h2>
+                <div class="quiz-question">
+                    <p>${window.languageManager ? window.languageManager.translate('completato_tutti_quiz') : '🎉 Hai completato tutti i quiz su Sofia!'}</p>
+                    <p>${window.languageManager ? window.languageManager.translate('grazie_per_aver_giocato') : 'Grazie per aver giocato! Ora conosci Sofia ancora meglio!'}</p>
+                    <button onclick="window.location.href='quiz.html'">Vai al quiz completo 🚀</button>
+                </div>
             </div>
         `;
     }
 }
 
-// Funzione per controllare la risposta
-function checkAnswer(index) {
+function checkHomeFullAnswer(index) {
+    const quizzes = getHomeMultiQuizzes();
     const quiz = quizzes[index];
-    const correctAnswer = window.languageManager ? window.languageManager.translate(quiz.answerKey) : "tanto";
-    const userAnswer = document.getElementById(`quiz-answer-${index}`)?.value.trim();
-    const feedback = document.getElementById(`feedback-${index}`);
-    const inputField = document.getElementById(`quiz-answer-${index}`);
-    const button = document.getElementById(`quiz-submit-${index}`);
-
-    if (!userAnswer || !feedback || !inputField || !button) return;
+    const correctAnswers = quiz.correct.sort();
+    const checked = Array.from(document.querySelectorAll(`#home-multi-answer-form-${index} .multi-answer:checked`)).map(el => parseInt(el.value)).sort();
+    const feedback = document.getElementById(`home-full-feedback-${index}`);
+    const submitBtn = document.getElementById(`home-multi-submit-${index}`);
 
     const correctText = window.languageManager ? window.languageManager.translate('risposta_corretta') : "🎉 Perfetto! Risposta corretta!";
     const wrongText = window.languageManager ? window.languageManager.translate('risposta_sbagliata') : "❌ Non proprio! La risposta corretta era:";
 
-    if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+    if (JSON.stringify(checked) === JSON.stringify(correctAnswers)) {
         feedback.textContent = correctText;
         feedback.style.color = "green";
-        inputField.style.borderColor = "#28a745";
-        button.disabled = true;
-        button.textContent = window.languageManager ? window.languageManager.translate('corretto') : "Corretto! ✓";
-        button.style.background = "linear-gradient(145deg, #28a745, #20c997)";
-
-        setTimeout(() => {
-            currentQuizIndex++;
-            window.currentQuizIndex = currentQuizIndex;
-            showQuiz(currentQuizIndex);
-        }, 1500);
+        submitBtn.disabled = true;
+        submitBtn.textContent = window.languageManager ? window.languageManager.translate('corretto') : "Corretto! ✓";
+        submitBtn.style.background = "linear-gradient(145deg, #28a745, #20c997)";
     } else {
-        feedback.textContent = `${wrongText} "${correctAnswer}"`;
+        let correctLabels = quiz.correct.map(i => quiz.options[i]).join(', ');
+        feedback.textContent = `${wrongText} ${correctLabels}`;
         feedback.style.color = "red";
-        inputField.style.borderColor = "#dc3545";
-        button.disabled = true;
-        button.textContent = window.languageManager ? window.languageManager.translate('sbagliato') : "Sbagliato ✗";
-        button.style.background = "linear-gradient(145deg, #dc3545, #c82333)";
-
-        inputField.style.animation = "shake 0.5s";
-        setTimeout(() => {
-            inputField.style.animation = "";
-        }, 500);
-
-        setTimeout(() => {
-            currentQuizIndex++;
-            window.currentQuizIndex = currentQuizIndex;
-            showQuiz(currentQuizIndex);
-        }, 2500);
+        submitBtn.disabled = true;
+        submitBtn.textContent = window.languageManager ? window.languageManager.translate('sbagliato') : "Sbagliato ✗";
+        submitBtn.style.background = "linear-gradient(145deg, #dc3545, #c82333)";
     }
+
+    // Update progress bar
+    const progressFill = document.querySelector('.progress-fill');
+    if (progressFill) {
+        const newWidth = Math.min(((index + 1) / quizzes.length) * 100, 100);
+        progressFill.style.width = `${newWidth}%`;
+    }
+
+    // Show next quiz after a delay
+    setTimeout(() => {
+        currentHomeQuizIndex++;
+        window.currentHomeQuizIndex = currentHomeQuizIndex;
+        showHomeQuiz(currentHomeQuizIndex);
+    }, 2500);
 }
 
-// Espone le funzioni globalmente per il cambio lingua e per i bottoni
 window.updateHomeQuizDisplay = function() {
-    currentQuizIndex = window.currentQuizIndex || 0;
-    showQuiz(currentQuizIndex);
+    currentHomeQuizIndex = window.currentHomeQuizIndex || 0;
+    showHomeQuiz(currentHomeQuizIndex);
 };
-window.checkAnswer = checkAnswer;
-window.goToQuizPage = function() {
-    sessionStorage.setItem('completedHomeQuizzes', 'true');
-    window.location.href = 'quiz.html';
-};
+window.checkHomeFullAnswer = checkHomeFullAnswer;
 
-// Mostra il primo quiz all'avvio
 if (homeQuizContainer) {
-    showQuiz(currentQuizIndex);
+    showHomeQuiz(currentHomeQuizIndex);
 }
 
 // ✅ RANDOM SPOTIFY SONG - CODICE COMPLETO ORIGINALE
