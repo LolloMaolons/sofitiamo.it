@@ -17,25 +17,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // Dopo la sincronizzazione, esegui il test
     setTimeout(testQuizLanguageSync, 200);
     // Sincronizza la lingua selezionata da localStorage (se diversa), anche se languageManager non è ancora pronto
-    function syncHomeQuizLanguage() {
-        const storedLang = localStorage.getItem('selectedLanguage');
-        if (window.languageManager && storedLang && window.languageManager.currentLanguage !== storedLang) {
-            window.languageManager.changeLanguage(storedLang);
+    // Sincronizzazione lingua quiz home: forzata e affidabile anche su reload
+    function forceHomeQuizLanguageAndRerender() {
+        const storedLang = localStorage.getItem('selectedLanguage') || 'it';
+        if (window.languageManager) {
+            if (window.languageManager.currentLanguage !== storedLang) {
+                window.languageManager.changeLanguage(storedLang);
+            } else {
+                // Se già corretta, rilancia il quiz per sicurezza
+                if (typeof window.updateHomeQuizDisplay === 'function') {
+                    window.updateHomeQuizDisplay();
+                }
+            }
             return true;
         }
         return false;
     }
 
-    if (!syncHomeQuizLanguage()) {
-        // Se languageManager non è ancora pronto, osserva finché non lo è
-        const interval = setInterval(() => {
-            if (syncHomeQuizLanguage()) {
-                clearInterval(interval);
-            }
-        }, 50);
-        // Timeout di sicurezza dopo 3 secondi
-        setTimeout(() => clearInterval(interval), 3000);
-    }
+    // Osserva finché languageManager non è pronto, poi forza lingua e rerender quiz
+    (function waitAndSyncQuizLang() {
+        if (!forceHomeQuizLanguageAndRerender()) {
+            setTimeout(waitAndSyncQuizLang, 50);
+        }
+    })();
     console.log('✅ DOM LOADED: Pagina caricata');
     
     // ✅ MENU - Sempre per primo
