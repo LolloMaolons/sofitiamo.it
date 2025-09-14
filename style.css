@@ -1974,6 +1974,7 @@ button{cursor:pointer}
 
 .song-card iframe {
     width: 100%;
+    height: 130px;
     border-radius: 12px;
 }
 

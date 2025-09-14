@@ -124,7 +124,7 @@ function handleRangeRequest($filePath, $fileSize) {
 }
 
 // Funzione per ridimensionare immagini al volo
-function resizeImage($imagePath, $width, $quality = 85) {
+function resizeImage($imagePath, $width, $quality = 72) {
     $extension = strtolower(pathinfo($imagePath, PATHINFO_EXTENSION));
     
     // Cache directory

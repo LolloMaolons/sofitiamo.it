@@ -1,4 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // === MENU-TOGGLE ===
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuLinks = document.getElementById('menu-links');
+    if (menuToggle && menuLinks) {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menuLinks.classList.toggle('active');
+        });
+        document.addEventListener('click', (e) => {
+            if (!menuLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+                menuLinks.classList.remove('active');
+            }
+        });
+    }
+
     // Sincronizza la lingua selezionata da localStorage (se diversa), anche se languageManager non è ancora pronto
     function syncQuizLanguage() {
         const storedLang = localStorage.getItem('selectedLanguage');

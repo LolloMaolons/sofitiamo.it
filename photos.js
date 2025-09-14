@@ -342,39 +342,28 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'].includes(extension)) {
             mediaElement = document.createElement('img');
-            
-            // Responsive images con srcset per diversi breakpoints
             const baseSrc = `media-protection.php?file=${file}`;
-            mediaElement.dataset.src = baseSrc;
-            mediaElement.dataset.srcset = `
-                ${baseSrc}&w=300 300w,
-                ${baseSrc}&w=600 600w,
-                ${baseSrc}&w=900 900w,
-                ${baseSrc}&w=1200 1200w
-            `;
-            mediaElement.sizes = `
-                (max-width: 640px) 50vw,
-                (max-width: 1024px) 33vw,
-                25vw
-            `;
-            
+            // Responsive srcset
+            mediaElement.dataset.src = baseSrc + '&w=400';
+            mediaElement.dataset.srcset = [
+                `${baseSrc}&w=200 200w`,
+                `${baseSrc}&w=400 400w`,
+                `${baseSrc}&w=600 600w`,
+                `${baseSrc}&w=800 800w`
+            ].join(', ');
+            mediaElement.sizes = "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 400px";
             mediaElement.alt = `Foto ${index + 1}`;
-            
-            // Priorità alta per prime 6 immagini (LCP)
-            if (index < 6) {
+            if (index < 3) {
                 mediaElement.fetchPriority = 'high';
-                mediaElement.src = `${baseSrc}&w=600`; // Carica subito in media risoluzione
+                mediaElement.src = baseSrc + '&w=400';
                 mediaElement.srcset = mediaElement.dataset.srcset;
             } else {
                 mediaElement.loading = 'lazy';
             }
-            
-            // Add error handling
             mediaElement.onerror = function() {
                 this.style.display = 'none';
                 console.log(`Errore nel caricare: ${file}`);
             };
-            
         } else if (['mp4', 'webm', 'ogg', 'mov', 'avi'].includes(extension)) {
             mediaElement = document.createElement('video');
             mediaElement.dataset.src = `media-protection.php?file=${file}`;
@@ -382,21 +371,17 @@ document.addEventListener('DOMContentLoaded', () => {
             mediaElement.loop = true;
             mediaElement.muted = true;
             mediaElement.playsInline = true;
-            // Add lazy loading for videos after the first 6
             if (index > 5) {
                 mediaElement.preload = 'none';
             } else {
                 mediaElement.src = mediaElement.dataset.src;
                 mediaElement.preload = 'metadata';
             }
-            
-            // Add error handling
             mediaElement.onerror = function() {
                 this.style.display = 'none';
                 console.log(`Errore nel caricare: ${file}`);
             };
         }
-        
         return mediaElement;
     }
 
@@ -405,25 +390,21 @@ document.addEventListener('DOMContentLoaded', () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const mediaElement = entry.target;
-                
                 if (mediaElement.dataset.src) {
-                    // Per immagini: carica srcset appropriato
                     if (mediaElement.tagName === 'IMG') {
-                        mediaElement.src = mediaElement.dataset.src + '&w=600'; // Default size
+                        mediaElement.src = mediaElement.dataset.src;
                         if (mediaElement.dataset.srcset) {
                             mediaElement.srcset = mediaElement.dataset.srcset;
                         }
                     } else {
-                        // Per video
                         mediaElement.src = mediaElement.dataset.src;
                     }
-                    
                     observer.unobserve(mediaElement);
                 }
             }
         });
     }, {
-        rootMargin: '100px 0px', // Aumenta il pre-caricamento
+        rootMargin: '100px 0px',
         threshold: 0.1
     });
 
