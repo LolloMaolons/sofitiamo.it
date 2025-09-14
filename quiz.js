@@ -1,4 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Sincronizza la lingua selezionata da localStorage (se diversa), anche se languageManager non è ancora pronto
+    function syncQuizLanguage() {
+        const storedLang = localStorage.getItem('selectedLanguage');
+        if (window.languageManager && storedLang && window.languageManager.currentLanguage !== storedLang) {
+            window.languageManager.changeLanguage(storedLang);
+            return true;
+        }
+        return false;
+    }
+
+    if (!syncQuizLanguage()) {
+        // Se languageManager non è ancora pronto, osserva finché non lo è
+        const interval = setInterval(() => {
+            if (syncQuizLanguage()) {
+                clearInterval(interval);
+            }
+        }, 50);
+        // Timeout di sicurezza dopo 3 secondi
+        setTimeout(() => clearInterval(interval), 3000);
+    }
     // Cache elementi DOM per evitare query multiple
     const elements = {
         menuToggle: document.getElementById('menu-toggle'),
@@ -38,19 +58,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showFullQuiz(index) {
         const quizzes = getMultiQuizzes();
+        const totalQuestions = quizzes.length;
         const startIndex = quizStartIndex;
-        const totalQuestions = quizzes.length - startIndex;
-        const currentIndex = index - startIndex;
+        // Always use totalQuestions for numbering and progress
+        const currentIndex = index;
         if (index < quizzes.length) {
             const quiz = quizzes[index];
-            const questionNumber = currentIndex + 1;
+            const questionNumber = index + 1;
             const quizTitle = window.languageManager ? window.languageManager.translate('quiz_title') : 'Quanto ne sai su Sofia?';
             const questionText = window.languageManager ? window.languageManager.translate('domanda') : 'Domanda';
             const ofText = window.languageManager ? window.languageManager.translate('di') : 'di';
             const submitText = window.languageManager ? window.languageManager.translate('invia_risposta') : "Invia Risposta";
+            const scoreLabel = window.languageManager ? window.languageManager.translate('punteggio_label') : 'Punteggio:';
 
             let optionsHtml = '';
+            // Emoji pertinenti per ogni domanda
+            let qText = quiz.question;
+            if (!/[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u.test(qText)) {
+                // No emoji present, add a relevant one
+                if (/noveli|antenato|battaglia|ottomani|shipka|storia|origine|perch[eé]/i.test(qText)) {
+                    qText = '🏛️ ' + qText; // storia, origini
+                } else if (/colore|fiore|simbolo|bandiera|rosa|lilla|verde|blu|giallo|oro/i.test(qText)) {
+                    qText = '🌸 ' + qText; // colori, simboli, fiori
+                } else if (/musica|canzone|brano|artista|cantante|ascolta|playlist|spotify|note/i.test(qText)) {
+                    qText = '🎵 ' + qText; // musica
+                } else if (/foto|immagine|scatto|fotografia|album|ricordo/i.test(qText)) {
+                    qText = '📸 ' + qText; // foto
+                } else if (/quiz|gioco|domanda|risposta|punteggio/i.test(qText)) {
+                    qText = '❓ ' + qText; // quiz generico
+                } else if (/amica|amico|famiglia|parente|sorella|fratello|mamma|papà|zio|zia|cugino|cugina/i.test(qText)) {
+                    qText = '👨‍👩‍👧‍👦 ' + qText; // famiglia
+                } else if (/scuola|classe|prof|insegnante|studente|studio|esame/i.test(qText)) {
+                    qText = '🏫 ' + qText; // scuola
+                } else if (/viaggio|vacanza|città|paese|luogo|posto|mondo|mappa/i.test(qText)) {
+                    qText = '🌍 ' + qText; // viaggi
+                } else if (/sport|gioca|partita|allenamento|squadra|calcio|basket|pallavolo/i.test(qText)) {
+                    qText = '🏅 ' + qText; // sport
+                } else if (/cibo|piatto|mangiare|dolce|torta|pizza|pasta|ristorante/i.test(qText)) {
+                    qText = '🍰 ' + qText; // cibo
+                } else {
+                    // Scegli casualmente tra nuvola, stella e punto di domanda
+                    const generiche = ['💭', '✨', '❓'];
+                    const randomEmoji = generiche[Math.floor(Math.random() * generiche.length)];
+                    qText = randomEmoji + ' ' + qText;
+                }
+            }
             quiz.options.forEach((opt, i) => {
+                // Always use the same label/input structure for all options
                 optionsHtml += `<label class="multi-answer-label"><input type="checkbox" class="multi-answer" value="${i}"> ${opt}</label><br>`;
             });
 
@@ -59,14 +113,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="quiz-progress">
                     <p>${questionText} ${questionNumber} ${ofText} ${totalQuestions}</p>
                     <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${((currentIndex + 1) / totalQuestions) * 100}%"></div>
+                        <div class="progress-fill" style="width: ${(questionNumber / totalQuestions) * 100}%"></div>
                     </div>
                 </div>
                 <div id="quiz-score" class="quiz-progress" style="margin-top: 1rem; background: #f8f9fa; color: #b8862b; font-size: 1.2rem; font-weight: bold;">
-                    Punteggio: <span id="quiz-score-value">${window.quizScore || 0}</span>
+                    ${scoreLabel} <span id="quiz-score-value">${window.quizScore || 0}</span> / ${totalQuestions}
                 </div>
                 <div class="quiz-question">
-                    <p>${quiz.question}</p>
+                    <p>${qText}</p>
                     <form id="multi-answer-form-${index}">
                         <div class="quiz-options-group">${optionsHtml}</div>
                         <div style="display: flex; justify-content: center; margin: 18px 0 0 0;">
@@ -82,23 +136,25 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         } else {
             // Valutazione finale
-            let quizzesDone = quizzes.length - quizStartIndex;
+            let quizzesDone = quizzes.length;
             let score = window.quizScore || 0;
             let percent = quizzesDone > 0 ? Math.round((score / quizzesDone) * 100) : 0;
             let valutazione = '';
-            if (percent === 100) valutazione = '🌟 Genio di Sofia!';
-            else if (percent >= 80) valutazione = '👏 Ottimo! Sei quasi un esperto!';
-            else if (percent >= 60) valutazione = '😊 Bravo! Ma puoi fare di più!';
-            else if (percent >= 40) valutazione = '😅 Non male, ma ripassa!';
-            else valutazione = '🤔 Forse Sofia è ancora un mistero per te!';
+            if (percent === 100) valutazione = window.languageManager ? window.languageManager.translate('valutazione_100') : '🌟 Genio di Sofia!';
+            else if (percent >= 80) valutazione = window.languageManager ? window.languageManager.translate('valutazione_80') : '👏 Ottimo! Sei quasi un esperto!';
+            else if (percent >= 60) valutazione = window.languageManager ? window.languageManager.translate('valutazione_60') : '😊 Bravo! Ma puoi fare di più!';
+            else if (percent >= 40) valutazione = window.languageManager ? window.languageManager.translate('valutazione_40') : '😅 Non male, ma ripassa!';
+            else valutazione = window.languageManager ? window.languageManager.translate('valutazione_0') : '🤔 Forse Sofia è ancora un mistero per te!';
             const congratsTitle = window.languageManager ? window.languageManager.translate('complimenti') : '🏆 Congratulazioni!';
+            const scoreLabel = window.languageManager ? window.languageManager.translate('punteggio_label') : 'Punteggio:';
+            const ofText = window.languageManager ? window.languageManager.translate('di') : 'di';
             elements.quizContainer.innerHTML = `
                 <div class="quiz-completion">
                     <h1 class="gold-text">${congratsTitle}</h1>
                     <div class="quiz-question">
                         <p>${window.languageManager ? window.languageManager.translate('completato_tutti_quiz') : '🎉 Hai completato tutti i quiz su Sofia!'}</p>
                         <div id="quiz-score" class="quiz-progress" style="margin: 1rem auto 1.5rem auto; background: #f8f9fa; color: #b8862b; font-size: 1.2rem; font-weight: bold;">
-                            Punteggio: <span id="quiz-score-value">${score}</span> su ${quizzesDone} <br><span style="font-size:1.1em;">${valutazione}</span>
+                            ${scoreLabel} <span id="quiz-score-value">${score}</span> ${window.languageManager ? window.languageManager.translate('su') : 'su'} ${quizzesDone} <br><span style="font-size:1.1em;">${valutazione}</span>
                         </div>
                         <p>${window.languageManager ? window.languageManager.translate('grazie_per_aver_giocato') : 'Grazie per aver giocato! Ora conosci Sofia ancora meglio!'}</p>
                         <button onclick="window.location.href='home.html'">${window.languageManager ? window.languageManager.translate('torna_alla_home') : 'Torna alla Home 🏠'}</button>

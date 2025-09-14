@@ -1,6 +1,41 @@
 console.log('🚀 HOME.JS: Script iniziato');
 
 document.addEventListener('DOMContentLoaded', () => {
+    // TEST: la lingua dei quiz deve sempre essere uguale a quella selezionata
+    function testQuizLanguageSync() {
+        const storedLang = localStorage.getItem('selectedLanguage') || 'it';
+        const quizLang = window.languageManager ? window.languageManager.currentLanguage : 'it';
+        if (quizLang !== storedLang) {
+            console.warn('[TEST] Lingua quiz desincronizzata! Atteso:', storedLang, 'Trovato:', quizLang);
+            return false;
+        } else {
+            console.log('[TEST] Lingua quiz sincronizzata:', quizLang);
+            return true;
+        }
+    }
+
+    // Dopo la sincronizzazione, esegui il test
+    setTimeout(testQuizLanguageSync, 200);
+    // Sincronizza la lingua selezionata da localStorage (se diversa), anche se languageManager non è ancora pronto
+    function syncHomeQuizLanguage() {
+        const storedLang = localStorage.getItem('selectedLanguage');
+        if (window.languageManager && storedLang && window.languageManager.currentLanguage !== storedLang) {
+            window.languageManager.changeLanguage(storedLang);
+            return true;
+        }
+        return false;
+    }
+
+    if (!syncHomeQuizLanguage()) {
+        // Se languageManager non è ancora pronto, osserva finché non lo è
+        const interval = setInterval(() => {
+            if (syncHomeQuizLanguage()) {
+                clearInterval(interval);
+            }
+        }, 50);
+        // Timeout di sicurezza dopo 3 secondi
+        setTimeout(() => clearInterval(interval), 3000);
+    }
     console.log('✅ DOM LOADED: Pagina caricata');
     
     // ✅ MENU - Sempre per primo
@@ -331,31 +366,34 @@ function renderMemoryGrid(images) {
     gameCards = [];
     memoryGrid.innerHTML = '';
     
-    images.forEach((image, index) => {
-        const card = document.createElement('div');
-        card.className = 'memory-card';
-        card.dataset.image = image;
-        card.dataset.index = index;
-        
-        const cardInner = document.createElement('div');
-        cardInner.className = 'memory-card-inner';
-        
-        const cardFront = document.createElement('div');
-        cardFront.className = 'memory-card-front';
-        cardFront.textContent = '?';
-        
-        const cardBack = document.createElement('div');
-        cardBack.className = 'memory-card-back';
-        const img = document.createElement('img');
-        img.src = `media-protection.php?file=${image}`;
-        img.alt = 'Memory card';
-        img.loading = 'lazy';
-        cardBack.appendChild(img);
-        
-        cardInner.appendChild(cardFront);
-        cardInner.appendChild(cardBack);
-        card.appendChild(cardInner);
-        
+    files.forEach((file, index) => {
+        const extension = String(file).split('.').pop().toLowerCase();
+        let mediaElement;
+        const t = window.languageManager ? translations[window.languageManager.currentLanguage] : translations.it;
+        const unavailableText = window.languageManager ? window.languageManager.translate('immagine_non_disponibile') : (t.immagine_non_disponibile || 'Immagine non disponibile');
+        const iconicText = window.languageManager ? window.languageManager.translate('momento_iconico') : (t.momento_iconico || 'Momento Iconico');
+        if (["webp", "jpg", "jpeg", "png", "gif"].includes(extension)) {
+            mediaElement = document.createElement('img');
+            mediaElement.src = `media/${file}`;
+            mediaElement.alt = file;
+            mediaElement.className = 'gallery-img';
+            mediaElement.onerror = function() {
+                mediaElement.src = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='160'><rect width='100%' height='100%' fill='%23ddd'/><text x='50%' y='50%' font-size='14' fill='%23999' text-anchor='middle' dominant-baseline='middle'>${unavailableText}</text></svg>`;
+            };
+        } else if (["mp4", "webm", "ogg"].includes(extension)) {
+            mediaElement = document.createElement('video');
+            mediaElement.src = `media/${file}`;
+            mediaElement.controls = true;
+            mediaElement.className = 'gallery-video';
+            mediaElement.onerror = function() {
+                mediaElement.src = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='160'><rect width='100%' height='100%' fill='%23ddd'/><text x='50%' y='50%' font-size='14' fill='%23999' text-anchor='middle' dominant-baseline='middle'>${unavailableText}</text></svg>`;
+            };
+        } else {
+            mediaElement = document.createElement('img');
+            mediaElement.src = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='160'><rect width='100%' height='100%' fill='%23042a12'/><text x='50%' y='50%' font-size='14' fill='%23ffffff' text-anchor='middle' dominant-baseline='middle'>${iconicText}</text></svg>`;
+            mediaElement.alt = iconicText;
+            mediaElement.className = 'gallery-img';
+        }
         card.addEventListener('click', () => flipCard(card));
         
         gameCards.push(card);
@@ -467,10 +505,11 @@ function showHomeQuiz(index) {
         const quiz = quizzes[index];
         const questionNumber = index + 1;
         const totalQuestions = quizzes.length;
-        const quizTitle = window.languageManager ? window.languageManager.translate('quiz_title') : 'Quanto ne sai su Sofia?';
-        const questionText = window.languageManager ? window.languageManager.translate('domanda') : 'Domanda';
-        const ofText = window.languageManager ? window.languageManager.translate('di') : 'di';
-        const submitText = window.languageManager ? window.languageManager.translate('invia_risposta') : "Invia Risposta";
+    const quizTitle = window.languageManager ? window.languageManager.translate('quiz_title') : 'Quanto ne sai su Sofia?';
+    const questionText = window.languageManager ? window.languageManager.translate('domanda') : 'Domanda';
+    const ofText = window.languageManager ? window.languageManager.translate('di') : 'di';
+    const submitText = window.languageManager ? window.languageManager.translate('invia_risposta') : "Invia Risposta";
+    const scoreLabel = window.languageManager ? window.languageManager.translate('quiz_score_home_label') : 'Punteggio:';
 
         let optionsHtml = '';
         quiz.options.forEach((opt, i) => {
@@ -480,7 +519,7 @@ function showHomeQuiz(index) {
         // Show score above the quiz
         homeQuizContainer.innerHTML = `
             <div id=\"home-quiz-score\" class=\"quiz-progress\" style=\"margin: 1rem auto 1.5rem auto; background: #f8f9fa; color: #b8862b; font-size: 1.2rem; font-weight: bold; text-align: center;\">
-                Punteggio: <span id=\"home-score-value\">${window.homeQuizScore || 0}</span>
+                ${scoreLabel} <span id=\"home-score-value\">${window.homeQuizScore || 0}</span>
             </div>
             <h2 class=\"gold-text\">${quizTitle}</h2>
             <div class=\"quiz-progress\">
@@ -505,14 +544,15 @@ function showHomeQuiz(index) {
             checkHomeFullAnswer(index);
         });
     } else {
-        const congratsTitle = window.languageManager ? window.languageManager.translate('complimenti') : '� Congratulazioni!';
+        const congratsTitle = window.languageManager ? window.languageManager.translate('complimenti') : '🎉 Complimenti!';
+        const goText = window.languageManager ? window.languageManager.translate('vai_al_quiz_completo') : 'Vai al quiz completo 🚀';
         homeQuizContainer.innerHTML = `
             <div class="quiz-completion">
                 <h2 class="gold-text">${congratsTitle}</h2>
                 <div class="quiz-question">
                     <p>${window.languageManager ? window.languageManager.translate('completato_tutti_quiz') : '🎉 Hai completato tutti i quiz su Sofia!'}</p>
                     <p>${window.languageManager ? window.languageManager.translate('grazie_per_aver_giocato') : 'Grazie per aver giocato! Ora conosci Sofia ancora meglio!'}</p>
-                    <button onclick="window.location.href='quiz.html'">Vai al quiz completo 🚀</button>
+                    <button onclick="window.location.href='quiz.html'">${goText}</button>
                 </div>
             </div>
         `;
@@ -520,10 +560,16 @@ function showHomeQuiz(index) {
     const maxHomeQuestions = 3;
     if (index >= maxHomeQuestions) {
         // Dopo 3 domande mostra il pulsante per continuare
-        const continueText = window.languageManager ? window.languageManager.translate('vuoi_continuare') : "Vuoi continuare con il quiz completo?";
-        const goText = window.languageManager ? window.languageManager.translate('si_andiamo') : "Sì, andiamo! 🚀";
+    const continueText = window.languageManager ? window.languageManager.translate('quiz_home_continue') : "Vuoi continuare con il quiz completo?";
+    const goText = window.languageManager ? window.languageManager.translate('quiz_home_andiamo') : "Sì, andiamo! 🚀";
+        // Center the parent container
+        homeQuizContainer.style.display = 'flex';
+        homeQuizContainer.style.flexDirection = 'column';
+        homeQuizContainer.style.alignItems = 'center';
+        homeQuizContainer.style.justifyContent = 'center';
+        homeQuizContainer.style.minHeight = '70vh';
         homeQuizContainer.innerHTML = `
-            <div class="quiz-question" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 320px;">
+            <div class="quiz-question" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 340px; min-height: 320px; max-width: 600px; width: 100%; background: rgba(255,255,255,0.95); border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.15);">
                 <h2 class="gold-text" style="text-align: center;">Quiz Home Completato</h2>
                 <p style="text-align: center;">${continueText}</p>
                 <div id="home-quiz-score" class="quiz-progress" style="margin: 1rem auto 1.5rem auto; background: #f8f9fa; color: #b8862b; font-size: 1.2rem; font-weight: bold; text-align: center;">
