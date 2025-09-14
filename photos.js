@@ -41,12 +41,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const memoryResultTitle = document.getElementById('memory-result-title');
     const memoryResultMessage = document.getElementById('memory-result-message');
 
+
     // Memory Game Buttons
     const easyBtn = document.getElementById('memory-easy-btn');
     const mediumBtn = document.getElementById('memory-medium-btn');
     const hardBtn = document.getElementById('memory-hard-btn');
     const restartBtn = document.getElementById('memory-restart-btn');
     const playAgainBtn = document.getElementById('memory-play-again-btn');
+
+    // Aggiorna errori/coppie in tempo reale al cambio lingua
+    if (window.languageManager && typeof window.languageManager.on === 'function') {
+        window.languageManager.on('change', updateMemoryStats);
+    } else {
+        // fallback: osserva la lingua ogni 200ms (se non c'è event system)
+        let lastLang = window.languageManager && window.languageManager.currentLanguage;
+        setInterval(() => {
+            if (window.languageManager && window.languageManager.currentLanguage !== lastLang) {
+                lastLang = window.languageManager.currentLanguage;
+                updateMemoryStats();
+            }
+        }, 200);
+    }
 
     // Load memory game images (prioritize loading when user clicks)
     function loadMemoryImages(forceReload = false) {
