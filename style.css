@@ -1,14 +1,3 @@
-@media (min-width: 2560px) {
-    .memory-grid.medium {
-        grid-template-columns: repeat(4, 1fr);
-        max-width: 520px;
-    }
-    .memory-grid.hard {
-        grid-template-columns: repeat(5, 1fr);
-        max-width: 700px;
-    }
-}
-
 /* Responsive, mobile-first stylesheet
    Mantiene la struttura HTML esistente (navbar, menu-toggle, etc.)
    Migliora i colori (verde bosco a gradiente, oro più realistico),
@@ -574,7 +563,7 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
 
 /* Enhanced button styling for completion and navigation */
 .quiz-question button[onclick*="goToQuizPage"] {
-    background: linear-gradient(145deg, var(--verde-sx), var(--verde-dx)) !important;
+    background: linear-gradient(145deg, var(--verde-sx), var (--verde-dx)) !important;
     border: none;
     color: white;
     font-weight: 700;
@@ -582,7 +571,7 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     transition: all 0.3s ease;
 }
 .quiz-question button[onclick*="home.html"]{
-    background: linear-gradient(145deg, var(--bordeaux-sx), var(--bordeaux-dx)) !important;
+    background: linear-gradient(145deg, var(--bordeaux-sx), var (--bordeaux-dx)) !important;
     border: none;
     color: white;
     font-weight: 700;
@@ -887,22 +876,11 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     animation: errorShake 0.6s ease-in-out;
 }
 
-#memory-restart-btn.memory-btn, #memory-play-again-btn.memory-btn {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
 
 #memory-game-over .memory-result {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-@keyframes errorShake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
-    20%, 40%, 60%, 80% { transform: translateX(8px); }
 }
 
 /* Small screen tweaks: migliora la gestione della tastiera mobile */
@@ -1028,7 +1006,7 @@ button{cursor:pointer}
 /* Memory Game Styles */
 #memory-game-section {
     background: linear-gradient(90deg,var(--lilla-sx),var(--lilla-dx));
-    padding: 2rem;
+    padding: 2rem 1.5rem;
     border-radius: 15px;
     margin-bottom: 2rem;
     text-align: center;
@@ -1048,17 +1026,22 @@ button{cursor:pointer}
 
 .memory-difficulty-buttons {
     display: flex;
-    gap: 1.5rem;
+    flex-direction: row;
     justify-content: center;
-    flex-wrap: wrap;
-    align-items: stretch;
-    width: 100%;
+    align-items: center;
+    gap: 1.2rem;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0 auto 2rem auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
 }
 
-
 .memory-btn {
+    width: 220px;
+    min-width: 220px;
+    max-width: 220px;
+    height: 48px;
+    margin: 0;
     background: linear-gradient(145deg, var(--oro-chiaro), #ffd700, var(--oro-scuro));
     color: white;
     border: none;
@@ -1071,19 +1054,13 @@ button{cursor:pointer}
     box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    min-width: 220px;
-    max-width: 220px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 8px 16px 8px;
     white-space: normal;
     word-break: break-word;
     overflow-wrap: break-word;
     text-align: center;
 }
 
+/* Vertical layout on small screens */
 .memory-btn:hover {
     transform: translateY(-3px) scale(1.05);
     box-shadow: 0 12px 30px rgba(212, 175, 55, 0.4);
@@ -1169,7 +1146,16 @@ button{cursor:pointer}
     max-width: 100%;
     max-height: 100%;
 }
-
+@media (min-width: 2560px) {
+    .memory-grid.medium {
+        grid-template-columns: repeat(4, 1fr);
+        max-width: 520px;
+    }
+    .memory-grid.hard {
+        grid-template-columns: repeat(5, 1fr);
+        max-width: 700px;
+    }
+}
 /* 4K and large screens: always 6 per riga, 2 righe */
 @media (min-width: 1600px) {
     .memory-grid {
@@ -1832,7 +1818,7 @@ button{cursor:pointer}
 }
 
 .language-select:hover {
-    background: linear-gradient(135deg, var(--verde-dx), var(--verde-sx));
+    background: linear-gradient(135deg, var(--verde-dx), var (--verde-sx));
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(11, 90, 43, 0.4);
 }
@@ -1856,7 +1842,7 @@ button{cursor:pointer}
 }
 
 .photos-page .language-select:hover {
-    background: linear-gradient(135deg, var(--lilla-dx), var(--lilla-sx));
+    background: linear-gradient(135deg, var(--lilla-dx), var (--lilla-sx));
     box-shadow: 0 4px 12px rgba(106, 76, 147, 0.4);
 }
 
@@ -1867,12 +1853,12 @@ button{cursor:pointer}
 
 /* Quiz page styling (bordeaux) */
 .quiz-page .language-select {
-    background: linear-gradient(135deg, var(--bordeaux-sx), var(--bordeaux-dx));
+    background: linear-gradient(135deg, var(--bordeaux-sx), var (--bordeaux-dx));
     border-color: var(--bordeaux-dx);
 }
 
 .quiz-page .language-select:hover {
-    background: linear-gradient(135deg, var(--bordeaux-dx), var(--bordeaux-sx));
+    background: linear-gradient(135deg, var(--bordeaux-dx), var (--bordeaux-sx));
     box-shadow: 0 4px 12px rgba(139, 21, 56, 0.4);
 }
 
@@ -1890,7 +1876,7 @@ button{cursor:pointer}
 }
 
 .login-container .language-select {
-    background: linear-gradient(135deg, var(--oro-chiaro), var(--oro-scuro));
+    background: linear-gradient(135deg, var(--oro-chiaro), var (--oro-scuro));
     border: 2px solid var(--oro-scuro);
     border-radius: 8px;
     padding: 8px 12px;
@@ -1906,7 +1892,7 @@ button{cursor:pointer}
 }
 
 .login-container .language-select:hover {
-    background: linear-gradient(135deg, var(--oro-scuro), var(--oro-chiaro));
+    background: linear-gradient(135deg, var(--oro-scuro), var (--oro-chiaro));
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(180, 134, 43, 0.4);
 }
@@ -2030,12 +2016,12 @@ button{cursor:pointer}
 
 /* Music page language selector styling */
 .music-page .language-select {
-    background: linear-gradient(135deg, var(--navy-sx), var(--navy-dx));
+    background: linear-gradient(135deg, var(--navy-sx), var (--navy-dx));
     border-color: var(--navy-dx);
 }
 
 .music-page .language-select:hover {
-    background: linear-gradient(135deg, var(--navy-dx), var(--navy-sx));
+    background: linear-gradient(135deg, var(--navy-dx), var (--navy-sx));
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
 
@@ -2094,5 +2080,54 @@ button{cursor:pointer}
     100% { 
         box-shadow: 0 0 40px rgba(228, 184, 75, 0.4), 0 15px 40px rgba(2,20,10,0.55);
         border-color: rgba(228, 184, 75, 0.5);
+    }
+}
+
+#memory-play-again-btn.memory-btn {
+    width: 150px;
+    min-width: 120px;
+    max-width: 180px;
+    height: 38px;
+    font-size: 0.85rem;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Usa lo stesso stile base dei memory-btn */
+    background: linear-gradient(145deg, var(--oro-chiaro), #ffd700, var(--oro-scuro));
+    color: white;
+    border: none;
+    padding: 8px 10px;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    text-align: center;
+}
+
+#memory-play-again-btn.memory-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(212, 175, 55, 0.4);
+}
+
+#memory-play-again-btn.memory-btn:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+@media (max-width: 600px) {
+    #memory-play-again-btn.memory-btn {
+        max-width: 90vw;
+        font-size: 0.8rem;
+        padding: 8px 6px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }

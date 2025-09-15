@@ -50,15 +50,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const playAgainBtn = document.getElementById('memory-play-again-btn');
 
     // Aggiorna errori/coppie in tempo reale al cambio lingua
+    function updateMemoryStatsAndGameOverText() {
+        // Aggiorna errori/coppie
+        updateMemoryStats();
+        // Aggiorna testo game over se visibile
+        if (!memoryGameOver.classList.contains('hidden')) {
+            const won = memoryResultTitle.classList.contains('gold-text');
+            if (won) {
+                const congratsText = window.languageManager ? window.languageManager.translate('complimenti') : '🎉 Complimenti! 🎉';
+                const wonText = window.languageManager ? window.languageManager.translate('hai_vinto') : 'Hai vinto il Memory Game! La tua memoria è fantastica!';
+                memoryResultTitle.textContent = congratsText;
+                memoryResultTitle.className = 'gold-text';
+                memoryResultMessage.textContent = wonText;
+            } else {
+                const gameOverText = window.languageManager ? window.languageManager.translate('game_over') : '😔 Game Over';
+                const retryText = window.languageManager ? window.languageManager.translate('riprova') : 'Hai esaurito i tentativi. Riprova per migliorare la tua memoria!';
+                memoryResultTitle.textContent = gameOverText;
+                memoryResultTitle.style.color = '#c92a2a';
+                memoryResultMessage.textContent = retryText;
+            }
+        }
+    }
+
     if (window.languageManager && typeof window.languageManager.on === 'function') {
-        window.languageManager.on('change', updateMemoryStats);
+        window.languageManager.on('change', updateMemoryStatsAndGameOverText);
     } else {
         // fallback: osserva la lingua ogni 200ms (se non c'è event system)
         let lastLang = window.languageManager && window.languageManager.currentLanguage;
         setInterval(() => {
             if (window.languageManager && window.languageManager.currentLanguage !== lastLang) {
                 lastLang = window.languageManager.currentLanguage;
-                updateMemoryStats();
+                updateMemoryStatsAndGameOverText();
             }
         }, 200);
     }
