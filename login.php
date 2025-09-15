@@ -34,6 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['frutto'])) {
         // Password CORRETTA: imposta SESSIONE PHP per i media protetti
         $_SESSION['authenticated'] = true;
         $_SESSION['user_logged_in'] = true;
+        $_SESSION['user_ip'] = $_SERVER['REMOTE_ADDR'];
+        $_SESSION['login_time'] = time();
         
         // Debug log per verificare sessione
         error_log("Login successful - Session authenticated: " . $_SESSION['authenticated']);

@@ -1,4 +1,7 @@
-<?php require_once 'auth.php'; ?>
+<?php
+require_once 'auth.php';
+checkAuthentication();
+?>
 <!DOCTYPE html>
 <html lang="it">
 <head>

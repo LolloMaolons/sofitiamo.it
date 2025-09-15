@@ -30,6 +30,5 @@ function checkAuthentication() {
     return true;
 }
 
-// Da includere all'inizio di ogni pagina protetta
-checkAuthentication();
+// ...non chiamare checkAuthentication() qui...
 ?>
