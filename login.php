@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['frutto'])) {
             localStorage.setItem('auth_token', '$token');
             localStorage.setItem('auth_time', '$timestamp');
             console.log('Session should be authenticated, redirecting...');
-            window.location.replace('home.html');
+            window.location.replace('home.php');
         </script>
         </body>
         </html>";

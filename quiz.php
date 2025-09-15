@@ -1,3 +1,4 @@
+<?php require_once 'auth.php'; ?>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -21,7 +22,7 @@
 <body class="quiz-page">
     <header>
         <nav id="navbar-quiz">
-            <a href="home.html" class="brand" data-translate="brand">DOTTORESSA!!!</a>
+            <a href="home.php" class="brand" data-translate="brand">DOTTORESSA!!!</a>
             <div class="menu-toggle" id="menu-toggle">
                 <div></div>
                 <div></div>
@@ -29,9 +30,9 @@
             </div>
         </nav>
         <div class="menu-links" id="menu-links">
-            <a href="photos.html" data-translate="momenti_iconici">Momenti iconici</a>
-            <a href="quiz.html" data-translate="quanto_ne_sai">Quanto ne sai su Sofia?</a>
-            <a href="music.html" data-translate="musica_sofia">Musica di Sofia</a>
+            <a href="photos.php" data-translate="momenti_iconici">Momenti iconici</a>
+            <a href="quiz.php" data-translate="quanto_ne_sai">Quanto ne sai su Sofia?</a>
+            <a href="music.php" data-translate="musica_sofia">Musica di Sofia</a>
         </div>
     </header>
 

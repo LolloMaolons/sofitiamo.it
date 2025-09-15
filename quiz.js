@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${scoreLabel} <span id="quiz-score-value">${score}</span> ${window.languageManager ? window.languageManager.translate('su') : 'su'} ${quizzesDone} <br><span style="font-size:1.1em;">${valutazione}</span>
                         </div>
                         <p>${window.languageManager ? window.languageManager.translate('grazie_per_aver_giocato') : 'Grazie per aver giocato! Ora conosci Sofia ancora meglio!'}</p>
-                        <button onclick="window.location.href='home.html'">${window.languageManager ? window.languageManager.translate('torna_alla_home') : 'Torna alla Home 🏠'}</button>
+                        <button onclick="window.location.href='home.php'">${window.languageManager ? window.languageManager.translate('torna_alla_home') : 'Torna alla Home 🏠'}</button>
                     </div>
                 </div>
             `;

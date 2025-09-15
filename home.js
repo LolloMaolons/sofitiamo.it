@@ -187,7 +187,7 @@ function renderHomeGallery(files) {
         
         // Link wrapper
         const linkElement = document.createElement('a');
-        linkElement.href = 'photos.html';
+    linkElement.href = 'photos.php';
         linkElement.appendChild(mediaElement);
         homeGallery.appendChild(linkElement);
     });
@@ -203,7 +203,7 @@ function showGalleryPlaceholders() {
     
     for (let i = 0; i < 4; i++) {
         const a = document.createElement('a');
-        a.href = 'photos.html';
+    a.href = 'photos.php';
         
         const img = document.createElement('img');
         img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="160"><rect width="100%" height="100%" fill="%23042a12"/><text x="50%" y="50%" font-size="14" fill="%23ffffff" text-anchor="middle" dominant-baseline="middle">Momento Iconico</text></svg>';
@@ -273,12 +273,12 @@ function initExistingFeatures() {
     // Preview buttons
     const quizBtn = document.querySelector('.quiz-preview-btn, .start-quiz-btn');
     if (quizBtn) {
-        quizBtn.addEventListener('click', () => window.location.href = 'quiz.html');
+    quizBtn.addEventListener('click', () => window.location.href = 'quiz.php');
     }
     
     const musicBtn = document.querySelector('.music-preview-btn, .start-music-btn');
     if (musicBtn) {
-        musicBtn.addEventListener('click', () => window.location.href = 'music.html');
+    musicBtn.addEventListener('click', () => window.location.href = 'music.php');
     }
 }
 
@@ -556,7 +556,7 @@ function showHomeQuiz(index) {
                 <div class="quiz-question">
                     <p>${window.languageManager ? window.languageManager.translate('completato_tutti_quiz') : '🎉 Hai completato tutti i quiz su Sofia!'}</p>
                     <p>${window.languageManager ? window.languageManager.translate('grazie_per_aver_giocato') : 'Grazie per aver giocato! Ora conosci Sofia ancora meglio!'}</p>
-                    <button onclick="window.location.href='quiz.html'">${goText}</button>
+                    <button onclick="window.location.href='quiz.php'">${goText}</button>
                 </div>
             </div>
         `;
@@ -593,7 +593,7 @@ function showHomeQuiz(index) {
                 sessionStorage.setItem('completedHomeQuizzes', 'true');
                 sessionStorage.setItem('homeQuizScore', window.homeQuizScore || 0);
                 sessionStorage.setItem('homeQuizCount', maxHomeQuestions);
-                window.location.href = 'quiz.html';
+                window.location.href = 'quiz.php';
             });
         }
     }
@@ -758,7 +758,7 @@ if (homeGalleryDuplicate && !homeGalleryDuplicate.hasChildNodes()) {
                 }
 
                 const linkElement = document.createElement('a');
-                linkElement.href = 'photos.html';
+                linkElement.href = 'photos.php';
                 linkElement.appendChild(mediaElement);
                 homeGalleryDuplicate.appendChild(linkElement);
             });
@@ -769,7 +769,7 @@ if (homeGalleryDuplicate && !homeGalleryDuplicate.hasChildNodes()) {
                 homeGalleryDuplicate.innerHTML = '';
                 for (let i = 0; i < 4; i++) {
                     const a = document.createElement('a');
-                    a.href = 'photos.html';
+                    a.href = 'photos.php';
                     const img = document.createElement('img');
                     img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360"><rect width="100%" height="100%" fill="%23042a12"/><text x="50%" y="50%" font-size="20" fill="%23ffffff" font-family="Arial" text-anchor="middle" dominant-baseline="middle">Momenti iconici (apri la galleria)</text></svg>';
                     img.alt = 'Placeholder - Momenti iconici';

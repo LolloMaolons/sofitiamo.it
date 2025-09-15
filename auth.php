@@ -22,20 +22,12 @@ function checkAuthentication() {
                 $params["secure"], $params["httponly"]
             );
         }
-        redirectToLogin();
-    }
-    // Se tutto ok, continua
-    return true;
-}
-
-function redirectToLogin() {
-    // Se non siamo già su index.php, reindirizza
-    $current = basename($_SERVER['PHP_SELF']);
-    if ($current !== 'index.php') {
+        // Reindirizza alla pagina di login
         header('Location: index.php');
         exit();
     }
-    // Se siamo già su index.php, non fare nulla (resta sulla pagina di login)
+    // Se tutto ok, continua
+    return true;
 }
 
 // Da includere all'inizio di ogni pagina protetta
