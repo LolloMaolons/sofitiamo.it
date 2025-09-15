@@ -366,19 +366,21 @@ function startMemoryGame(difficulty) {
 function renderMemoryGrid(images) {
     const memoryGrid = document.getElementById('memory-grid');
     if (!memoryGrid) return;
-    
+
     gameCards = [];
     memoryGrid.innerHTML = '';
-    
-    files.forEach((file, index) => {
+
+    images.forEach((file, index) => {
         const extension = String(file).split('.').pop().toLowerCase();
         let mediaElement;
+        // Traduzioni fallback
         const t = window.languageManager ? translations[window.languageManager.currentLanguage] : translations.it;
         const unavailableText = window.languageManager ? window.languageManager.translate('immagine_non_disponibile') : (t.immagine_non_disponibile || 'Immagine non disponibile');
         const iconicText = window.languageManager ? window.languageManager.translate('momento_iconico') : (t.momento_iconico || 'Momento Iconico');
+
         if (["webp", "jpg", "jpeg", "png", "gif"].includes(extension)) {
             mediaElement = document.createElement('img');
-            mediaElement.src = `media/${file}`;
+            mediaElement.src = `media-protection.php?file=${file}`;
             mediaElement.alt = file;
             mediaElement.className = 'gallery-img';
             mediaElement.onerror = function() {
@@ -386,7 +388,7 @@ function renderMemoryGrid(images) {
             };
         } else if (["mp4", "webm", "ogg"].includes(extension)) {
             mediaElement = document.createElement('video');
-            mediaElement.src = `media/${file}`;
+            mediaElement.src = `media-protection.php?file=${file}`;
             mediaElement.controls = true;
             mediaElement.className = 'gallery-video';
             mediaElement.onerror = function() {
@@ -398,21 +400,83 @@ function renderMemoryGrid(images) {
             mediaElement.alt = iconicText;
             mediaElement.className = 'gallery-img';
         }
+
+        // Card wrapper
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.dataset.image = file;
+        card.style.width = '100px';
+        card.style.height = '120px';
+        card.style.display = 'flex';
+        card.style.alignItems = 'center';
+        card.style.justifyContent = 'center';
+        card.style.background = '#fff';
+        card.style.borderRadius = '10px';
+        card.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+        card.style.margin = '8px';
+        card.style.cursor = 'pointer';
+        card.style.position = 'relative';
+        card.style.overflow = 'hidden';
+
+        // Card front/back logic
+        const front = document.createElement('div');
+        front.className = 'memory-card-front';
+        front.style.position = 'absolute';
+        front.style.width = '100%';
+        front.style.height = '100%';
+        front.style.background = '#b8862b';
+        front.style.borderRadius = '10px';
+        front.style.display = 'flex';
+        front.style.alignItems = 'center';
+        front.style.justifyContent = 'center';
+        front.style.fontWeight = 'bold';
+        front.style.fontSize = '1.2rem';
+        front.style.color = '#fff';
+        front.textContent = '🧠';
+
+        const back = document.createElement('div');
+        back.className = 'memory-card-back';
+        back.style.position = 'absolute';
+        back.style.width = '100%';
+        back.style.height = '100%';
+        back.style.borderRadius = '10px';
+        back.style.display = 'flex';
+        back.style.alignItems = 'center';
+        back.style.justifyContent = 'center';
+        back.style.background = '#fff';
+        back.appendChild(mediaElement);
+
+        card.appendChild(front);
+        card.appendChild(back);
+
+        // Show only front initially
+        back.style.visibility = 'hidden';
+
         card.addEventListener('click', () => flipCard(card));
-        
+
+        // Flip logic
+        card.classList.remove('flipped', 'matched');
+        card._front = front;
+        card._back = back;
+
         gameCards.push(card);
         memoryGrid.appendChild(card);
     });
 }
 
 function flipCard(card) {
-    if (!gameActive || flippedCards.length >= 2 || card.classList.contains('flipped')) {
+    if (!gameActive || flippedCards.length >= 2 || card.classList.contains('flipped') || card.classList.contains('matched')) {
         return;
     }
-    
+
+    // Flip visual
     card.classList.add('flipped');
+    if (card._front && card._back) {
+        card._front.style.visibility = 'hidden';
+        card._back.style.visibility = 'visible';
+    }
     flippedCards.push(card);
-    
+
     if (flippedCards.length === 2) {
         gameActive = false;
         setTimeout(() => {
@@ -424,12 +488,21 @@ function flipCard(card) {
 function checkMatch() {
     const [card1, card2] = flippedCards;
     const match = card1.dataset.image === card2.dataset.image;
-    
+
     if (match) {
         card1.classList.add('matched');
         card2.classList.add('matched');
         matchedPairs++;
-        
+
+        if (card1._front && card1._back) {
+            card1._front.style.visibility = 'hidden';
+            card1._back.style.visibility = 'visible';
+        }
+        if (card2._front && card2._back) {
+            card2._front.style.visibility = 'hidden';
+            card2._back.style.visibility = 'visible';
+        }
+
         if (matchedPairs === gameCards.length / 2) {
             setTimeout(() => showGameResult('win'), 500);
             return;
@@ -437,18 +510,26 @@ function checkMatch() {
     } else {
         errors++;
         updateErrorDisplay();
-        
-        if (errors >= maxErrors) {
-            setTimeout(() => showGameResult('lose'), 500);
-            return;
-        }
-        
+
         setTimeout(() => {
             card1.classList.remove('flipped');
             card2.classList.remove('flipped');
+            if (card1._front && card1._back) {
+                card1._front.style.visibility = 'visible';
+                card1._back.style.visibility = 'hidden';
+            }
+            if (card2._front && card2._back) {
+                card2._front.style.visibility = 'visible';
+                card2._back.style.visibility = 'hidden';
+            }
         }, 1000);
+
+        if (errors >= maxErrors) {
+            setTimeout(() => showGameResult('lose'), 1200);
+            return;
+        }
     }
-    
+
     flippedCards = [];
     gameActive = true;
 }
