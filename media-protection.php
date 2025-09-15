@@ -206,3 +206,7 @@ if (isset($_GET['w']) && is_numeric($_GET['w'])) {
     }
 }
 ?>
+<?php
+require_once 'auth.php';
+// ...existing code per servire immagini/video...
+?>

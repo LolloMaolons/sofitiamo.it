@@ -2,35 +2,42 @@
 session_start();
 
 function checkAuthentication() {
-    // Verifica se esiste un token di sessione
-    if (!isset($_SESSION['auth_token'])) {
-        redirectToLogin();
-    }
-    
-    // Verifica se la sessione non è scaduta (24 ore)
-    if (!isset($_SESSION['login_time']) || (time() - $_SESSION['login_time']) > 86400) {
+    // Se la sessione non è valida o non esiste, reindirizza
+    if (
+        !isset($_SESSION['authenticated']) ||
+        $_SESSION['authenticated'] !== true ||
+        !isset($_SESSION['user_ip']) ||
+        $_SESSION['user_ip'] !== $_SERVER['REMOTE_ADDR'] ||
+        !isset($_SESSION['login_time']) ||
+        (time() - $_SESSION['login_time']) > 86400
+    ) {
+        // Distruggi la sessione per evitare session fixation
+        session_unset();
         session_destroy();
+        // Cancella il cookie PHPSESSID
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $params["path"], $params["domain"],
+                $params["secure"], $params["httponly"]
+            );
+        }
         redirectToLogin();
     }
-    
-    // Verifica IP per sicurezza aggiuntiva
-    if (!isset($_SESSION['user_ip']) || $_SESSION['user_ip'] !== $_SERVER['REMOTE_ADDR']) {
-        session_destroy();
-        redirectToLogin();
-    }
-    
-    // Se arriviamo qui, l'utente è autenticato
+    // Se tutto ok, continua
     return true;
 }
 
 function redirectToLogin() {
-    header('Location: index.php');
-    exit();
+    // Se non siamo già su index.php, reindirizza
+    $current = basename($_SERVER['PHP_SELF']);
+    if ($current !== 'index.php') {
+        header('Location: index.php');
+        exit();
+    }
+    // Se siamo già su index.php, non fare nulla (resta sulla pagina di login)
 }
 
-// Esegui la verifica
+// Da includere all'inizio di ogni pagina protetta
 checkAuthentication();
-
-$token = bin2hex(random_bytes(32)); // 64 caratteri esadecimali
-// Salva $token nel database associato all'utente
 ?>
