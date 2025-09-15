@@ -1798,7 +1798,6 @@ button{cursor:pointer}
 /* Default styling (verde) */
 .language-select {
     background: linear-gradient(135deg, var(--verde-sx), var(--verde-dx));
-    border: 2px solid var(--verde-dx);
     border-radius: 8px;
     padding: 6px 10px;
     font-family: "Josefin Sans", sans-serif;

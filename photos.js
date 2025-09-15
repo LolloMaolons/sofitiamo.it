@@ -290,18 +290,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // End the memory game
     function endGame(won) {
         gameActive = false;
-        
+
+        // Correggi sempre la classe e il colore del titolo
         if (won) {
+            memoryResultTitle.className = 'gold-text';
+            memoryResultTitle.style.color = '';
             const congratsText = window.languageManager ? window.languageManager.translate('complimenti') : '🎉 Complimenti! 🎉';
             const wonText = window.languageManager ? window.languageManager.translate('hai_vinto') : 'Hai vinto il Memory Game! La tua memoria è fantastica!';
             memoryResultTitle.textContent = congratsText;
-            memoryResultTitle.className = 'gold-text';
             memoryResultMessage.textContent = wonText;
         } else {
+            memoryResultTitle.className = '';
+            memoryResultTitle.style.color = '#c92a2a';
             const gameOverText = window.languageManager ? window.languageManager.translate('game_over') : '😔 Game Over';
             const retryText = window.languageManager ? window.languageManager.translate('riprova') : 'Hai esaurito i tentativi. Riprova per migliorare la tua memoria!';
             memoryResultTitle.textContent = gameOverText;
-            memoryResultTitle.style.color = '#c92a2a';
             memoryResultMessage.textContent = retryText;
         }
 
