@@ -387,20 +387,20 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'].includes(extension)) {
             mediaElement = document.createElement('img');
+            // Responsive images for gallery (displayed at ~220px-454px wide)
             const baseSrc = `media-protection.php?file=${file}`;
-            // Responsive srcset
-            mediaElement.dataset.src = baseSrc + '&w=400';
+            mediaElement.dataset.src = baseSrc + '&w=454';
             mediaElement.dataset.srcset = [
-                `${baseSrc}&w=200 200w`,
+                `${baseSrc}&w=220 220w`,
                 `${baseSrc}&w=400 400w`,
                 `${baseSrc}&w=600 600w`,
                 `${baseSrc}&w=800 800w`
             ].join(', ');
-            mediaElement.sizes = "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 400px";
+            mediaElement.sizes = "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 454px";
             mediaElement.alt = `Foto ${index + 1}`;
             if (index < 3) {
                 mediaElement.fetchPriority = 'high';
-                mediaElement.src = baseSrc + '&w=400';
+                mediaElement.src = baseSrc + '&w=454';
                 mediaElement.srcset = mediaElement.dataset.srcset;
             } else {
                 mediaElement.loading = 'lazy';

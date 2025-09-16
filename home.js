@@ -884,15 +884,29 @@ function applyPhotoFadeInAnimation(gallerySelector = '.gallery') {
 applyPhotoFadeInAnimation('#home-gallery');
 
 function createMediaElement(file, index) {
-    // ...creazione mediaElement come in photos.js...
-    // Esempio:
     let mediaElement;
     const extension = file.split('.').pop().toLowerCase();
     if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'].includes(extension)) {
         mediaElement = document.createElement('img');
-        mediaElement.src = `media-protection.php?file=${file}`;
+        // Responsive images for home gallery (displayed at ~454x303)
+        const baseSrc = `media-protection.php?file=${file}`;
+        mediaElement.dataset.src = baseSrc + '&w=454';
+        mediaElement.dataset.srcset = [
+            `${baseSrc}&w=200 200w`,
+            `${baseSrc}&w=400 400w`,
+            `${baseSrc}&w=600 600w`,
+            `${baseSrc}&w=800 800w`
+        ].join(', ');
+        mediaElement.sizes = "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 454px";
         mediaElement.alt = `Momento ${index + 1}`;
-        mediaElement.className = 'gallery-img';
+        // Load first 2 images eagerly, others lazy
+        if (index < 2) {
+            mediaElement.fetchPriority = 'high';
+            mediaElement.src = baseSrc + '&w=454';
+            mediaElement.srcset = mediaElement.dataset.srcset;
+        } else {
+            mediaElement.loading = 'lazy';
+        }
         mediaElement.onerror = function() {
             mediaElement.src = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='160'><rect width='100%' height='100%' fill='%23ddd'/><text x='50%' y='50%' font-size='14' fill='%23999' text-anchor='middle' dominant-baseline='middle'>Immagine non disponibile</text></svg>`;
         };

@@ -7,6 +7,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <!-- Prefetch other main pages and their assets for faster navigation -->
+    <link rel="prefetch" href="home.php">
+    <link rel="prefetch" href="photos.php">
+    <link rel="prefetch" href="quiz.php">
+    <link rel="prefetch" href="music.php">
+    <link rel="prefetch" href="home.js" as="script">
+    <link rel="prefetch" href="photos.js" as="script">
+    <link rel="prefetch" href="quiz.js" as="script">
+    <link rel="prefetch" href="music.js" as="script">
+    <link rel="prefetch" href="style.css" as="style">
 </head>
 <body class="login-page">
     <header>
