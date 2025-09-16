@@ -193,6 +193,9 @@ function renderHomeGallery(files) {
     });
     
     console.log('✅ HOME GALLERY RENDERED');
+
+    // Dopo aver inserito le immagini/video nella gallery, aggiungi il delay per animazione
+    applyPhotoFadeInAnimation('#home-gallery');
 }
 
 function showGalleryPlaceholders() {
@@ -915,3 +918,16 @@ function checkHomeAnswer(index) {
 }
 
 console.log('📄 HOME.JS: Script completato');
+
+// Dopo aver inserito le immagini/video nella gallery, aggiungi il delay per animazione
+function applyPhotoFadeInAnimation(gallerySelector = '.gallery') {
+    const gallery = document.querySelector(gallerySelector);
+    if (!gallery) return;
+    const items = gallery.querySelectorAll('img, video');
+    items.forEach((el, i) => {
+        el.style.setProperty('--photo-delay', `${i * 0.12}s`);
+    });
+}
+
+// Esempio: dopo aver popolato la gallery
+applyPhotoFadeInAnimation('#home-gallery');

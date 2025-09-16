@@ -326,6 +326,11 @@ document.addEventListener('DOMContentLoaded', () => {
         errors = 0;
         gameActive = false;
         currentDifficulty = null;
+        // Mostra i bottoni di difficoltà e nascondi restart
+        if (easyBtn) easyBtn.classList.remove('hidden');
+        if (mediumBtn) mediumBtn.classList.remove('hidden');
+        if (hardBtn) hardBtn.classList.remove('hidden');
+        if (restartBtn) restartBtn.classList.add('hidden');
     }
 
     // Event listeners for memory game
@@ -422,6 +427,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(`Errore nel caricare: ${file}`);
             };
         }
+        // Applica il delay di animazione direttamente qui
+        mediaElement.style.setProperty('--photo-delay', `${index * 0.12}s`);
+        // Applica animazione solo quando carica
+        setTimeout(() => addPhotoFadeInOnLoad(mediaElement, index), 0);
         return mediaElement;
     }
 
@@ -447,6 +456,30 @@ document.addEventListener('DOMContentLoaded', () => {
         rootMargin: '100px 0px',
         threshold: 0.1
     });
+
+    // Funzione per applicare animazione fade-in con delay
+    function applyPhotoFadeInAnimation(gallerySelector = '.gallery') {
+        const gallery = document.querySelector(gallerySelector);
+        if (!gallery) return;
+        const items = gallery.querySelectorAll('img, video');
+        items.forEach((el, i) => {
+            el.style.setProperty('--photo-delay', `${i * 0.12}s`);
+        });
+    }
+
+    // Funzione per aggiungere animazione quando l'immagine/video viene caricata
+    function addPhotoFadeInOnLoad(mediaElement, index) {
+        function showAnimation() {
+            mediaElement.style.opacity = '0';
+            mediaElement.style.animation = `photoFadeIn 1.2s cubic-bezier(.22,.68,.43,1.01) forwards`;
+            mediaElement.style.animationDelay = `${index * 0.12}s`;
+        }
+        if (mediaElement.tagName === 'IMG') {
+            mediaElement.addEventListener('load', showAnimation, { once: true });
+        } else if (mediaElement.tagName === 'VIDEO') {
+            mediaElement.addEventListener('loadeddata', showAnimation, { once: true });
+        }
+    }
 
     fetch('media-protection.php?file=media-list.json')
         .then(response => response.json())

@@ -265,6 +265,34 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
 .gallery a{text-decoration:none;display:block;cursor:pointer}
 .gallery a:hover img, .gallery a:hover video{transform:scale(1.03)}
 
+/* Animazione fade-in lenta per le foto */
+@keyframes photoFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.96) translateY(18px);
+        filter: blur(6px);
+    }
+    60% {
+        opacity: 0.7;
+        transform: scale(1.02) translateY(-4px);
+        filter: blur(2px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+    }
+}
+
+/* Applica animazione alle immagini e video delle gallery */
+.gallery img,
+.gallery video {
+    /* RIMUOVI queste proprietà di default */
+    /* opacity: 0;
+    animation: photoFadeIn 1.2s cubic-bezier(.22,.68,.43,1.01) forwards;
+    animation-delay: var(--photo-delay, 0s); */
+}
+
 /* Video area responsive - Fixed */
 #graduation-video video, .graduation-video-player {
     width: 100% !important;
