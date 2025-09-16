@@ -369,6 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Full Gallery ---
     const photosGallery = document.getElementById('photos-gallery');
+    const priorityCount = 3; // Definisci il numero di immagini prioritarie
 
     // Function to shuffle an array using Fisher-Yates algorithm
     function shuffleArray(array) {
@@ -387,7 +388,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'].includes(extension)) {
             mediaElement = document.createElement('img');
-            // Responsive images for gallery (displayed at ~220px-454px wide)
             const baseSrc = `media-protection.php?file=${file}`;
             mediaElement.dataset.src = baseSrc + '&w=454';
             mediaElement.dataset.srcset = [
@@ -398,13 +398,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ].join(', ');
             mediaElement.sizes = "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 454px";
             mediaElement.alt = `Foto ${index + 1}`;
-            if (index < 3) {
-                mediaElement.fetchPriority = 'high';
-                mediaElement.src = baseSrc + '&w=454';
-                mediaElement.srcset = mediaElement.dataset.srcset;
-            } else {
-                mediaElement.loading = 'lazy';
-            }
+            // NON impostare src qui!
+            mediaElement.loading = 'lazy';
             mediaElement.onerror = function() {
                 this.style.display = 'none';
                 console.log(`Errore nel caricare: ${file}`);
@@ -416,31 +411,25 @@ document.addEventListener('DOMContentLoaded', () => {
             mediaElement.loop = true;
             mediaElement.muted = true;
             mediaElement.playsInline = true;
-            if (index > 5) {
-                mediaElement.preload = 'none';
-            } else {
-                mediaElement.src = mediaElement.dataset.src;
-                mediaElement.preload = 'metadata';
-            }
+            mediaElement.preload = 'none';
+            // NON impostare src qui!
             mediaElement.onerror = function() {
                 this.style.display = 'none';
                 console.log(`Errore nel caricare: ${file}`);
             };
         }
-        // Imposta subito opacity a 0 per evitare flicker/frame
         mediaElement.style.opacity = '0';
-        // Applica il delay di animazione direttamente qui
         mediaElement.style.setProperty('--photo-delay', `${index * 0.12}s`);
-        // Applica animazione solo quando carica
         setTimeout(() => addPhotoFadeInOnLoad(mediaElement, index), 0);
         return mediaElement;
     }
 
-    // Intersection Observer ottimizzato per performance
+    // Intersection Observer: carica solo quelle effettivamente mostrate (viewport) e scarica quando non visibili
     const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
+            const mediaElement = entry.target;
             if (entry.isIntersecting) {
-                const mediaElement = entry.target;
+                // Carica solo quando visibile
                 if (mediaElement.dataset.src) {
                     if (mediaElement.tagName === 'IMG') {
                         mediaElement.src = mediaElement.dataset.src;
@@ -450,12 +439,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         mediaElement.src = mediaElement.dataset.src;
                     }
-                    observer.unobserve(mediaElement);
+                }
+            } else {
+                // Scarica quando non più visibile
+                if (mediaElement.tagName === 'IMG') {
+                    mediaElement.removeAttribute('src');
+                    mediaElement.removeAttribute('srcset');
+                } else {
+                    mediaElement.removeAttribute('src');
                 }
             }
         });
     }, {
-        rootMargin: '100px 0px',
+        rootMargin: '0px 0px', // solo quando effettivamente nel viewport
         threshold: 0.1
     });
 
@@ -488,19 +484,11 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             const mediaFiles = shuffleArray(data.files);
             
-            // Carica prime 3 immagini immediatamente (sopra la piega)
-            const priorityCount = 3;
-            
             mediaFiles.forEach((file, index) => {
                 const mediaElement = createMediaElement(file, index);
-                
                 if (mediaElement) {
                     photosGallery.appendChild(mediaElement);
-                    
-                    // Solo lazy load dopo le prime 3
-                    if (index >= priorityCount) {
-                        imageObserver.observe(mediaElement);
-                    }
+                    imageObserver.observe(mediaElement); // carica solo quando visibile
                 }
             });
         })
