@@ -385,7 +385,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function createMediaElement(file, index) {
         const extension = file.split('.').pop().toLowerCase();
         let mediaElement;
-        
         if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'].includes(extension)) {
             mediaElement = document.createElement('img');
             const baseSrc = `media-protection.php?file=${file}`;
@@ -398,7 +397,6 @@ document.addEventListener('DOMContentLoaded', () => {
             ].join(', ');
             mediaElement.sizes = "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 454px";
             mediaElement.alt = `Foto ${index + 1}`;
-            // NON impostare src qui!
             mediaElement.loading = 'lazy';
             mediaElement.onerror = function() {
                 this.style.display = 'none';
@@ -412,7 +410,6 @@ document.addEventListener('DOMContentLoaded', () => {
             mediaElement.muted = true;
             mediaElement.playsInline = true;
             mediaElement.preload = 'none';
-            // NON impostare src qui!
             mediaElement.onerror = function() {
                 this.style.display = 'none';
                 console.log(`Errore nel caricare: ${file}`);
@@ -420,38 +417,53 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         mediaElement.style.opacity = '0';
         mediaElement.style.setProperty('--photo-delay', `${index * 0.12}s`);
-        setTimeout(() => addPhotoFadeInOnLoad(mediaElement, index), 0);
+        mediaElement._fadeInShown = false;
+        mediaElement._loaded = false;
+        mediaElement._fadeInIndex = index;
         return mediaElement;
     }
 
-    // Intersection Observer: carica solo quelle effettivamente mostrate (viewport) e scarica quando non visibili
+    // Intersection Observer: carica e mostra animazione solo quando visibile
     const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             const mediaElement = entry.target;
             if (entry.isIntersecting) {
-                // Carica solo quando visibile
-                if (mediaElement.dataset.src) {
-                    if (mediaElement.tagName === 'IMG') {
-                        mediaElement.src = mediaElement.dataset.src;
-                        if (mediaElement.dataset.srcset) {
-                            mediaElement.srcset = mediaElement.dataset.srcset;
+                if (!mediaElement._loaded) {
+                    // Carica solo quando entra nel viewport
+                    if (mediaElement.dataset.src) {
+                        if (mediaElement.tagName === 'IMG') {
+                            mediaElement.src = mediaElement.dataset.src;
+                            if (mediaElement.dataset.srcset) {
+                                mediaElement.srcset = mediaElement.dataset.srcset;
+                            }
+                        } else {
+                            mediaElement.src = mediaElement.dataset.src;
                         }
-                    } else {
-                        mediaElement.src = mediaElement.dataset.src;
+                    }
+                    mediaElement._loaded = true;
+                }
+                if (!mediaElement._fadeInShown) {
+                    mediaElement._fadeInShown = true;
+                    // Mostra animazione solo la prima volta che entra nel viewport
+                    if (mediaElement.tagName === 'IMG') {
+                        mediaElement.addEventListener('load', function showAnimation() {
+                            mediaElement.style.animation = `photoFadeIn 1.2s cubic-bezier(.22,.68,.43,1.01) forwards`;
+                            mediaElement.style.animationDelay = `${mediaElement._fadeInIndex * 0.12}s`;
+                            mediaElement.removeEventListener('load', showAnimation);
+                        });
+                    } else if (mediaElement.tagName === 'VIDEO') {
+                        mediaElement.addEventListener('loadeddata', function showAnimation() {
+                            mediaElement.style.animation = `photoFadeIn 1.2s cubic-bezier(.22,.68,.43,1.01) forwards`;
+                            mediaElement.style.animationDelay = `${mediaElement._fadeInIndex * 0.12}s`;
+                            mediaElement.removeEventListener('loadeddata', showAnimation);
+                        });
                     }
                 }
-            } else {
-                // Scarica quando non più visibile
-                if (mediaElement.tagName === 'IMG') {
-                    mediaElement.removeAttribute('src');
-                    mediaElement.removeAttribute('srcset');
-                } else {
-                    mediaElement.removeAttribute('src');
-                }
+                observer.unobserve(mediaElement); // osserva solo finché non è caricato e animato
             }
         });
     }, {
-        rootMargin: '0px 0px', // solo quando effettivamente nel viewport
+        rootMargin: '0px 0px',
         threshold: 0.1
     });
 
@@ -483,7 +495,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             const mediaFiles = shuffleArray(data.files);
-            
             mediaFiles.forEach((file, index) => {
                 const mediaElement = createMediaElement(file, index);
                 if (mediaElement) {
