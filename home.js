@@ -899,14 +899,10 @@ function createMediaElement(file, index) {
         ].join(', ');
         mediaElement.sizes = "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 454px";
         mediaElement.alt = `Momento ${index + 1}`;
-        // Load first 2 images eagerly, others lazy
-        if (index < 2) {
-            mediaElement.fetchPriority = 'high';
-            mediaElement.src = baseSrc + '&w=454';
-            mediaElement.srcset = mediaElement.dataset.srcset;
-        } else {
-            mediaElement.loading = 'lazy';
-        }
+        // Tutte le immagini della home hanno priorità alta
+        mediaElement.fetchPriority = 'high';
+        mediaElement.src = baseSrc + '&w=454';
+        mediaElement.srcset = mediaElement.dataset.srcset;
         mediaElement.onerror = function() {
             mediaElement.src = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='160'><rect width='100%' height='100%' fill='%23ddd'/><text x='50%' y='50%' font-size='14' fill='%23999' text-anchor='middle' dominant-baseline='middle'>Immagine non disponibile</text></svg>`;
         };
