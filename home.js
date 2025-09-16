@@ -131,71 +131,22 @@ function loadHomeGalleryNow() {
 function renderHomeGallery(files) {
     const homeGallery = document.getElementById('home-gallery');
     console.log('🎨 RENDERING HOME GALLERY...');
-    
-    // Clear existing
     homeGallery.innerHTML = '';
-    
-    files.forEach((file, index) => {
-        const extension = String(file).split('.').pop().toLowerCase();
-        let mediaElement;
-        
-        if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) {
-            mediaElement = document.createElement('img');
-            mediaElement.src = `media-protection.php?file=${file}`;
-            mediaElement.alt = `Momento ${index + 1}`;
 
-            mediaElement.onload = () => console.log('✅ IMG OK:', file);
-            mediaElement.onerror = (e) => {
-                console.error('❌ IMG ERROR:', file, e);
-                // Prova a fare una fetch per vedere la risposta HTTP
-                fetch(`media-protection.php?file=${file}`)
-                    .then(resp => {
-                        if (!resp.ok) {
-                            console.error(`❌ HTTP ERROR: ${resp.status} ${resp.statusText} per ${file}`);
-                        } else {
-                            console.error(`❌ IMG ERROR: Il file sembra esistere ma non è un'immagine valida o c'è un problema di CORS.`);
-                        }
-                    })
-                    .catch(fetchErr => {
-                        console.error('❌ FETCH ERROR:', fetchErr);
-                    });
-                mediaElement.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="160"><rect width="100%" height="100%" fill="%23ddd"/><text x="50%" y="50%" font-size="14" fill="%23999" text-anchor="middle" dominant-baseline="middle">Immagine non disponibile</text></svg>';
-            };
-        } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
-            mediaElement = document.createElement('video');
-            mediaElement.src = `media-protection.php?file=${file}`;
-            mediaElement.autoplay = true;
-            mediaElement.loop = true;
-            mediaElement.muted = true;
-            mediaElement.playsInline = true;
-            mediaElement.controls = false;
-        } else {
-            // Fallback
-            mediaElement = document.createElement('img');
-            mediaElement.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="160"><rect width="100%" height="100%" fill="%23042a12"/><text x="50%" y="50%" font-size="14" fill="%23ffffff" text-anchor="middle" dominant-baseline="middle">Momento Iconico</text></svg>';
-            mediaElement.alt = 'Momento iconico';
-        }
-        
-        // Styles
-        if (mediaElement) {
-            mediaElement.style.width = '100%';
-            mediaElement.style.height = '160px';
-            mediaElement.style.objectFit = 'cover';
-            mediaElement.style.borderRadius = '10px';
-            mediaElement.style.boxShadow = '0 6px 14px rgba(0,0,0,0.12)';
-        }
-        
+    files.forEach((file, index) => {
+        // Usa la funzione che applica animazione
+        const mediaElement = createMediaElement(file, index);
+
         // Link wrapper
         const linkElement = document.createElement('a');
-    linkElement.href = 'photos.php';
+        linkElement.href = 'photos.php';
         linkElement.appendChild(mediaElement);
         homeGallery.appendChild(linkElement);
     });
-    
-    console.log('✅ HOME GALLERY RENDERED');
 
-    // Dopo aver inserito le immagini/video nella gallery, aggiungi il delay per animazione
-    applyPhotoFadeInAnimation('#home-gallery');
+    console.log('✅ HOME GALLERY RENDERED');
+    // RIMUOVI questa chiamata, non serve più:
+    // applyPhotoFadeInAnimation('#home-gallery');
 }
 
 function showGalleryPlaceholders() {
@@ -931,3 +882,52 @@ function applyPhotoFadeInAnimation(gallerySelector = '.gallery') {
 
 // Esempio: dopo aver popolato la gallery
 applyPhotoFadeInAnimation('#home-gallery');
+
+function createMediaElement(file, index) {
+    // ...creazione mediaElement come in photos.js...
+    // Esempio:
+    let mediaElement;
+    const extension = file.split('.').pop().toLowerCase();
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'].includes(extension)) {
+        mediaElement = document.createElement('img');
+        mediaElement.src = `media-protection.php?file=${file}`;
+        mediaElement.alt = `Momento ${index + 1}`;
+        mediaElement.className = 'gallery-img';
+        mediaElement.onerror = function() {
+            mediaElement.src = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='160'><rect width='100%' height='100%' fill='%23ddd'/><text x='50%' y='50%' font-size='14' fill='%23999' text-anchor='middle' dominant-baseline='middle'>Immagine non disponibile</text></svg>`;
+        };
+    } else if (['mp4', 'webm', 'ogg', 'mov', 'avi'].includes(extension)) {
+        mediaElement = document.createElement('video');
+        mediaElement.src = `media-protection.php?file=${file}`;
+        mediaElement.autoplay = true;
+        mediaElement.loop = true;
+        mediaElement.muted = true;
+        mediaElement.playsInline = true;
+        mediaElement.controls = false;
+        mediaElement.className = 'gallery-video';
+        mediaElement.onerror = function() {
+            mediaElement.src = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='160'><rect width='100%' height='100%' fill='%23ddd'/><text x='50%' y='50%' font-size='14' fill='%23999' text-anchor='middle' dominant-baseline='middle'>Video non disponibile</text></svg>`;
+        };
+    } else {
+        mediaElement = document.createElement('img');
+        mediaElement.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="160"><rect width="100%" height="100%" fill="%23042a12"/><text x="50%" y="50%" font-size="14" fill="%23ffffff" text-anchor="middle" dominant-baseline="middle">Momento Iconico</text></svg>';
+        mediaElement.alt = 'Momento iconico';
+    }
+    // Imposta subito opacity a 0 per evitare flicker/frame
+    mediaElement.style.opacity = '0';
+    mediaElement.style.setProperty('--photo-delay', `${index * 0.12}s`);
+    setTimeout(() => addPhotoFadeInOnLoad(mediaElement, index), 0);
+    return mediaElement;
+}
+
+function addPhotoFadeInOnLoad(mediaElement, index) {
+    function showAnimation() {
+        mediaElement.style.animation = `photoFadeIn 1.2s cubic-bezier(.22,.68,.43,1.01) forwards`;
+        mediaElement.style.animationDelay = `${index * 0.12}s`;
+    }
+    if (mediaElement.tagName === 'IMG') {
+        mediaElement.addEventListener('load', showAnimation, { once: true });
+    } else if (mediaElement.tagName === 'VIDEO') {
+        mediaElement.addEventListener('loadeddata', showAnimation, { once: true });
+    }
+}

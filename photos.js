@@ -427,6 +427,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(`Errore nel caricare: ${file}`);
             };
         }
+        // Imposta subito opacity a 0 per evitare flicker/frame
+        mediaElement.style.opacity = '0';
         // Applica il delay di animazione direttamente qui
         mediaElement.style.setProperty('--photo-delay', `${index * 0.12}s`);
         // Applica animazione solo quando carica
@@ -470,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Funzione per aggiungere animazione quando l'immagine/video viene caricata
     function addPhotoFadeInOnLoad(mediaElement, index) {
         function showAnimation() {
-            mediaElement.style.opacity = '0';
+            // L'opacità è già 0, parte solo l'animazione
             mediaElement.style.animation = `photoFadeIn 1.2s cubic-bezier(.22,.68,.43,1.01) forwards`;
             mediaElement.style.animationDelay = `${index * 0.12}s`;
         }
