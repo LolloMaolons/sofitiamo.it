@@ -381,23 +381,30 @@ document.addEventListener('DOMContentLoaded', () => {
         return shuffled;
     }
 
-    // Function to create media element with responsive images
+    // Function to create media element with lazy loading, but animation only when in viewport
     function createMediaElement(file, index) {
         const extension = file.split('.').pop().toLowerCase();
         let mediaElement;
         if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'].includes(extension)) {
             mediaElement = document.createElement('img');
             const baseSrc = `media-protection.php?file=${file}`;
-            mediaElement.dataset.src = baseSrc + '&w=454';
+            // Usa width minore per anteprima veloce
+            mediaElement.dataset.src = baseSrc + '&w=320';
             mediaElement.dataset.srcset = [
-                `${baseSrc}&w=220 220w`,
-                `${baseSrc}&w=400 400w`,
-                `${baseSrc}&w=600 600w`,
-                `${baseSrc}&w=800 800w`
+                `${baseSrc}&w=160 160w`,
+                `${baseSrc}&w=320 320w`,
+                `${baseSrc}&w=480 480w`,
+                `${baseSrc}&w=640 640w`
             ].join(', ');
-            mediaElement.sizes = "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 454px";
+            mediaElement.sizes = "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 320px";
             mediaElement.alt = `Foto ${index + 1}`;
             mediaElement.loading = 'lazy';
+            // Priorità alta solo per le prime 3 immagini
+            if (index < 3) mediaElement.setAttribute('fetchpriority', 'high');
+            mediaElement.style.opacity = '0';
+            mediaElement._fadeInIndex = index;
+            mediaElement._loaded = false;
+            mediaElement._fadeInShown = false;
             mediaElement.onerror = function() {
                 this.style.display = 'none';
                 console.log(`Errore nel caricare: ${file}`);
@@ -405,31 +412,30 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (['mp4', 'webm', 'ogg', 'mov', 'avi'].includes(extension)) {
             mediaElement = document.createElement('video');
             mediaElement.dataset.src = `media-protection.php?file=${file}`;
-            mediaElement.autoplay = true;
+            mediaElement.autoplay = false; // autoplay solo se visibile
             mediaElement.loop = true;
             mediaElement.muted = true;
             mediaElement.playsInline = true;
             mediaElement.preload = 'none';
+            mediaElement.style.opacity = '0';
+            mediaElement._fadeInIndex = index;
+            mediaElement._loaded = false;
+            mediaElement._fadeInShown = false;
             mediaElement.onerror = function() {
                 this.style.display = 'none';
                 console.log(`Errore nel caricare: ${file}`);
             };
         }
-        mediaElement.style.opacity = '0';
-        mediaElement.style.setProperty('--photo-delay', `${index * 0.12}s`);
-        mediaElement._fadeInShown = false;
-        mediaElement._loaded = false;
-        mediaElement._fadeInIndex = index;
         return mediaElement;
     }
 
-    // Intersection Observer: carica e mostra animazione solo quando visibile
+    // Intersection Observer: lazy load and animate only when in viewport
     const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             const mediaElement = entry.target;
             if (entry.isIntersecting) {
+                // Lazy load: set src/srcset only when in viewport
                 if (!mediaElement._loaded) {
-                    // Carica solo quando entra nel viewport
                     if (mediaElement.dataset.src) {
                         if (mediaElement.tagName === 'IMG') {
                             mediaElement.src = mediaElement.dataset.src;
@@ -438,28 +444,29 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                         } else {
                             mediaElement.src = mediaElement.dataset.src;
+                            mediaElement.autoplay = true; // autoplay solo ora
                         }
                     }
                     mediaElement._loaded = true;
                 }
+                // Animation only when in viewport
                 if (!mediaElement._fadeInShown) {
                     mediaElement._fadeInShown = true;
-                    // Mostra animazione solo la prima volta che entra nel viewport
+                    function showAnimation() {
+                        mediaElement.style.animation = `photoFadeIn 0.7s cubic-bezier(.22,.68,.43,1.01) forwards`;
+                        mediaElement.style.animationDelay = `${mediaElement._fadeInIndex * 0.08}s`;
+                    }
                     if (mediaElement.tagName === 'IMG') {
-                        mediaElement.addEventListener('load', function showAnimation() {
-                            mediaElement.style.animation = `photoFadeIn 1.2s cubic-bezier(.22,.68,.43,1.01) forwards`;
-                            mediaElement.style.animationDelay = `${mediaElement._fadeInIndex * 0.12}s`;
-                            mediaElement.removeEventListener('load', showAnimation);
-                        });
+                        if (mediaElement.complete) {
+                            showAnimation();
+                        } else {
+                            mediaElement.addEventListener('load', showAnimation, { once: true });
+                        }
                     } else if (mediaElement.tagName === 'VIDEO') {
-                        mediaElement.addEventListener('loadeddata', function showAnimation() {
-                            mediaElement.style.animation = `photoFadeIn 1.2s cubic-bezier(.22,.68,.43,1.01) forwards`;
-                            mediaElement.style.animationDelay = `${mediaElement._fadeInIndex * 0.12}s`;
-                            mediaElement.removeEventListener('loadeddata', showAnimation);
-                        });
+                        mediaElement.addEventListener('loadeddata', showAnimation, { once: true });
                     }
                 }
-                observer.unobserve(mediaElement); // osserva solo finché non è caricato e animato
+                observer.unobserve(mediaElement);
             }
         });
     }, {
@@ -499,7 +506,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const mediaElement = createMediaElement(file, index);
                 if (mediaElement) {
                     photosGallery.appendChild(mediaElement);
-                    imageObserver.observe(mediaElement); // carica solo quando visibile
+                    imageObserver.observe(mediaElement); // lazy load + animazione solo in viewport
                 }
             });
         })
