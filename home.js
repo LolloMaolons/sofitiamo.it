@@ -230,10 +230,6 @@ function initExistingFeatures() {
     quizBtn.addEventListener('click', () => window.location.href = 'quiz.php');
     }
     
-    const musicBtn = document.querySelector('.music-preview-btn, .start-music-btn');
-    if (musicBtn) {
-    musicBtn.addEventListener('click', () => window.location.href = 'music.php');
-    }
 }
 
 // ✅ MEMORY GAME - CODICE COMPLETO ORIGINALE
@@ -716,42 +712,6 @@ window.checkHomeFullAnswer = checkHomeFullAnswer;
 
 if (homeQuizContainer) {
     showHomeQuiz(currentHomeQuizIndex);
-}
-
-// ✅ RANDOM SPOTIFY SONG - CODICE COMPLETO ORIGINALE
-const songUrls = [
-    'https://open.spotify.com/embed/track/0KzAbK6nItSqNh8q70tb0K?utm_source=generator',
-    'https://open.spotify.com/embed/track/0jWgAnTrNZmOGmqgvHhZEm?utm_source=generator',
-    'https://open.spotify.com/embed/track/0xahPNJVFHGMEFxu9kergk?utm_source=generator',
-    'https://open.spotify.com/embed/track/474uVhyGgK5MtY9gMcDgGl?utm_source=generator',
-    'https://open.spotify.com/embed/track/2ZWlPOoWh0626oTaHrnl2a?utm_source=generator',
-    'https://open.spotify.com/embed/track/1mBSWayaS9nnqLvZNdOdL7?utm_source=generator',
-    'https://open.spotify.com/embed/track/4kzOYNpDNmkSGs9w6Z7dVB?utm_source=generator',
-    'https://open.spotify.com/embed/track/6VzcQuzTNTMFnJ6rBSaLH9?utm_source=generator',
-    'https://open.spotify.com/embed/track/0JXXNGljqupsJaZsgSbMZV?utm_source=generator',
-    'https://open.spotify.com/embed/track/1uAOCTevGnyKIDbgZdOCnE?utm_source=generator',
-    'https://open.spotify.com/embed/track/1MrSbSu9UNo7Aucwrf32WJ?utm_source=generator',
-    'https://open.spotify.com/embed/track/1oAwsWBovWRIp7qLMGPIet?utm_source=generator',
-    'https://open.spotify.com/embed/track/3xwNG8evnrOMelmAJ9RxJ1?utm_source=generator',
-    'https://open.spotify.com/embed/track/1UZOjK1BwmwWU14Erba9CZ?utm_source=generator',
-    'https://open.spotify.com/embed/track/0WI4Oe17LXAWCekzAEPCWi?utm_source=generator',
-    'https://open.spotify.com/embed/track/37C6DyoMu75ViTiwqxV4bY?utm_source=generator',
-    'https://open.spotify.com/embed/track/6BsxtJ3aKkc3KqB734VaYJ?utm_source=generator'
-];
-
-const randomSongContainer = document.getElementById('random-song-container');
-if (randomSongContainer && songUrls.length > 0) {
-    const randomIndex = Math.floor(Math.random() * songUrls.length);
-    const randomSongUrl = songUrls[randomIndex];
-    
-    randomSongContainer.innerHTML = `
-        <iframe data-testid="embed-iframe" style="border-radius:8px" 
-                src="${randomSongUrl}" 
-                width="100%" height="170" frameBorder="0" allowfullscreen="" 
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                loading="lazy">
-        </iframe>
-    `;
 }
 
 // ✅ ICONIC MOMENTS GALLERY - CODICE DUPLICATO MA MANTENUTO PER COMPATIBILITÀ

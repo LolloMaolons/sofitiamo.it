@@ -51,7 +51,6 @@ checkAuthentication();
         <div class="menu-links" id="menu-links">
             <a href="photos.php" data-translate="momenti_iconici">Momenti iconici</a>
             <a href="quiz.php" data-translate="quanto_ne_sai">Quanto ne sai su Sofia?</a>
-            <a href="music.php" data-translate="musica_sofia">Musica di Sofia</a>
         </div>
     </header>
 
@@ -68,23 +67,19 @@ checkAuthentication();
                 <!-- Le immagini e i video verranno inseriti qui da home.js -->
             </div>
         </div>
-
-        <h3 class="point-text" data-translate="musica_sofia_title">🎵 Musica che ha il Sapore di Sofia</h3>
-        <div id="home-music-section">
-            <p style="color: white; font-weight: 600; margin-bottom: 1.5rem;" data-translate="musica_intro">Le canzoni che catturano l'essenza della nostra dottoressa!</p>
-            <div class="music-preview-grid">
-                <div id="random-song-container">
-                    <!-- Random song will be loaded here by JavaScript -->
-                </div>
-            </div>
-            <div class="music-see-more">
-                <a href="music.php" data-translate="ascolta_tutte">Ascolta tutte le canzoni 🎵</a>
-            </div>
-        </div>
         
         <h3 class="point-text" data-translate="piccolo_assaggio">🧠 Un piccolo assaggio del quiz...</h3>
         <div id="home-quiz-section">
             <!-- I quiz verranno inseriti qui da home.js -->
+        </div>
+        
+         <h3 class="point-text" data-translate="musica_sofia_title">🎵 Musica che ha il Sapore di Sofia</h3>
+        <div id="home-music-section">
+            <p style="color: white; font-weight: 600; margin-bottom: 1.5rem;" data-translate="musica_intro">Le canzoni che catturano l'essenza della nostra dottoressa!</p>
+            <div class="music-preview-grid">
+                <!-- Playlist Spotify integrata -->
+                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5SU1PVc7sTaK7ui3NBgr7E?utm_source=generator&theme=0" width="90%" height="500" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
         </div>
         
         <h3 class="point-text" data-translate="video_laurea">Il Video di Laurea</h3>

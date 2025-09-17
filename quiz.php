@@ -35,7 +35,6 @@ checkAuthentication();
         <div class="menu-links" id="menu-links">
             <a href="photos.php" data-translate="momenti_iconici">Momenti iconici</a>
             <a href="quiz.php" data-translate="quanto_ne_sai">Quanto ne sai su Sofia?</a>
-            <a href="music.php" data-translate="musica_sofia">Musica di Sofia</a>
         </div>
     </header>
 
