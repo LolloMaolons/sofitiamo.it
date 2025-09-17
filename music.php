@@ -42,11 +42,7 @@ checkAuthentication();
             <h1 class="gold-text" data-translate="musica_sofia_title">🎵 Musica che ha il Sapore di Sofia 🎵</h1>
             <p class="music-intro" data-translate="musica_intro">Le canzoni che catturano l'essenza della nostra dottoressa!</p>
             <div class="music-grid">
-                <iframe data-testid="embed-iframe"
-                    src="https://open.spotify.com/embed/playlist/2F6S5cehzWUWuKoKjRAxZX?utm_source=generator&theme=0"
-                    frameBorder="0" allowfullscreen=""
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy"></iframe>
+                <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/0AjaaKeiD0VPkwOusTY4kM?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             </div>
         </section>
     </main>
