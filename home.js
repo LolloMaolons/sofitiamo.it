@@ -544,40 +544,63 @@ function showHomeQuiz(index) {
         const quiz = quizzes[index];
         const questionNumber = index + 1;
         const totalQuestions = quizzes.length;
-    const quizTitle = window.languageManager ? window.languageManager.translate('quiz_title') : 'Quanto ne sai su Sofia?';
-    const questionText = window.languageManager ? window.languageManager.translate('domanda') : 'Domanda';
-    const ofText = window.languageManager ? window.languageManager.translate('di') : 'di';
-    const submitText = window.languageManager ? window.languageManager.translate('invia_risposta') : "Invia Risposta";
-    const scoreLabel = window.languageManager ? window.languageManager.translate('quiz_score_home_label') : 'Punteggio:';
+        const quizTitle = window.languageManager ? window.languageManager.translate('quiz_title') : 'Quanto ne sai su Sofia?';
+        const questionText = window.languageManager ? window.languageManager.translate('domanda') : 'Domanda';
+        const ofText = window.languageManager ? window.languageManager.translate('di') : 'di';
+        const submitText = window.languageManager ? window.languageManager.translate('invia_risposta') : "Invia Risposta";
+        const scoreLabel = window.languageManager ? window.languageManager.translate('quiz_score_home_label') : 'Punteggio:';
 
+        // Determina se sono consentite risposte multiple
+        const isMultiAnswer = quiz.correct.length > 1;
+        let multiNote = '';
+        if (isMultiAnswer) {
+            multiNote = ' <span style="font-size:0.95em; color:#888;">(' + (window.languageManager ? window.languageManager.translate('multi_answer_note') : 'Puoi selezionare più risposte') + ')</span>';
+        }
         let optionsHtml = '';
         quiz.options.forEach((opt, i) => {
-            optionsHtml += `<label class=\"multi-answer-label\"><input type=\"checkbox\" class=\"multi-answer\" value=\"${i}\"> ${opt}</label><br>`;
+            optionsHtml += `<label class="multi-answer-label"><input type="checkbox" class="multi-answer" value="${i}"> ${opt}</label><br>`;
         });
 
-        // Show score above the quiz
         homeQuizContainer.innerHTML = `
-            <div id=\"home-quiz-score\" class=\"quiz-progress\" style=\"margin: 1rem auto 1.5rem auto; background: #f8f9fa; color: #b8862b; font-size: 1.2rem; font-weight: bold; text-align: center;\">
-                ${scoreLabel} <span id=\"home-score-value\">${window.homeQuizScore || 0}</span>
+            <div id="home-quiz-score" class="quiz-progress" style="margin: 1rem auto 1.5rem auto; background: #f8f9fa; color: #b8862b; font-size: 1.2rem; font-weight: bold; text-align: center;">
+                ${scoreLabel} <span id="home-score-value">${window.homeQuizScore || 0}</span>
             </div>
-            <h2 class=\"gold-text\">${quizTitle}</h2>
-            <div class=\"quiz-progress\">
+            <h2 class="gold-text">${quizTitle}</h2>
+            <div class="quiz-progress">
                 <p>${questionText} ${questionNumber} ${ofText} ${totalQuestions}</p>
-                <div class=\"progress-bar\">
-                    <div class=\"progress-fill\" style=\"width: ${((index + 1) / quizzes.length) * 100}%\"></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${((index + 1) / quizzes.length) * 100}%"></div>
                 </div>
             </div>
-            <div class=\"quiz-question\">
-                <p>${quiz.question}</p>
-                <form id=\"home-multi-answer-form-${index}\">
-                    <div class=\"quiz-options-group\">${optionsHtml}</div>
-                    <div style=\"display: flex; justify-content: center; margin: 18px 0 0 0;\">
-                        <button type=\"button\" id=\"home-multi-submit-${index}\">${submitText}</button>
+            <div class="quiz-question">
+                <p>${quiz.question}${multiNote}</p>
+                <form id="home-multi-answer-form-${index}">
+                    <div class="quiz-options-group">${optionsHtml}</div>
+                    <div style="display: flex; justify-content: center; margin: 18px 0 0 0;">
+                        <button type="button" id="home-multi-submit-${index}" disabled>${submitText}</button>
                     </div>
                 </form>
-                <div style=\"margin-top: 18px; min-height: 32px; text-align: center;\"><p id=\"home-full-feedback-${index}\" style=\"margin:0;\"></p></div>
+                <div style="margin-top: 18px; min-height: 32px; text-align: center;"><p id="home-full-feedback-${index}" style="margin:0;"></p></div>
             </div>
         `;
+
+        // Logica per abilitare/disabilitare il bottone e limitare la selezione
+        const checkboxes = Array.from(document.querySelectorAll(`#home-multi-answer-form-${index} .multi-answer`));
+        const submitBtn = document.getElementById(`home-multi-submit-${index}`);
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                const checked = checkboxes.filter(c => c.checked);
+                // Se risposta singola, consenti solo una selezione
+                if (!isMultiAnswer) {
+                    if (checked.length > 1) {
+                        checkboxes.forEach(c => { if (c !== cb) c.checked = false; });
+                    }
+                }
+                // Abilita il bottone solo se almeno una risposta è selezionata
+                submitBtn.disabled = checked.length === 0;
+            });
+        });
 
         document.getElementById(`home-multi-submit-${index}`).addEventListener('click', function() {
             checkHomeFullAnswer(index);

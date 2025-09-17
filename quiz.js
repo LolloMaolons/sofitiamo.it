@@ -87,8 +87,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const scoreLabel = window.languageManager ? window.languageManager.translate('punteggio_label') : 'Punteggio:';
 
             let optionsHtml = '';
+            // Determina se sono consentite risposte multiple
+            const isMultiAnswer = quiz.correct.length > 1;
+            let multiNote = '';
+            if (isMultiAnswer) {
+                multiNote = ' <span style="font-size:0.95em; color:#888;">(' + (window.languageManager ? window.languageManager.translate('multi_answer_note') : 'Puoi selezionare più risposte') + ')</span>';
+            }
             // Emoji pertinenti per ogni domanda
-            let qText = quiz.question;
+            let qText = quiz.question + multiNote;
             if (!/[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u.test(qText)) {
                 // No emoji present, add a relevant one
                 if (/noveli|antenato|battaglia|ottomani|shipka|storia|origine|perch[eé]/i.test(qText)) {
@@ -119,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             quiz.options.forEach((opt, i) => {
-                // Always use the same label/input structure for all options
                 optionsHtml += `<label class="multi-answer-label"><input type="checkbox" class="multi-answer" value="${i}"> ${opt}</label><br>`;
             });
 
@@ -139,12 +144,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     <form id="multi-answer-form-${index}">
                         <div class="quiz-options-group">${optionsHtml}</div>
                         <div style="display: flex; justify-content: center; margin: 18px 0 0 0;">
-                            <button type="button" id="multi-submit-${index}">${submitText}</button>
+                            <button type="button" id="multi-submit-${index}" disabled>${submitText}</button>
                         </div>
                     </form>
                     <div style="margin-top: 18px; min-height: 32px; text-align: center;"><p id="full-feedback-${index}" style="margin:0;"></p></div>
                 </div>
             `;
+
+            // Logica per abilitare/disabilitare il bottone e limitare la selezione
+            const checkboxes = Array.from(document.querySelectorAll(`#multi-answer-form-${index} .multi-answer`));
+            const submitBtn = document.getElementById(`multi-submit-${index}`);
+
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const checked = checkboxes.filter(c => c.checked);
+                    // Se risposta singola, consenti solo una selezione
+                    if (!isMultiAnswer) {
+                        if (checked.length > 1) {
+                            checkboxes.forEach(c => { if (c !== cb) c.checked = false; });
+                        }
+                    }
+                    // Abilita il bottone solo se almeno una risposta è selezionata
+                    submitBtn.disabled = checked.length === 0;
+                });
+            });
 
             document.getElementById(`multi-submit-${index}`).addEventListener('click', function() {
                 checkFullAnswer(index);

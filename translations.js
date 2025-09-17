@@ -158,6 +158,7 @@ const translations = {
         musica_sofia_title: "🎵 Musica che ha il Sapore di Sofia 🎵",
         musica_intro: "Le canzoni che catturano l'essenza della nostra dottoressa!",
         ascolta_tutte: "Ascolta tutte le canzoni 🎵",
+        multi_answer_note: "Puoi selezionare più risposte",
     },
     
     en: {
@@ -314,6 +315,7 @@ const translations = {
         musica_sofia_title: "🎵 Music with Sofia's Flavor 🎵",
         musica_intro: "Songs that capture the essence of our doctor!",
         ascolta_tutte: "Listen to all songs 🎵",
+        multi_answer_note: "You can select multiple answers",
     },
     
     bg: {
@@ -470,6 +472,7 @@ const translations = {
         musica_sofia_title: "🎵 Музика със Софийски вкус 🎵",
         musica_intro: "Песните, които улавят същността на нашата докторка!",
         ascolta_tutte: "Чуй всички песни 🎵",
+        multi_answer_note: "Може да избереш повече от един отговор",
     },
     
     ru: {
@@ -782,6 +785,7 @@ const translations = {
         musica_sofia_title: "🎵 Musique au goût de Sofia 🎵",
         musica_intro: "Les chansons qui capturent l'essence de notre docteure !",
         ascolta_tutte: "Écoute toutes les chansons 🎵",
+        multi_answer_note: "Vous pouvez sélectionner plusieurs réponses",
     }
 };
 
