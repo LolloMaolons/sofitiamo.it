@@ -13,8 +13,7 @@ checkAuthentication();
     <link rel="preload" href="home.js" as="script">
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
-    
-    <!-- Font con display=swap -->
+    <link rel="prefetch" href="quiz.php">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     
     <!-- Bootstrap asincrono -->

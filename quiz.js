@@ -201,6 +201,13 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.disabled = true;
             submitBtn.textContent = window.languageManager ? window.languageManager.translate('sbagliato') : "Sbagliato ✗";
             submitBtn.style.background = "linear-gradient(145deg, #dc3545, #c82333)";
+            // Animazione shake su feedback e bottone
+            feedback.classList.add('shake');
+            submitBtn.classList.add('shake');
+            setTimeout(() => {
+                feedback.classList.remove('shake');
+                submitBtn.classList.remove('shake');
+            }, 500);
         }
 
         // Aggiorna punteggio

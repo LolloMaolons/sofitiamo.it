@@ -640,6 +640,29 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
     transition: all 0.3s ease;
 }
 
+.shake {
+    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Animazione shake solo per quiz */
+.quiz-question .shake,
+.quiz-question button.shake {
+    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(4px); }
+    30%, 50%, 70% { transform: translateX(-8px); }
+    40%, 60% { transform: translateX(8px); }
+}
+
 .quiz-question p[id^="feedback"][style*="green"], 
 .quiz-question p[id^="full-feedback"][style*="green"] {
     background: linear-gradient(145deg, #d4edda, #c3e6cb);
