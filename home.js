@@ -535,7 +535,8 @@ function getHomeMultiQuizzes() {
     const lang = window.languageManager ? window.languageManager.currentLanguage : 'it';
     const t = window.languageManager ? translations[lang] : translations.it;
     const quizzes = [];
-    for (let i = 1; i <= 15; i++) {
+    // AGGIORNATO: ora supporta tutte le domande disponibili (fino a 17)
+    for (let i = 1; i <= 17; i++) {
         if (t[`quiz_multi_${i}_q`] && Array.isArray(t[`quiz_multi_${i}_opts`]) && Array.isArray(t[`quiz_multi_${i}_ans`])) {
             quizzes.push({
                 question: t[`quiz_multi_${i}_q`],
@@ -556,7 +557,7 @@ function showHomeQuiz(index) {
     if (index < quizzes.length) {
         const quiz = quizzes[index];
         const questionNumber = index + 1;
-        const totalQuestions = quizzes.length;
+        const totalQuestions = quizzes.length + 1;
         const quizTitle = window.languageManager ? window.languageManager.translate('quiz_title') : 'Quanto ne sai su Sofia?';
         const questionText = window.languageManager ? window.languageManager.translate('domanda') : 'Domanda';
         const ofText = window.languageManager ? window.languageManager.translate('di') : 'di';

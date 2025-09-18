@@ -11,11 +11,9 @@
     <link rel="prefetch" href="home.php">
     <link rel="prefetch" href="photos.php">
     <link rel="prefetch" href="quiz.php">
-    <link rel="prefetch" href="music.php">
     <link rel="prefetch" href="home.js" as="script">
     <link rel="prefetch" href="photos.js" as="script">
     <link rel="prefetch" href="quiz.js" as="script">
-    <link rel="prefetch" href="music.js" as="script">
     <link rel="prefetch" href="style.css" as="style">
 </head>
 <body class="login-page">

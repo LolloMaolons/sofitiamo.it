@@ -1171,26 +1171,39 @@ h1,h2,h3{margin:.2rem 0 .8rem 0}
 }
 /* Messaggio di errore */
 #error-message{
-    color:#c92a2a;
-    font-weight:700;
+    color: #c92a2a;
+    font-weight: 700;
     text-align: center;
     transition: all 0.3s ease;
-    margin: 0;
+    margin: 20px 0 0 0;
     padding: 0;
-    /* Completamente invisibile di default */
     opacity: 0;
     height: 0;
     overflow: hidden;
+    background: none;
 }
 
 #error-message.show-error {
     opacity: 1;
-    border-radius: 8px;
+    height: auto;
+    padding: 12px 0;
     background: linear-gradient(145deg, rgba(201, 42, 42, 0.1), rgba(220, 53, 69, 0.1));
+    border-radius: 8px;
     border: 1px solid rgba(201, 42, 42, 0.2);
-    animation: errorShake 0.6s ease-in-out;
+    animation: errorShake 0.5s cubic-bezier(.36,.07,.19,.97);
 }
 
+/* Animazione shake per errore login */
+@keyframes errorShake {
+    0% { transform: translateX(0); }
+    15% { transform: translateX(-8px); }
+    30% { transform: translateX(8px); }
+    45% { transform: translateX(-6px); }
+    60% { transform: translateX(6px); }
+    75% { transform: translateX(-4px); }
+    90% { transform: translateX(4px); }
+    100% { transform: translateX(0); }
+}
 
 #memory-game-over .memory-result {
     display: flex;

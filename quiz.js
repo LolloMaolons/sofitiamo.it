@@ -45,7 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const lang = window.languageManager ? window.languageManager.currentLanguage : 'it';
         const t = window.languageManager ? translations[lang] : translations.it;
         const quizzes = [];
-        for (let i = 1; i <= 15; i++) {
+        // AGGIORNATO: ora supporta tutte le domande disponibili (fino a 17)
+        for (let i = 1; i <= 17; i++) {
             if (t[`quiz_multi_${i}_q`] && Array.isArray(t[`quiz_multi_${i}_opts`]) && Array.isArray(t[`quiz_multi_${i}_ans`])) {
                 quizzes.push({
                     question: t[`quiz_multi_${i}_q`],
@@ -73,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showFullQuiz(index) {
         const quizzes = getMultiQuizzes();
-        const totalQuestions = quizzes.length;
+        const totalQuestions = quizzes.length + 1;
         const startIndex = quizStartIndex;
         // Always use totalQuestions for numbering and progress
         const currentIndex = index;
@@ -93,37 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isMultiAnswer) {
                 multiNote = ' <span style="font-size:0.95em; color:#888;">(' + (window.languageManager ? window.languageManager.translate('multi_answer_note') : 'Puoi selezionare più risposte') + ')</span>';
             }
-            // Emoji pertinenti per ogni domanda
+
             let qText = quiz.question + multiNote;
-            if (!/[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u.test(qText)) {
-                // No emoji present, add a relevant one
-                if (/noveli|antenato|battaglia|ottomani|shipka|storia|origine|perch[eé]/i.test(qText)) {
-                    qText = '🏛️ ' + qText; // storia, origini
-                } else if (/colore|fiore|simbolo|bandiera|rosa|lilla|verde|blu|giallo|oro/i.test(qText)) {
-                    qText = '🌸 ' + qText; // colori, simboli, fiori
-                } else if (/musica|canzone|brano|artista|cantante|ascolta|playlist|spotify|note/i.test(qText)) {
-                    qText = '🎵 ' + qText; // musica
-                } else if (/foto|immagine|scatto|fotografia|album|ricordo/i.test(qText)) {
-                    qText = '📸 ' + qText; // foto
-                } else if (/quiz|gioco|domanda|risposta|punteggio/i.test(qText)) {
-                    qText = '❓ ' + qText; // quiz generico
-                } else if (/amica|amico|famiglia|parente|sorella|fratello|mamma|papà|zio|zia|cugino|cugina/i.test(qText)) {
-                    qText = '👨‍👩‍👧‍👦 ' + qText; // famiglia
-                } else if (/scuola|classe|prof|insegnante|studente|studio|esame/i.test(qText)) {
-                    qText = '🏫 ' + qText; // scuola
-                } else if (/viaggio|vacanza|città|paese|luogo|posto|mondo|mappa/i.test(qText)) {
-                    qText = '🌍 ' + qText; // viaggi
-                } else if (/sport|gioca|partita|allenamento|squadra|calcio|basket|pallavolo/i.test(qText)) {
-                    qText = '🏅 ' + qText; // sport
-                } else if (/cibo|piatto|mangiare|dolce|torta|pizza|pasta|ristorante/i.test(qText)) {
-                    qText = '🍰 ' + qText; // cibo
-                } else {
-                    // Scegli casualmente tra nuvola, stella e punto di domanda
-                    const generiche = ['💭', '✨', '❓'];
-                    const randomEmoji = generiche[Math.floor(Math.random() * generiche.length)];
-                    qText = randomEmoji + ' ' + qText;
-                }
-            }
+            
             quiz.options.forEach((opt, i) => {
                 optionsHtml += `<label class="multi-answer-label"><input type="checkbox" class="multi-answer" value="${i}"> ${opt}</label><br>`;
             });
