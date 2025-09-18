@@ -13,7 +13,16 @@ checkAuthentication();
     <link rel="preload" href="home.js" as="script">
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
-    <link rel="prefetch" href="quiz.php">
+    <link rel="preload" href="quiz.js" as="script">
+    <link rel="preload" href="photos.js" as="script">
+    <link rel="preload" href="quiz.php" as="document">
+    <link rel="preload" href="photos.php" as="document">
+    <link rel="prefetch" href="quiz.js" as="script">
+    <link rel="prefetch" href="photos.js" as="script">
+    <link rel="prefetch" href="quiz.php" as="document">
+    <link rel="prefetch" href="photos.php" as="document">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" as="style">
+
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     
     <!-- Bootstrap asincrono -->

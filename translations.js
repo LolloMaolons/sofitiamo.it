@@ -28,7 +28,7 @@ const translations = {
     quiz_home_of: "/",
     quiz_home_punteggio: "Punteggio:",
     quiz_home_torna: "Torna alla Home 🏠",
-    quiz_multi_1_q: "❓ Qual è il suo soprannome più comune?",
+    quiz_multi_1_q: "✍️ Qual è il suo soprannome più comune?",
     quiz_multi_1_opts: ["sofi-scimmietta", "sofficino", "sofcheto", "zingara"],
     quiz_multi_1_ans: [3],
     quiz_multi_2_q: "🧀 Qual è il suo formaggio preferito?",
@@ -196,7 +196,7 @@ const translations = {
     quiz_home_torna: "Back to Home 🏠",
     punteggio_label: "Score:",
     // New multi-answer quiz questions
-    quiz_multi_1_q: "❓ What is her most common nickname?",
+    quiz_multi_1_q: "✍️ What is her most common nickname?",
     quiz_multi_1_opts: ["sofi-monkey", "sofficino", "sofcheto", "gypsy"],
     quiz_multi_1_ans: [3],
     quiz_multi_2_q: "🧀 What is her favorite cheese?",
@@ -359,7 +359,7 @@ const translations = {
     quiz_home_torna: "Обратно към началото 🏠",
     punteggio_label: "Резултат:",
     // Нови въпроси с множествен избор
-    quiz_multi_1_q: "❓ Какъв е най-честият ѝ прякор?",
+    quiz_multi_1_q: "✍️ Какъв е най-честият ѝ прякор?",
     quiz_multi_1_opts: ["Софи-маймунка", "Софицино", "Софчето", "циганка"],
     quiz_multi_1_ans: [3],
     quiz_multi_2_q: "🧀 Какво е любимото ѝ сирене?",
@@ -522,7 +522,7 @@ const translations = {
     quiz_home_torna: "Вернуться домой 🏠",
     punteggio_label: "Счёт:",
     // Новые вопросы с множественным выбором
-    quiz_multi_1_q: "❓ Какое у неё самое частое прозвище?",
+    quiz_multi_1_q: "✍️ Какое у неё самое частое прозвище?",
     quiz_multi_1_opts: ["Софи-обезьянка", "Софи-скьиммино", "Софчето", "цыганка"],
     quiz_multi_1_ans: [3],
     quiz_multi_2_q: "🧀 Какой её любимый сыр?",
@@ -718,7 +718,7 @@ const translations = {
     quiz_home_punteggio: "Score :",
     quiz_home_torna: "Retour à l'accueil 🏠",
     // Nouvelles questions à choix multiples
-    quiz_multi_1_q: "❓ Quel est son surnom le plus courant?",
+    quiz_multi_1_q: "✍️ Quel est son surnom le plus courant?",
     quiz_multi_1_opts: ["sofi-petite singe", "sofficino", "sofcheto", "gitane"],
     quiz_multi_1_ans: [3],
     quiz_multi_2_q: "🧀 Quel est son fromage préféré?",
