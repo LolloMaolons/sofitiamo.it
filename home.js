@@ -175,20 +175,37 @@ function showGalleryPlaceholders() {
 
 function loadVideoNow() {
     const graduationVideo = document.getElementById('graduation-video');
-    
     console.log('🎬 LOADING VIDEO...');
-    
+
+    const videoSrc = 'media-protection.php?file=graduation/videolaurea.mp4';
+
     const video = document.createElement('video');
-    video.src = 'media-protection.php?file=graduation/videolaurea.mp4';
+    video.src = videoSrc;
     video.controls = true;
-    video.preload = 'metadata';
+    video.preload = 'auto';
+    video.autoplay = false;
+    video.muted = false;
+    video.playsInline = true;
     video.style.width = '100%';
-    video.style.maxWidth = '600px';
-    
+    video.style.maxWidth = '480px';
+    video.controlsList = 'nodownload';
+
+    // Workaround: se solo l'audio parte, forza il reload del video
+    let videoStarted = false;
+    video.addEventListener('playing', () => {
+        videoStarted = true;
+        // Se il video non mostra frame dopo 2 secondi, forza reload
+        setTimeout(() => {
+            if (video.videoWidth === 0 || video.videoHeight === 0) {
+                video.load();
+                video.play();
+            }
+        }, 2000);
+    });
     video.onloadedmetadata = () => {
         console.log('✅ VIDEO LOADED');
     };
-    
+
     video.onerror = () => {
         console.error('❌ VIDEO ERROR');
         graduationVideo.innerHTML = `
@@ -198,7 +215,7 @@ function loadVideoNow() {
             </div>
         `;
     };
-    
+
     graduationVideo.innerHTML = '';
     graduationVideo.appendChild(video);
 }
