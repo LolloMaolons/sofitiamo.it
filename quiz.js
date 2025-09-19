@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="quiz-question">
                         <p>${window.languageManager ? window.languageManager.translate('completato_tutti_quiz') : '🎉 Hai completato tutti i quiz su Sofia!'}</p>
                         <div id="quiz-score" class="quiz-progress" style="margin: 1rem auto 1.5rem auto; background: #f8f9fa; color: #b8862b; font-size: 1.2rem; font-weight: bold;">
-                            ${scoreLabel} <span id="quiz-score-value">${score}</span> ${window.languageManager ? window.languageManager.translate('su') : 'su'} ${quizzesDone} <br><span style="font-size:1.1em;">${valutazione}</span>
+                            ${scoreLabel} <span id="quiz-score-value">${score}</span> ${window.languageManager ? window.languageManager.translate('su') : 'su'} ${quizzesDone + 1} <br><span style="font-size:1.1em;">${valutazione}</span>
                         </div>
                         <p>${window.languageManager ? window.languageManager.translate('grazie_per_aver_giocato') : 'Grazie per aver giocato! Ora conosci Sofia ancora meglio!'}</p>
                         <button onclick="window.location.href='home.php'">${window.languageManager ? window.languageManager.translate('torna_alla_home') : 'Torna alla Home 🏠'}</button>
